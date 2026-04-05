@@ -1,27 +1,30 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import productTshirt from "@/assets/product-tshirt.jpg";
-import productHoodie from "@/assets/product-hoodie.jpg";
-import productSweatshirt from "@/assets/product-sweatshirt.jpg";
+import design1 from "@/assets/design-1.jpeg";
+import design2 from "@/assets/design-2.jpeg";
+import design3 from "@/assets/design-3.jpeg";
+import design4 from "@/assets/design-4.jpeg";
 
 const products = [
   {
     name: "Essential Tee",
     description: "Premium pamuklu, yalın tasarım",
-    price: "₺890",
-    image: productTshirt,
+    image: design1,
   },
   {
     name: "Summit Hoodie",
     description: "Dağların gücünü taşıyan konfor",
-    price: "₺1.490",
-    image: productHoodie,
+    image: design2,
   },
   {
     name: "Peak Sweatshirt",
     description: "Zamansız zarafet, üstün kalite",
-    price: "₺1.290",
-    image: productSweatshirt,
+    image: design3,
+  },
+  {
+    name: "Alpine Tee",
+    description: "Sadeliğin gücünü yansıtan tasarım",
+    image: design4,
   },
 ];
 
@@ -45,7 +48,7 @@ const ProductsSection = () => {
           <div className="w-16 h-px bg-primary mx-auto mt-6" />
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {products.map((product, i) => (
             <motion.div
               key={product.name}
@@ -64,15 +67,9 @@ const ProductsSection = () => {
                   height={1000}
                 />
                 <div className="absolute inset-0 bg-background/0 group-hover:bg-background/20 transition-all duration-500" />
-                <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                  <button className="w-full font-body text-xs tracking-[0.3em] uppercase border border-primary text-primary py-3 hover:bg-primary hover:text-primary-foreground transition-all">
-                    İncele
-                  </button>
-                </div>
               </div>
               <h3 className="font-display text-xl text-foreground mb-1">{product.name}</h3>
-              <p className="font-body text-sm text-muted-foreground mb-2">{product.description}</p>
-              <p className="font-display text-lg text-gradient-gold">{product.price}</p>
+              <p className="font-body text-sm text-muted-foreground">{product.description}</p>
             </motion.div>
           ))}
         </div>

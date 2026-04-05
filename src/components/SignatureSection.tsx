@@ -1,7 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import signatureLogo from "@/assets/alpenzo-signature.png";
-import productTshirt from "@/assets/product-tshirt.jpg";
+import design1 from "@/assets/design-1.jpeg";
 
 const SignatureSection = () => {
   const ref = useRef(null);
@@ -25,7 +25,6 @@ const SignatureSection = () => {
                 className="w-full max-w-lg mx-auto"
                 loading="lazy"
               />
-              {/* Corner accents */}
               <div className="absolute top-0 left-0 w-12 h-12 border-t border-l border-primary/40" />
               <div className="absolute bottom-0 right-0 w-12 h-12 border-b border-r border-primary/40" />
             </div>
@@ -49,21 +48,20 @@ const SignatureSection = () => {
             </p>
             <p className="font-body text-base text-muted-foreground leading-relaxed mb-8">
               Sınırlı sayıda üretilen bu koleksiyon, sadeliğin lüksle buluştuğu 
-              benzersiz bir tişört deneyimi sunar.
+              benzersiz bir deneyim sunar.
             </p>
 
-            {/* Mini product preview */}
+            {/* Mini product preview - no price */}
             <div className="flex items-center gap-6 p-4 border border-border/50 bg-background/50">
               <img
-                src={productTshirt}
+                src={design1}
                 alt="Signature Tee"
                 className="w-20 h-24 object-cover"
                 loading="lazy"
               />
               <div>
                 <p className="font-display text-lg text-foreground">Signature Tee</p>
-                <p className="font-body text-xs text-muted-foreground mb-1">100% Premium Pamuk — Özel Baskı</p>
-                <p className="font-display text-base text-gradient-gold">₺1.190</p>
+                <p className="font-body text-xs text-muted-foreground">100% Premium Pamuk — Özel Baskı</p>
               </div>
             </div>
           </motion.div>

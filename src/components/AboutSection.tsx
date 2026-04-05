@@ -30,7 +30,7 @@ const AboutSection = () => {
               Her ayrıntı özenle azaltıldı; geriye sadece zamansız zarafet, üstün kalite ve mükemmel bir duruş kaldı.
             </p>
             <p className="font-display text-lg text-foreground/70 italic">
-              "Minimal değil, öz tasarladık."
+              "Sadelikteki gerçek gücü öne çıkardık."
             </p>
           </motion.div>
 
@@ -60,13 +60,12 @@ const AboutSection = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-24 pt-16 border-t border-border"
+          className="grid grid-cols-3 gap-8 mt-24 pt-16 border-t border-border"
         >
           {[
             { value: "100%", label: "Premium Pamuk" },
             { value: "50+", label: "Tasarım" },
-            { value: "10K+", label: "Mutlu Müşteri" },
-            { value: "2024", label: "Kuruluş" },
+            { value: "2026", label: "Kuruluş" },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
               <p className="font-display text-3xl md:text-4xl text-gradient-gold mb-2">{stat.value}</p>

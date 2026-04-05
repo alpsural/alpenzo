@@ -43,7 +43,7 @@ const HeroSection = () => {
           transition={{ delay: 1, duration: 1 }}
           className="font-display text-xl md:text-2xl text-foreground/80 font-light italic"
         >
-          Sadelikten doğan tarz
+          Sadelikle yükselen bir stil
         </motion.p>
 
         <motion.button
@@ -53,7 +53,7 @@ const HeroSection = () => {
           onClick={() => document.querySelector("#products")?.scrollIntoView({ behavior: "smooth" })}
           className="mt-12 font-body text-xs tracking-[0.3em] uppercase border border-primary text-primary px-10 py-4 hover:bg-primary hover:text-primary-foreground transition-all duration-500"
         >
-          Koleksiyonu Keşfet
+          Koleksiyona Göz At
         </motion.button>
       </div>
 
