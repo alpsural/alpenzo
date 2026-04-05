@@ -1,36 +1,12 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import design1 from "@/assets/design-1.jpeg";
-import design2 from "@/assets/design-2.jpeg";
-import design3 from "@/assets/design-3.jpeg";
-import design4 from "@/assets/design-4.jpeg";
-
-const products = [
-  {
-    name: "Essential Tee",
-    description: "Premium pamuklu, yalın tasarım",
-    image: design1,
-  },
-  {
-    name: "Summit Hoodie",
-    description: "Dağların gücünü taşıyan konfor",
-    image: design2,
-  },
-  {
-    name: "Peak Sweatshirt",
-    description: "Zamansız zarafet, üstün kalite",
-    image: design3,
-  },
-  {
-    name: "Alpine Tee",
-    description: "Sadeliğin gücünü yansıtan tasarım",
-    image: design4,
-  },
-];
+import { useNavigate } from "react-router-dom";
+import { products } from "@/data/products";
 
 const ProductsSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const navigate = useNavigate();
 
   return (
     <section id="products" className="py-32 bg-background" ref={ref}>
@@ -56,6 +32,7 @@ const ProductsSection = () => {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: i * 0.15 }}
               className="group cursor-pointer"
+              onClick={() => navigate(`/product/${product.id}`)}
             >
               <div className="relative aspect-[4/5] overflow-hidden bg-card mb-6">
                 <img
