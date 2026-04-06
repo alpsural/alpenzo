@@ -18,7 +18,7 @@ const HeroSection = () => {
           transition={{ delay: 0.2, duration: 0.8 }}
           className="font-body text-xs tracking-[0.5em] text-primary uppercase mb-6"
         >
-          Crafted for Elevation
+          Created for Elevation
         </motion.p>
 
         <motion.h1
