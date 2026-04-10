@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import signatureLogo from "@/assets/signature-logo.png";
 import { signatureProducts } from "@/data/signatureProducts";
 
-const categories = ["Tümü", "Tişört", "Hoodie", "Polo"];
+const categories = ["Tümü", "Tee", "Hoodie", "Sweatshirt", "Polo"];
 
 const SignatureCollection = () => {
   const navigate = useNavigate();

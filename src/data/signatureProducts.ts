@@ -1,4 +1,4 @@
-import coverLabel from "@/assets/essential/cover-label.jpg";
+import coverLabel from "@/assets/essential/cover-label-v2.jpg";
 import whiteEmbroidery1 from "@/assets/essential/white-embroidery-1.jpg";
 import whiteEmbroidery2 from "@/assets/essential/white-embroidery-2.jpg";
 import blackEmbroidery1 from "@/assets/essential/black-embroidery-1.jpg";
@@ -8,8 +8,12 @@ import blackCollection from "@/assets/essential/black-collection.png";
 import atypeBlackDetail from "@/assets/essential/atype-black-detail.jpg";
 import atypeWhiteDetail from "@/assets/essential/atype-white-detail.jpg";
 
+import siyahHoodieV2 from "@/assets/signature/siyah-hoodie-v2.png";
+import beyazHoodieV2 from "@/assets/signature/beyaz-hoodie-v2.png";
+import hoodieDesign2Black from "@/assets/signature/hoodie-design2-black.png";
 import siyahHoodie from "@/assets/signature/siyah-hoodie.png";
 import beyazHoodie from "@/assets/signature/beyaz-hoodie.png";
+
 import siyahPolo from "@/assets/signature/siyah-polo.jpeg";
 import beyazPolo from "@/assets/signature/beyaz-polo.png";
 
@@ -43,7 +47,7 @@ export const signatureProducts: SignatureProduct[] = [
       atypeWhiteDetail,
     ],
     details: ["100% Premium Pamuk", "Nakış İşleme", "Özel Etiket", "Sınırlı Üretim"],
-    category: "Tişört",
+    category: "Tee",
   },
   {
     id: "sig-summit-hoodie-black",
@@ -51,8 +55,8 @@ export const signatureProducts: SignatureProduct[] = [
     description: "Dağların karanlık zarafeti",
     longDescription:
       "Signature Summit Hoodie, Alpenzo'nun dağlardan ilham alan ruhunu en saf hâliyle yansıtır. Ağır gramajlı premium kumaşı, özel kapüşon kesimi ve Signature işlemesiyle bu hoodie, sıradan olandan uzak, seçkin bir parça olarak tasarlanmıştır.",
-    coverImage: siyahHoodie,
-    images: [siyahHoodie],
+    coverImage: siyahHoodieV2,
+    images: [siyahHoodieV2, siyahHoodie, hoodieDesign2Black],
     details: ["Ağır Gramajlı Kumaş", "Oversize Fit", "Signature İşleme", "Sınırlı Üretim"],
     category: "Hoodie",
   },
@@ -62,8 +66,8 @@ export const signatureProducts: SignatureProduct[] = [
     description: "Zirvede beyaz sessizlik",
     longDescription:
       "Beyaz Summit Hoodie, dağların karla kaplı dorukalarından esinlenmiştir. Saf beyaz tonu ve premium dokusuyla hem konfor hem zarafet sunan bu parça, Signature Collection'ın en çok yönlü üyesidir.",
-    coverImage: beyazHoodie,
-    images: [beyazHoodie],
+    coverImage: beyazHoodieV2,
+    images: [beyazHoodieV2, beyazHoodie],
     details: ["Ağır Gramajlı Kumaş", "Oversize Fit", "Signature İşleme", "Sınırlı Üretim"],
     category: "Hoodie",
   },
