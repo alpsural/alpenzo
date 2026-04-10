@@ -1,10 +1,12 @@
-import beyazTisort from "@/assets/signature/beyaz-tisort.png";
-import beyazTisortDetay from "@/assets/signature/beyaz-tisort-detay.jpg";
-import beyazTisortFlat from "@/assets/signature/beyaz-tisort-flat.jpg";
-
-import siyahTisort from "@/assets/signature/siyah-tisort.png";
-import siyahTisortDetay from "@/assets/signature/siyah-tisort-detay.jpg";
-import siyahTisortFlat from "@/assets/signature/siyah-tisort-flat.jpg";
+import coverLabel from "@/assets/essential/cover-label.jpg";
+import whiteEmbroidery1 from "@/assets/essential/white-embroidery-1.jpg";
+import whiteEmbroidery2 from "@/assets/essential/white-embroidery-2.jpg";
+import blackEmbroidery1 from "@/assets/essential/black-embroidery-1.jpg";
+import blackEmbroidery2 from "@/assets/essential/black-embroidery-2.jpg";
+import whiteCollection from "@/assets/essential/white-collection.png";
+import blackCollection from "@/assets/essential/black-collection.png";
+import atypeBlackDetail from "@/assets/essential/atype-black-detail.jpg";
+import atypeWhiteDetail from "@/assets/essential/atype-white-detail.jpg";
 
 import siyahHoodie from "@/assets/signature/siyah-hoodie.png";
 import beyazHoodie from "@/assets/signature/beyaz-hoodie.png";
@@ -16,6 +18,7 @@ export interface SignatureProduct {
   name: string;
   description: string;
   longDescription: string;
+  coverImage: string;
   images: string[];
   details: string[];
   category: string;
@@ -23,23 +26,23 @@ export interface SignatureProduct {
 
 export const signatureProducts: SignatureProduct[] = [
   {
-    id: "sig-essential-tee-white",
-    name: "Essential Tee — White",
-    description: "Saf beyaz, saf zarafet",
+    id: "essential-tee",
+    name: "Essential Tee",
+    description: "Sadeliğin en zarif hâli",
     longDescription:
-      "Alpenzo Signature Essential Tee, markanın en öz tasarım felsefesini beyaz tonlarıyla yansıtır. %100 premium pamuktan üretilen bu tişört, yumuşak dokusu ve kusursuz kalıbıyla Signature Collection'ın temel taşlarından biridir. Sınırlı sayıda üretilmiştir.",
-    images: [beyazTisort, beyazTisortDetay, beyazTisortFlat],
-    details: ["100% Premium Pamuk", "Signature Fit", "Özel Etiket", "Sınırlı Üretim"],
-    category: "Tişört",
-  },
-  {
-    id: "sig-essential-tee-black",
-    name: "Essential Tee — Black",
-    description: "Karanlığın zarif gücü",
-    longDescription:
-      "Siyah Essential Tee, Alpenzo Signature serisinin en ikonik parçasıdır. Derin siyah tonuyla güçlü bir duruş sergileyen bu tişört, premium pamuk kalitesi ve özel kesim detaylarıyla fark yaratır. Her ayrıntısında markanın DNA'sını taşır.",
-    images: [siyahTisort, siyahTisortDetay, siyahTisortFlat],
-    details: ["100% Premium Pamuk", "Signature Fit", "Özel Logo Detay", "Sınırlı Üretim"],
+      "Alpenzo Essential Tee, markanın en öz tasarım felsefesini yansıtır. %100 premium pamuktan üretilen bu tişört, yumuşak dokusu ve kusursuz kalıbıyla koleksiyonun temel taşıdır. Nakış işleme detayları ve özel etiket tasarımıyla her ayrıntısında markanın DNA'sını taşır.",
+    coverImage: coverLabel,
+    images: [
+      whiteEmbroidery1,
+      whiteEmbroidery2,
+      blackEmbroidery1,
+      blackEmbroidery2,
+      whiteCollection,
+      blackCollection,
+      atypeBlackDetail,
+      atypeWhiteDetail,
+    ],
+    details: ["100% Premium Pamuk", "Nakış İşleme", "Özel Etiket", "Sınırlı Üretim"],
     category: "Tişört",
   },
   {
@@ -48,6 +51,7 @@ export const signatureProducts: SignatureProduct[] = [
     description: "Dağların karanlık zarafeti",
     longDescription:
       "Signature Summit Hoodie, Alpenzo'nun dağlardan ilham alan ruhunu en saf hâliyle yansıtır. Ağır gramajlı premium kumaşı, özel kapüşon kesimi ve Signature işlemesiyle bu hoodie, sıradan olandan uzak, seçkin bir parça olarak tasarlanmıştır.",
+    coverImage: siyahHoodie,
     images: [siyahHoodie],
     details: ["Ağır Gramajlı Kumaş", "Oversize Fit", "Signature İşleme", "Sınırlı Üretim"],
     category: "Hoodie",
@@ -58,6 +62,7 @@ export const signatureProducts: SignatureProduct[] = [
     description: "Zirvede beyaz sessizlik",
     longDescription:
       "Beyaz Summit Hoodie, dağların karla kaplı dorukalarından esinlenmiştir. Saf beyaz tonu ve premium dokusuyla hem konfor hem zarafet sunan bu parça, Signature Collection'ın en çok yönlü üyesidir.",
+    coverImage: beyazHoodie,
     images: [beyazHoodie],
     details: ["Ağır Gramajlı Kumaş", "Oversize Fit", "Signature İşleme", "Sınırlı Üretim"],
     category: "Hoodie",
@@ -68,6 +73,7 @@ export const signatureProducts: SignatureProduct[] = [
     description: "Klasik form, modern ruh",
     longDescription:
       "Signature Polo, klasik polo yaka formunu Alpenzo'nun modern tasarım diliyle yeniden yorumlar. Siyah tonuyla güçlü ve kendinden emin bir ifade sunan bu parça, premium pamuk piké kumaşıyla üstün konfor sağlar.",
+    coverImage: siyahPolo,
     images: [siyahPolo],
     details: ["Premium Piké Kumaş", "Slim Fit", "Signature Yaka Detay", "Sınırlı Üretim"],
     category: "Polo",
@@ -78,6 +84,7 @@ export const signatureProducts: SignatureProduct[] = [
     description: "Zarafetin sessiz ifadesi",
     longDescription:
       "Beyaz Signature Polo, sadeliğin en zarif hâlidir. Premium piké kumaşı ve özel yaka detaylarıyla hem resmi hem günlük kullanıma uygun olan bu parça, Alpenzo'nun 'az çoktur' felsefesinin mükemmel bir yansımasıdır.",
+    coverImage: beyazPolo,
     images: [beyazPolo],
     details: ["Premium Piké Kumaş", "Slim Fit", "Signature Yaka Detay", "Sınırlı Üretim"],
     category: "Polo",

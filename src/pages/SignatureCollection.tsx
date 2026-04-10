@@ -95,7 +95,7 @@ const SignatureCollection = () => {
               >
                 <div className="relative aspect-[3/4] overflow-hidden bg-card">
                   <img
-                    src={product.images[0]}
+                    src={product.coverImage}
                     alt={product.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"

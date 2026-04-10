@@ -166,7 +166,7 @@ const SignatureProductDetail = () => {
                       >
                         <div className="w-20 h-24 overflow-hidden bg-card mb-2">
                           <img
-                            src={p.images[0]}
+                            src={p.coverImage}
                             alt={p.name}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           />
