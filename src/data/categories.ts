@@ -1,4 +1,4 @@
-import atypeBlack from "@/assets/atype-black.jpg";
+import tshirtCover from "@/assets/tshirt-cover.jpg";
 import design3 from "@/assets/design-3.jpeg";
 import productSweatshirt from "@/assets/product-sweatshirt.jpg";
 import signatureLogo from "@/assets/alpenzo-signature.png";
@@ -16,7 +16,7 @@ export const categories: Category[] = [
     id: "tshirt",
     name: "T-Shirt",
     description: "Sadeliğin gücünü yansıtan tasarımlar",
-    coverImage: atypeBlack,
+    coverImage: tshirtCover,
   },
   {
     id: "sweatshirt",
@@ -61,6 +61,7 @@ import blackEmbroidery1 from "@/assets/essential/black-embroidery-1.jpg";
 import blackEmbroidery2 from "@/assets/essential/black-embroidery-2.jpg";
 import whiteCollection from "@/assets/essential/white-collection.png";
 import blackCollection from "@/assets/essential/black-collection.png";
+import atypeBlack from "@/assets/atype-black.jpg";
 import atypeBlackDetail from "@/assets/essential/atype-black-detail.jpg";
 import atypeWhiteDetail from "@/assets/essential/atype-white-detail.jpg";
 
