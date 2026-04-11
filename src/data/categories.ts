@@ -53,6 +53,7 @@ import beyazTisortFlat from "@/assets/signature/beyaz-tisort-flat.jpg";
 import siyahTisort from "@/assets/signature/siyah-tisort.png";
 import siyahTisortDetay from "@/assets/signature/siyah-tisort-detay.jpg";
 import siyahTisortFlat from "@/assets/signature/siyah-tisort-flat.jpg";
+import atypeBlack from "@/assets/atype-black.jpg";
 import atypeWhite from "@/assets/atype-white.jpg";
 import coverLabel from "@/assets/essential/cover-label-v2.jpg";
 import whiteEmbroidery1 from "@/assets/essential/white-embroidery-1.jpg";
