@@ -53,7 +53,6 @@ import beyazTisortFlat from "@/assets/signature/beyaz-tisort-flat.jpg";
 import siyahTisort from "@/assets/signature/siyah-tisort.png";
 import siyahTisortDetay from "@/assets/signature/siyah-tisort-detay.jpg";
 import siyahTisortFlat from "@/assets/signature/siyah-tisort-flat.jpg";
-import atypeBlack from "@/assets/atype-black.jpg";
 import atypeWhite from "@/assets/atype-white.jpg";
 import coverLabel from "@/assets/essential/cover-label-v2.jpg";
 import whiteEmbroidery1 from "@/assets/essential/white-embroidery-1.jpg";
@@ -63,6 +62,7 @@ import blackEmbroidery2 from "@/assets/essential/black-embroidery-2.jpg";
 import whiteCollection from "@/assets/essential/white-collection.png";
 import blackCollection from "@/assets/essential/black-collection.png";
 import atypeBlack from "@/assets/atype-black.jpg";
+import atypeBlackDetail from "@/assets/essential/atype-black-detail.jpg";
 import atypeWhiteDetail from "@/assets/essential/atype-white-detail.jpg";
 
 // --- Hoodie products ---
