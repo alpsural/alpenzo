@@ -38,9 +38,7 @@ const ProductsSection = () => {
                 <img
                   src={cat.coverImage}
                   alt={cat.name}
-                  className={`w-full h-full transition-transform duration-700 group-hover:scale-105 ${
-                    cat.id === "signature" ? "object-contain p-8" : "object-cover"
-                  }`}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-background/0 group-hover:bg-background/15 transition-all duration-500" />
