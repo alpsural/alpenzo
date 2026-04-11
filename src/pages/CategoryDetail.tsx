@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
@@ -11,12 +11,9 @@ const CategoryDetail = () => {
   const category = categories.find((c) => c.id === id);
   const products = id ? categoryProducts[id] ?? [] : [];
 
-  // Collect all images for the auto-carousel
   const allImages = products.flatMap((p) => p.images);
-
   const [carouselIndex, setCarouselIndex] = useState(0);
 
-  // Auto-slide every 3 seconds
   useEffect(() => {
     if (allImages.length <= 1) return;
     const interval = setInterval(() => {
@@ -70,7 +67,6 @@ const CategoryDetail = () => {
                 transition={{ duration: 0.8 }}
               />
             ))}
-            {/* Carousel controls */}
             {allImages.length > 1 && (
               <>
                 <button
@@ -85,7 +81,6 @@ const CategoryDetail = () => {
                 >
                   <ChevronRight size={20} className="text-foreground" />
                 </button>
-                {/* Dots */}
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
                   {allImages.map((_, i) => (
                     <button
@@ -101,17 +96,14 @@ const CategoryDetail = () => {
             )}
             {/* Category title overlay */}
             <div className="absolute inset-0 flex items-end justify-start p-8 bg-gradient-to-t from-background/70 to-transparent">
-              <div>
-                <h1 className="font-display text-4xl md:text-6xl font-light text-foreground">
-                  {category.name}
-                </h1>
-                <p className="font-body text-sm text-muted-foreground mt-2">{category.description}</p>
-              </div>
+              <h1 className="font-display text-4xl md:text-6xl font-light text-foreground">
+                {category.name}
+              </h1>
             </div>
           </div>
         )}
 
-        {/* Products grid */}
+        {/* Products grid — only image + name */}
         <div className="container mx-auto px-6 py-16">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
             {products.map((product, i) => (
@@ -122,16 +114,15 @@ const CategoryDetail = () => {
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 className="group"
               >
-                <div className="relative aspect-[3/4] overflow-hidden bg-card mb-4">
+                <div className="relative aspect-[3/4] overflow-hidden bg-card mb-3">
                   <img
                     src={product.image}
                     alt={product.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-background/0 group-hover:bg-background/10 transition-all duration-500" />
                 </div>
-                <h3 className="font-display text-lg text-foreground">{product.name}</h3>
+                <p className="font-body text-sm text-foreground">{product.name}</p>
               </motion.div>
             ))}
           </div>

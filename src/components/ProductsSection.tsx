@@ -24,27 +24,28 @@ const ProductsSection = () => {
           <div className="w-16 h-px bg-primary mx-auto mt-6" />
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
           {categories.map((cat, i) => (
             <motion.div
               key={cat.id}
               initial={{ opacity: 0, y: 40 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: i * 0.15 }}
+              transition={{ duration: 0.6, delay: i * 0.12 }}
               className="group cursor-pointer"
-              onClick={() => navigate(`/category/${cat.id}`)}
+              onClick={() => navigate(cat.route ?? `/category/${cat.id}`)}
             >
-              <div className="relative aspect-[4/5] overflow-hidden bg-card mb-6">
+              <div className="relative aspect-[3/4] overflow-hidden bg-card mb-4">
                 <img
                   src={cat.coverImage}
                   alt={cat.name}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className={`w-full h-full transition-transform duration-700 group-hover:scale-105 ${
+                    cat.id === "signature" ? "object-contain p-8" : "object-cover"
+                  }`}
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-background/0 group-hover:bg-background/20 transition-all duration-500" />
+                <div className="absolute inset-0 bg-background/0 group-hover:bg-background/15 transition-all duration-500" />
               </div>
-              <h3 className="font-display text-xl text-foreground mb-1">{cat.name}</h3>
-              <p className="font-body text-sm text-muted-foreground">{cat.description}</p>
+              <h3 className="font-display text-lg text-foreground text-center">{cat.name}</h3>
             </motion.div>
           ))}
         </div>

@@ -1,21 +1,28 @@
 import atypeBlack from "@/assets/atype-black.jpg";
 import design3 from "@/assets/design-3.jpeg";
-import siyahPolo from "@/assets/signature/siyah-polo.jpeg";
+import productSweatshirt from "@/assets/product-sweatshirt.jpg";
+import signatureLogo from "@/assets/alpenzo-signature.png";
 
-// Category cover images
 export interface Category {
   id: string;
   name: string;
   description: string;
   coverImage: string;
+  route?: string; // custom route override
 }
 
 export const categories: Category[] = [
   {
-    id: "alpine-tee",
-    name: "Alpine Tee",
+    id: "tshirt",
+    name: "T-Shirt",
     description: "Sadeliğin gücünü yansıtan tasarımlar",
     coverImage: atypeBlack,
+  },
+  {
+    id: "sweatshirt",
+    name: "Sweatshirt",
+    description: "Zamansız zarafet, üstün kalite",
+    coverImage: productSweatshirt,
   },
   {
     id: "hoodie",
@@ -24,22 +31,22 @@ export const categories: Category[] = [
     coverImage: design3,
   },
   {
-    id: "polo-tee",
-    name: "Polo Tee",
-    description: "Klasik form, modern ruh",
-    coverImage: siyahPolo,
+    id: "signature",
+    name: "Signature Collection",
+    description: "Sınırlı üretim, seçkin tasarımlar",
+    coverImage: signatureLogo,
+    route: "/signature",
   },
 ];
 
-// All products grouped by category
 export interface CategoryProduct {
   id: string;
   name: string;
   image: string;
-  images: string[]; // for carousel
+  images: string[];
 }
 
-// --- Alpine Tee products ---
+// --- T-Shirt products ---
 import beyazTisort from "@/assets/signature/beyaz-tisort.png";
 import beyazTisortDetay from "@/assets/signature/beyaz-tisort-detay.jpg";
 import beyazTisortFlat from "@/assets/signature/beyaz-tisort-flat.jpg";
@@ -64,20 +71,17 @@ import siyahHoodie from "@/assets/signature/siyah-hoodie.png";
 import beyazHoodie from "@/assets/signature/beyaz-hoodie.png";
 import hoodieDesign2Black from "@/assets/signature/hoodie-design2-black.png";
 
-// --- Polo products ---
-import beyazPolo from "@/assets/signature/beyaz-polo.png";
-
 export const categoryProducts: Record<string, CategoryProduct[]> = {
-  "alpine-tee": [
+  tshirt: [
     {
       id: "essential-tee-white",
-      name: "Essential Tee — White",
+      name: "Essential Tee — Beyaz",
       image: beyazTisort,
       images: [beyazTisort, beyazTisortDetay, beyazTisortFlat],
     },
     {
       id: "essential-tee-black",
-      name: "Essential Tee — Black",
+      name: "Essential Tee — Siyah",
       image: siyahTisort,
       images: [siyahTisort, siyahTisortDetay, siyahTisortFlat],
     },
@@ -89,43 +93,37 @@ export const categoryProducts: Record<string, CategoryProduct[]> = {
     },
     {
       id: "alpine-tee-white",
-      name: "Alpine Tee — White",
+      name: "Alpine Tee — Beyaz",
       image: atypeWhite,
       images: [atypeWhite],
     },
     {
       id: "alpine-tee-black",
-      name: "Alpine Tee — Black",
+      name: "Alpine Tee — Siyah",
       image: atypeBlack,
       images: [atypeBlack],
+    },
+  ],
+  sweatshirt: [
+    {
+      id: "peak-sweatshirt",
+      name: "Peak Sweatshirt",
+      image: productSweatshirt,
+      images: [productSweatshirt],
     },
   ],
   hoodie: [
     {
       id: "summit-hoodie-black",
-      name: "Summit Hoodie — Black",
+      name: "Summit Hoodie — Siyah",
       image: siyahHoodieV2,
       images: [siyahHoodieV2, siyahHoodie, hoodieDesign2Black],
     },
     {
       id: "summit-hoodie-white",
-      name: "Summit Hoodie — White",
+      name: "Summit Hoodie — Beyaz",
       image: beyazHoodieV2,
       images: [beyazHoodieV2, beyazHoodie],
-    },
-  ],
-  "polo-tee": [
-    {
-      id: "polo-black",
-      name: "Polo Tee — Black",
-      image: siyahPolo,
-      images: [siyahPolo],
-    },
-    {
-      id: "polo-white",
-      name: "Polo Tee — White",
-      image: beyazPolo,
-      images: [beyazPolo],
     },
   ],
 };
