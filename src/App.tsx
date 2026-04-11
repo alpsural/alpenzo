@@ -7,6 +7,7 @@ import Index from "./pages/Index.tsx";
 import ProductDetail from "./pages/ProductDetail.tsx";
 import SignatureCollection from "./pages/SignatureCollection.tsx";
 import SignatureProductDetail from "./pages/SignatureProductDetail.tsx";
+import CategoryDetail from "./pages/CategoryDetail.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -20,6 +21,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/category/:id" element={<CategoryDetail />} />
           <Route path="/signature" element={<SignatureCollection />} />
           <Route path="/signature/:id" element={<SignatureProductDetail />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
