@@ -109,10 +109,16 @@ export const categoryProducts: Record<string, CategoryProduct[]> = {
   ],
   sweatshirt: [
     {
-      id: "peak-sweatshirt",
-      name: "Peak Sweatshirt",
-      image: productSweatshirt,
-      images: [productSweatshirt],
+      id: "sweatshirt-black",
+      name: "Sweatshirt — Siyah",
+      image: sweatshirtBlack,
+      images: [sweatshirtBlack],
+    },
+    {
+      id: "sweatshirt-white",
+      name: "Sweatshirt — Beyaz",
+      image: sweatshirtWhite,
+      images: [sweatshirtWhite],
     },
   ],
   hoodie: [
