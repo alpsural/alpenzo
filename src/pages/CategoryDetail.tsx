@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { categories, categoryProducts } from "@/data/categories";
+import ContinuousCarousel from "@/components/ContinuousCarousel";
 
 const CategoryDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -10,17 +10,7 @@ const CategoryDetail = () => {
 
   const category = categories.find((c) => c.id === id);
   const products = id ? categoryProducts[id] ?? [] : [];
-
   const allImages = products.flatMap((p) => p.images);
-  const [carouselIndex, setCarouselIndex] = useState(0);
-
-  useEffect(() => {
-    if (allImages.length <= 1) return;
-    const interval = setInterval(() => {
-      setCarouselIndex((prev) => (prev + 1) % allImages.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [allImages.length]);
 
   if (!category) {
     return (
@@ -53,55 +43,8 @@ const CategoryDetail = () => {
       </motion.div>
 
       <div className="pt-16">
-        {/* Auto-sliding carousel */}
-        {allImages.length > 0 && (
-          <div className="relative w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden bg-card">
-            {allImages.map((img, i) => (
-              <motion.img
-                key={i}
-                src={img}
-                alt={`${category.name} ${i + 1}`}
-                className="absolute inset-0 w-full h-full object-cover"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: i === carouselIndex ? 1 : 0 }}
-                transition={{ duration: 0.8 }}
-              />
-            ))}
-            {allImages.length > 1 && (
-              <>
-                <button
-                  onClick={() => setCarouselIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1))}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-background/60 backdrop-blur-sm p-2 rounded-full hover:bg-background/80 transition-colors"
-                >
-                  <ChevronLeft size={20} className="text-foreground" />
-                </button>
-                <button
-                  onClick={() => setCarouselIndex((prev) => (prev + 1) % allImages.length)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-background/60 backdrop-blur-sm p-2 rounded-full hover:bg-background/80 transition-colors"
-                >
-                  <ChevronRight size={20} className="text-foreground" />
-                </button>
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                  {allImages.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setCarouselIndex(i)}
-                      className={`w-2 h-2 rounded-full transition-all ${
-                        i === carouselIndex ? "bg-primary w-5" : "bg-foreground/40"
-                      }`}
-                    />
-                  ))}
-                </div>
-              </>
-            )}
-            {/* Category title overlay */}
-            <div className="absolute inset-0 flex items-end justify-start p-8 bg-gradient-to-t from-background/70 to-transparent">
-              <h1 className="font-display text-4xl md:text-6xl font-light text-foreground">
-                {category.name}
-              </h1>
-            </div>
-          </div>
-        )}
+        {/* Continuous carousel */}
+        <ContinuousCarousel images={allImages} title={category.name} />
 
         {/* Products grid — only image + name */}
         <div className="container mx-auto px-6 py-16">

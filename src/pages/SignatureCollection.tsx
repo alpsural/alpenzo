@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import signatureLogo from "@/assets/signature-logo.png";
 import { signatureProducts } from "@/data/signatureProducts";
+import ContinuousCarousel from "@/components/ContinuousCarousel";
 
 const categories = ["Tümü", "Tee", "Polo"];
 
@@ -15,6 +16,8 @@ const SignatureCollection = () => {
     activeCategory === "Tümü"
       ? signatureProducts
       : signatureProducts.filter((p) => p.category === activeCategory);
+
+  const allImages = signatureProducts.flatMap((p) => p.images);
 
   return (
     <div className="min-h-screen bg-background">
@@ -38,13 +41,16 @@ const SignatureCollection = () => {
         </div>
       </motion.div>
 
-      {/* Hero banner */}
       <div className="pt-16">
+        {/* Continuous carousel at top */}
+        <ContinuousCarousel images={allImages} title="Signature Collection" />
+
+        {/* Logo + description */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
-          className="relative py-24 md:py-32 bg-secondary flex flex-col items-center justify-center text-center px-6"
+          className="py-16 flex flex-col items-center justify-center text-center px-6"
         >
           <motion.img
             initial={{ opacity: 0, scale: 0.9 }}
@@ -52,7 +58,7 @@ const SignatureCollection = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             src={signatureLogo}
             alt="Alpenzo Signature Collection"
-            className="w-64 md:w-80 mb-8 object-contain"
+            className="w-48 md:w-64 mb-6 object-contain"
           />
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -65,7 +71,7 @@ const SignatureCollection = () => {
         </motion.div>
 
         {/* Category filter */}
-        <div className="container mx-auto px-6 py-8 flex justify-center gap-6">
+        <div className="container mx-auto px-6 pb-8 flex justify-center gap-6">
           {categories.map((cat) => (
             <button
               key={cat}
@@ -81,7 +87,7 @@ const SignatureCollection = () => {
           ))}
         </div>
 
-        {/* Product grid — Zara inspired */}
+        {/* Product grid */}
         <div className="container mx-auto px-6 pb-24">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-1 md:gap-2">
             {filtered.map((product, i) => (
