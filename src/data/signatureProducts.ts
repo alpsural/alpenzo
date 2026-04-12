@@ -1,21 +1,10 @@
-import coverLabel from "@/assets/essential/cover-label-v2.jpg";
-import whiteEmbroidery1 from "@/assets/essential/white-embroidery-1.jpg";
-import whiteEmbroidery2 from "@/assets/essential/white-embroidery-2.jpg";
-import blackEmbroidery1 from "@/assets/essential/black-embroidery-1.jpg";
-import blackEmbroidery2 from "@/assets/essential/black-embroidery-2.jpg";
-import whiteCollection from "@/assets/essential/white-collection.png";
-import blackCollection from "@/assets/essential/black-collection.png";
-import atypeBlackDetail from "@/assets/essential/atype-black-detail.jpg";
-import atypeWhiteDetail from "@/assets/essential/atype-white-detail.jpg";
-
-import siyahHoodieV2 from "@/assets/signature/siyah-hoodie-v2.png";
-import beyazHoodieV2 from "@/assets/signature/beyaz-hoodie-v2.png";
-import hoodieDesign2Black from "@/assets/signature/hoodie-design2-black.png";
-import siyahHoodie from "@/assets/signature/siyah-hoodie.png";
-import beyazHoodie from "@/assets/signature/beyaz-hoodie.png";
-
-import siyahPolo from "@/assets/signature/siyah-polo.jpeg";
-import beyazPolo from "@/assets/signature/beyaz-polo.png";
+import whiteTeeDetail from "@/assets/signature/white-tee-detail.jpg";
+import whiteTeeFlat from "@/assets/signature/white-tee-flat.jpg";
+import blackTeeFlat from "@/assets/signature/black-tee-flat.jpg";
+import blackTeeDetail from "@/assets/signature/black-tee-detail.jpg";
+import poloBlackGreek from "@/assets/signature/polo-black-greek.jpg";
+import poloBlackMinimal from "@/assets/signature/polo-black-minimal.jpg";
+import poloWhite from "@/assets/signature/polo-white.png";
 
 export interface SignatureProduct {
   id: string;
@@ -30,56 +19,47 @@ export interface SignatureProduct {
 
 export const signatureProducts: SignatureProduct[] = [
   {
-    id: "essential-tee",
-    name: "Essential Tee",
+    id: "sig-tee-white",
+    name: "Signature Tee — White",
     description: "Sadeliğin en zarif hâli",
     longDescription:
-      "Alpenzo Essential Tee, markanın en öz tasarım felsefesini yansıtır. %100 premium pamuktan üretilen bu tişört, yumuşak dokusu ve kusursuz kalıbıyla koleksiyonun temel taşıdır. Nakış işleme detayları ve özel etiket tasarımıyla her ayrıntısında markanın DNA'sını taşır.",
-    coverImage: coverLabel,
-    images: [
-      whiteEmbroidery1,
-      whiteEmbroidery2,
-      blackEmbroidery1,
-      blackEmbroidery2,
-      whiteCollection,
-      blackCollection,
-      atypeBlackDetail,
-      atypeWhiteDetail,
-    ],
+      "Alpenzo Signature Tee, markanın en öz tasarım felsefesini yansıtır. %100 premium pamuktan üretilen bu tişört, yumuşak dokusu ve kusursuz kalıbıyla koleksiyonun temel taşıdır.",
+    coverImage: whiteTeeDetail,
+    images: [whiteTeeDetail, whiteTeeFlat],
     details: ["100% Premium Pamuk", "Nakış İşleme", "Özel Etiket", "Sınırlı Üretim"],
     category: "Tee",
   },
   {
-    id: "sig-summit-hoodie-black",
-    name: "Summit Hoodie — Black",
-    description: "Dağların karanlık zarafeti",
+    id: "sig-tee-black",
+    name: "Signature Tee — Black",
+    description: "Karanlığın zarif gücü",
     longDescription:
-      "Signature Summit Hoodie, Alpenzo'nun dağlardan ilham alan ruhunu en saf hâliyle yansıtır. Ağır gramajlı premium kumaşı, özel kapüşon kesimi ve Signature işlemesiyle bu hoodie, sıradan olandan uzak, seçkin bir parça olarak tasarlanmıştır.",
-    coverImage: siyahHoodieV2,
-    images: [siyahHoodieV2, siyahHoodie, hoodieDesign2Black],
-    details: ["Ağır Gramajlı Kumaş", "Oversize Fit", "Signature İşleme", "Sınırlı Üretim"],
-    category: "Hoodie",
+      "Siyah Signature Tee, güçlü ve kendinden emin bir ifade sunar. Premium pamuk kumaşı ve nakış işleme detaylarıyla Alpenzo'nun DNA'sını taşır.",
+    coverImage: blackTeeDetail,
+    images: [blackTeeDetail, blackTeeFlat],
+    details: ["100% Premium Pamuk", "Nakış İşleme", "Özel Etiket", "Sınırlı Üretim"],
+    category: "Tee",
   },
   {
-    id: "sig-summit-hoodie-white",
-    name: "Summit Hoodie — White",
-    description: "Zirvede beyaz sessizlik",
-    longDescription:
-      "Beyaz Summit Hoodie, dağların karla kaplı dorukalarından esinlenmiştir. Saf beyaz tonu ve premium dokusuyla hem konfor hem zarafet sunan bu parça, Signature Collection'ın en çok yönlü üyesidir.",
-    coverImage: beyazHoodieV2,
-    images: [beyazHoodieV2, beyazHoodie],
-    details: ["Ağır Gramajlı Kumaş", "Oversize Fit", "Signature İşleme", "Sınırlı Üretim"],
-    category: "Hoodie",
-  },
-  {
-    id: "sig-polo-black",
-    name: "Polo Yaka — Black",
+    id: "sig-polo-black-greek",
+    name: "Polo Yaka — Black Greek",
     description: "Klasik form, modern ruh",
     longDescription:
-      "Signature Polo, klasik polo yaka formunu Alpenzo'nun modern tasarım diliyle yeniden yorumlar. Siyah tonuyla güçlü ve kendinden emin bir ifade sunan bu parça, premium pamuk piké kumaşıyla üstün konfor sağlar.",
-    coverImage: siyahPolo,
-    images: [siyahPolo],
-    details: ["Premium Piké Kumaş", "Slim Fit", "Signature Yaka Detay", "Sınırlı Üretim"],
+      "Greek desenli yaka ve kol detaylarıyla klasik polo formunu Alpenzo'nun cesur tasarım diliyle yeniden yorumlar. Premium piké kumaşıyla üstün konfor sağlar.",
+    coverImage: poloBlackGreek,
+    images: [poloBlackGreek],
+    details: ["Premium Piké Kumaş", "Greek Desen Detay", "Signature İşleme", "Sınırlı Üretim"],
+    category: "Polo",
+  },
+  {
+    id: "sig-polo-black-minimal",
+    name: "Polo Yaka — Black Minimal",
+    description: "Sadeliğin gücü",
+    longDescription:
+      "Minimal siyah polo, Alpenzo'nun 'az çoktur' felsefesinin mükemmel bir yansımasıdır. İnce şerit detayları ve premium piké kumaşıyla zamansız bir elegans sunar.",
+    coverImage: poloBlackMinimal,
+    images: [poloBlackMinimal],
+    details: ["Premium Piké Kumaş", "Slim Fit", "Minimal Şerit Detay", "Sınırlı Üretim"],
     category: "Polo",
   },
   {
@@ -87,10 +67,10 @@ export const signatureProducts: SignatureProduct[] = [
     name: "Polo Yaka — White",
     description: "Zarafetin sessiz ifadesi",
     longDescription:
-      "Beyaz Signature Polo, sadeliğin en zarif hâlidir. Premium piké kumaşı ve özel yaka detaylarıyla hem resmi hem günlük kullanıma uygun olan bu parça, Alpenzo'nun 'az çoktur' felsefesinin mükemmel bir yansımasıdır.",
-    coverImage: beyazPolo,
-    images: [beyazPolo],
-    details: ["Premium Piké Kumaş", "Slim Fit", "Signature Yaka Detay", "Sınırlı Üretim"],
+      "Beyaz Signature Polo, sadeliğin en zarif hâlidir. Gold detaylı premium piké kumaşıyla hem resmi hem günlük kullanıma uygun olan bu parça, koleksiyonun en çok yönlü üyesidir.",
+    coverImage: poloWhite,
+    images: [poloWhite],
+    details: ["Premium Piké Kumaş", "Slim Fit", "Gold Şerit Detay", "Sınırlı Üretim"],
     category: "Polo",
   },
 ];
