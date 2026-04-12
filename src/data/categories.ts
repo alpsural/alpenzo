@@ -1,6 +1,5 @@
-import tshirtCover from "@/assets/tshirt-cover.jpg";
+import tshirtCoverNew from "@/assets/tshirt-cover-new.jpeg";
 import design3 from "@/assets/design-3.jpeg";
-import productSweatshirt from "@/assets/product-sweatshirt.jpg";
 import sweatshirtCover from "@/assets/sweatshirt-cover.jpg";
 import sweatshirtBlack from "@/assets/sweatshirt-black.png";
 import sweatshirtWhite from "@/assets/sweatshirt-white.jpg";
@@ -11,7 +10,7 @@ export interface Category {
   name: string;
   description: string;
   coverImage: string;
-  route?: string; // custom route override
+  route?: string;
 }
 
 export const categories: Category[] = [
@@ -19,7 +18,7 @@ export const categories: Category[] = [
     id: "tshirt",
     name: "T-Shirt",
     description: "Sadeliğin gücünü yansıtan tasarımlar",
-    coverImage: tshirtCover,
+    coverImage: tshirtCoverNew,
   },
   {
     id: "sweatshirt",
@@ -50,23 +49,10 @@ export interface CategoryProduct {
 }
 
 // --- T-Shirt products ---
-import beyazTisort from "@/assets/signature/beyaz-tisort.png";
-import beyazTisortDetay from "@/assets/signature/beyaz-tisort-detay.jpg";
-import beyazTisortFlat from "@/assets/signature/beyaz-tisort-flat.jpg";
-import siyahTisort from "@/assets/signature/siyah-tisort.png";
-import siyahTisortDetay from "@/assets/signature/siyah-tisort-detay.jpg";
-import siyahTisortFlat from "@/assets/signature/siyah-tisort-flat.jpg";
-import atypeWhite from "@/assets/atype-white.jpg";
-import coverLabel from "@/assets/essential/cover-label-v2.jpg";
-import whiteEmbroidery1 from "@/assets/essential/white-embroidery-1.jpg";
-import whiteEmbroidery2 from "@/assets/essential/white-embroidery-2.jpg";
-import blackEmbroidery1 from "@/assets/essential/black-embroidery-1.jpg";
-import blackEmbroidery2 from "@/assets/essential/black-embroidery-2.jpg";
-import whiteCollection from "@/assets/essential/white-collection.png";
-import blackCollection from "@/assets/essential/black-collection.png";
-import atypeBlack from "@/assets/atype-black.jpg";
-import atypeBlackDetail from "@/assets/essential/atype-black-detail.jpg";
-import atypeWhiteDetail from "@/assets/essential/atype-white-detail.jpg";
+import alpineWhite from "@/assets/tshirt/alpine-white.png";
+import alpineBlack from "@/assets/tshirt/alpine-black.png";
+import atypeBlackBack from "@/assets/tshirt/atype-black-back.jpg";
+import atypeWhiteBack from "@/assets/tshirt/atype-white-back.jpg";
 
 // --- Hoodie products ---
 import siyahHoodieV2 from "@/assets/signature/siyah-hoodie-v2.png";
@@ -78,34 +64,28 @@ import hoodieDesign2Black from "@/assets/signature/hoodie-design2-black.png";
 export const categoryProducts: Record<string, CategoryProduct[]> = {
   tshirt: [
     {
-      id: "essential-tee-white",
-      name: "Essential Tee — Beyaz",
-      image: beyazTisort,
-      images: [beyazTisort, beyazTisortDetay, beyazTisortFlat],
-    },
-    {
-      id: "essential-tee-black",
-      name: "Essential Tee — Siyah",
-      image: siyahTisort,
-      images: [siyahTisort, siyahTisortDetay, siyahTisortFlat],
-    },
-    {
-      id: "essential-tee-label",
-      name: "Essential Tee — Label Edition",
-      image: coverLabel,
-      images: [coverLabel, whiteEmbroidery1, whiteEmbroidery2, blackEmbroidery1, blackEmbroidery2, whiteCollection, blackCollection, atypeBlackDetail, atypeWhiteDetail],
-    },
-    {
       id: "alpine-tee-white",
       name: "Alpine Tee — Beyaz",
-      image: atypeWhite,
-      images: [atypeWhite],
+      image: alpineWhite,
+      images: [alpineWhite],
     },
     {
       id: "alpine-tee-black",
       name: "Alpine Tee — Siyah",
-      image: atypeBlack,
-      images: [atypeBlack],
+      image: alpineBlack,
+      images: [alpineBlack],
+    },
+    {
+      id: "atype-tee-black",
+      name: "A-Type Tee — Siyah",
+      image: atypeBlackBack,
+      images: [atypeBlackBack],
+    },
+    {
+      id: "atype-tee-white",
+      name: "A-Type Tee — Beyaz",
+      image: atypeWhiteBack,
+      images: [atypeWhiteBack],
     },
   ],
   sweatshirt: [
