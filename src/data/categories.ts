@@ -1,6 +1,8 @@
 import tshirtCover from "@/assets/tshirt-cover.jpg";
 import design3 from "@/assets/design-3.jpeg";
 import productSweatshirt from "@/assets/product-sweatshirt.jpg";
+import sweatshirtBlack from "@/assets/sweatshirt-black.png";
+import sweatshirtWhite from "@/assets/sweatshirt-white.jpg";
 import signatureLogo from "@/assets/alpenzo-signature.png";
 
 export interface Category {
