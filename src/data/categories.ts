@@ -1,6 +1,7 @@
 import tshirtCover from "@/assets/tshirt-cover.jpg";
 import design3 from "@/assets/design-3.jpeg";
 import productSweatshirt from "@/assets/product-sweatshirt.jpg";
+import sweatshirtCover from "@/assets/sweatshirt-cover.jpg";
 import sweatshirtBlack from "@/assets/sweatshirt-black.png";
 import sweatshirtWhite from "@/assets/sweatshirt-white.jpg";
 import signatureLogo from "@/assets/alpenzo-signature.png";
@@ -24,7 +25,7 @@ export const categories: Category[] = [
     id: "sweatshirt",
     name: "Sweatshirt",
     description: "Zamansız zarafet, üstün kalite",
-    coverImage: productSweatshirt,
+    coverImage: sweatshirtCover,
   },
   {
     id: "hoodie",
