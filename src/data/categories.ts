@@ -52,7 +52,9 @@ export interface CategoryProduct {
 import alpineWhite from "@/assets/tshirt/alpine-white.png";
 import alpineBlack from "@/assets/tshirt/alpine-black.png";
 import atypeBlackBack from "@/assets/tshirt/atype-black-back.jpg";
+import atypeBlackFront from "@/assets/tshirt/atype-black-front.jpg";
 import atypeWhiteBack from "@/assets/tshirt/atype-white-back.jpg";
+import atypeWhiteFront from "@/assets/tshirt/atype-white-front.jpg";
 
 // --- Hoodie products ---
 import siyahHoodieV2 from "@/assets/signature/siyah-hoodie-v2.png";
@@ -78,14 +80,14 @@ export const categoryProducts: Record<string, CategoryProduct[]> = {
     {
       id: "atype-tee-black",
       name: "A-Type Tee — Siyah",
-      image: atypeBlackBack,
-      images: [atypeBlackBack],
+      image: atypeBlackFront,
+      images: [atypeBlackFront, atypeBlackBack],
     },
     {
       id: "atype-tee-white",
       name: "A-Type Tee — Beyaz",
-      image: atypeWhiteBack,
-      images: [atypeWhiteBack],
+      image: atypeWhiteFront,
+      images: [atypeWhiteFront, atypeWhiteBack],
     },
   ],
   sweatshirt: [

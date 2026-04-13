@@ -5,6 +5,8 @@ import blackTeeDetail from "@/assets/signature/black-tee-detail.jpg";
 import poloBlackGreek from "@/assets/signature/polo-black-greek.jpg";
 import poloBlackMinimal from "@/assets/signature/polo-black-minimal.jpg";
 import poloWhite from "@/assets/signature/polo-white.png";
+import sigLabelDetail from "@/assets/signature/sig-label-detail.jpg";
+import sigLabelAlpenzo from "@/assets/signature/sig-label-alpenzo.jpg";
 
 export interface SignatureProduct {
   id: string;
@@ -72,5 +74,16 @@ export const signatureProducts: SignatureProduct[] = [
     images: [poloWhite],
     details: ["Premium Piké Kumaş", "Slim Fit", "Gold Şerit Detay", "Sınırlı Üretim"],
     category: "Polo",
+  },
+  {
+    id: "sig-label-black",
+    name: "Signature Label — Black",
+    description: "Detaylarda saklı mükemmellik",
+    longDescription:
+      "Alpenzo'nun imza etiketi, her parçanın özünde taşıdığı kalite ve özenin somut ifadesidir. Premium kumaş üzerine işlenmiş logo ve el yazısı signature detayı, markanın DNA'sını her dikişte hissettirir.",
+    coverImage: sigLabelDetail,
+    images: [sigLabelDetail, sigLabelAlpenzo],
+    details: ["Özel Dokuma Etiket", "Signature İşleme", "Premium Detay", "Sınırlı Üretim"],
+    category: "Tee",
   },
 ];
