@@ -7,6 +7,8 @@ import poloBlackMinimal from "@/assets/signature/polo-black-minimal.jpg";
 import poloWhite from "@/assets/signature/polo-white.png";
 import sigLabelDetail from "@/assets/signature/sig-label-detail.jpg";
 import sigLabelAlpenzo from "@/assets/signature/sig-label-alpenzo.jpg";
+import sigTeeDetail from "@/assets/signature/sig-tee-detail.jpg";
+import sigTeeFlat from "@/assets/signature/sig-tee-flat.jpg";
 
 export interface SignatureProduct {
   id: string;
@@ -84,6 +86,17 @@ export const signatureProducts: SignatureProduct[] = [
     coverImage: sigLabelDetail,
     images: [sigLabelDetail, sigLabelAlpenzo],
     details: ["Özel Dokuma Etiket", "Signature İşleme", "Premium Detay", "Sınırlı Üretim"],
+    category: "Tee",
+  },
+  {
+    id: "sig-tee-elevation",
+    name: "Signature Tee — Created for Elevation",
+    description: "Yükseliş için yaratıldı",
+    longDescription:
+      "Alpenzo'nun ikonik 'Created for Elevation' yazısı ve el yazısı logosuyla bezenen bu özel tişört, markanın ruhunu en güçlü şekilde yansıtır. Premium pamuk kumaş ve nakış işleme detaylarıyla koleksiyonun en dikkat çekici parçasıdır.",
+    coverImage: sigTeeDetail,
+    images: [sigTeeDetail, sigTeeFlat],
+    details: ["100% Premium Pamuk", "Nakış İşleme", "Özel Etiket", "Sınırlı Üretim"],
     category: "Tee",
   },
 ];
