@@ -1,5 +1,5 @@
 import tshirtCoverNew from "@/assets/tshirt-cover-new.jpeg";
-import design3 from "@/assets/design-3.jpeg";
+import hoodieCover from "@/assets/hoodie-cover.jpg";
 import sweatshirtCover from "@/assets/sweatshirt-cover.jpg";
 import sweatshirtBlack from "@/assets/sweatshirt-black.png";
 import sweatshirtWhite from "@/assets/sweatshirt-white.jpg";
@@ -30,7 +30,7 @@ export const categories: Category[] = [
     id: "hoodie",
     name: "Hoodie",
     description: "Dağların gücünü taşıyan konfor",
-    coverImage: design3,
+    coverImage: hoodieCover,
   },
   {
     id: "signature",

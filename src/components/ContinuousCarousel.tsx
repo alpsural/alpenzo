@@ -1,4 +1,3 @@
-import { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 
 interface ContinuousCarouselProps {
@@ -7,19 +6,21 @@ interface ContinuousCarouselProps {
   speed?: number; // pixels per second
 }
 
+const CARD_WIDTH = 360;
+const GAP = 16;
+
 const ContinuousCarousel = ({ images, title, speed = 40 }: ContinuousCarouselProps) => {
   if (images.length === 0) return null;
 
-  // Duplicate images enough times to fill the strip
   const strip = [...images, ...images, ...images];
-  const totalWidth = strip.length * 400; // approx width per image
-  const singleSetWidth = images.length * 400;
+  const singleSetWidth = images.length * (CARD_WIDTH + GAP);
+  const totalWidth = strip.length * (CARD_WIDTH + GAP);
   const duration = singleSetWidth / speed;
 
   return (
     <div className="relative w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden bg-card">
       <motion.div
-        className="flex h-full"
+        className="flex h-full items-center"
         animate={{ x: [0, -singleSetWidth] }}
         transition={{
           x: {
@@ -28,13 +29,13 @@ const ContinuousCarousel = ({ images, title, speed = 40 }: ContinuousCarouselPro
             ease: "linear",
           },
         }}
-        style={{ width: totalWidth }}
+        style={{ width: totalWidth, gap: GAP }}
       >
         {strip.map((img, i) => (
           <div
             key={i}
-            className="h-full flex-shrink-0"
-            style={{ width: 400 }}
+            className="h-[85%] flex-shrink-0 rounded-lg overflow-hidden"
+            style={{ width: CARD_WIDTH }}
           >
             <img
               src={img}
