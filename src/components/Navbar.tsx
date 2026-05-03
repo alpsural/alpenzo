@@ -7,7 +7,7 @@ const navLinks = [
   { label: "Ana Sayfa", href: "#hero", route: "/" },
   { label: "Hakkımızda", href: "#about", route: "/" },
   { label: "Signature Collection", href: "/signature", route: "/signature" },
-  { label: "Hikayemiz", href: "#story", route: "/" },
+  { label: "Hikâyemiz", href: "#story", route: "/" },
   { label: "İletişim", href: "#contact", route: "/" },
 ];
 
