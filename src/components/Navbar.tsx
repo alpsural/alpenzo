@@ -7,8 +7,8 @@ const navLinks = [
   { label: "Ana Sayfa", href: "#hero", route: "/" },
   { label: "Hakkımızda", href: "#about", route: "/" },
   { label: "Signature Collection", href: "/signature", route: "/signature" },
-  { label: "Hikâyemiz", href: "#story", route: "/" },
-  { label: "İletişim", href: "#contact", route: "/" },
+  { label: "HİKAYEMİZ", href: "#story", route: "/" },
+  { label: "İLETİŞİM", href: "#contact", route: "/" },
 ];
 
 const Navbar = () => {
