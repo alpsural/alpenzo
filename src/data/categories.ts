@@ -60,10 +60,11 @@ import atypeWhiteFrontPlain from "@/assets/tshirt/atype-white-front-plain.jpg";
 
 // --- Hoodie products ---
 import siyahHoodieV2 from "@/assets/signature/siyah-hoodie-v2.png";
+import siyahHoodieV2Alt from "@/assets/signature/siyah-hoodie-v2-alt.png";
 import beyazHoodieV2 from "@/assets/signature/beyaz-hoodie-v2.png";
+import beyazHoodieV2Alt from "@/assets/signature/beyaz-hoodie-v2-alt.png";
 import siyahHoodie from "@/assets/signature/siyah-hoodie.png";
 import beyazHoodie from "@/assets/signature/beyaz-hoodie.png";
-import hoodieDesign2Black from "@/assets/signature/hoodie-design2-black.png";
 import sweatshirtBlackAlt from "@/assets/sweatshirt-black-2.jpg";
 import sweatshirtWhiteAlt from "@/assets/sweatshirt-white-2.jpg";
 
@@ -113,13 +114,13 @@ export const categoryProducts: Record<string, CategoryProduct[]> = {
       id: "summit-hoodie-black",
       name: "Summit Hoodie — Siyah",
       image: siyahHoodieV2,
-      images: [siyahHoodieV2, siyahHoodie, hoodieDesign2Black],
+      images: [siyahHoodieV2, siyahHoodieV2Alt, siyahHoodie],
     },
     {
       id: "summit-hoodie-white",
       name: "Summit Hoodie — Beyaz",
       image: beyazHoodieV2,
-      images: [beyazHoodieV2, beyazHoodie],
+      images: [beyazHoodieV2, beyazHoodieV2Alt, beyazHoodie],
     },
   ],
 };
