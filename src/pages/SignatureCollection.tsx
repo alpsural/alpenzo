@@ -29,7 +29,12 @@ const SignatureCollection = () => {
       >
         <div className="container mx-auto px-6 h-16 flex items-center">
           <button
-            onClick={() => navigate("/")}
+            onClick={() => {
+              navigate("/");
+              setTimeout(() => {
+                document.querySelector("#products")?.scrollIntoView({ behavior: "smooth" });
+              }, 300);
+            }}
             className="flex items-center gap-2 font-body text-sm tracking-widest text-muted-foreground hover:text-primary transition-colors uppercase"
           >
             <ArrowLeft size={18} />

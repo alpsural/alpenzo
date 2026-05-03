@@ -3,7 +3,7 @@ import hoodieCover from "@/assets/hoodie-cover.jpg";
 import sweatshirtCover from "@/assets/sweatshirt-cover.jpg";
 import sweatshirtBlack from "@/assets/sweatshirt-black.png";
 import sweatshirtWhite from "@/assets/sweatshirt-white.jpg";
-import signatureLogo from "@/assets/alpenzo-signature.png";
+import signatureCoverNew from "@/assets/signature-cover-new.jpg";
 
 export interface Category {
   id: string;
@@ -36,7 +36,7 @@ export const categories: Category[] = [
     id: "signature",
     name: "Signature Collection",
     description: "Sınırlı üretim, seçkin tasarımlar",
-    coverImage: signatureLogo,
+    coverImage: signatureCoverNew,
     route: "/signature",
   },
 ];

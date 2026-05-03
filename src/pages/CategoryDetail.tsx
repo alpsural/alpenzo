@@ -40,7 +40,12 @@ const CategoryDetail = () => {
       >
         <div className="container mx-auto px-6 h-16 flex items-center">
           <button
-            onClick={() => navigate("/")}
+            onClick={() => {
+              navigate("/");
+              setTimeout(() => {
+                document.querySelector("#products")?.scrollIntoView({ behavior: "smooth" });
+              }, 300);
+            }}
             className="flex items-center gap-2 font-body text-sm tracking-widest text-muted-foreground hover:text-primary transition-colors uppercase"
           >
             <ArrowLeft size={18} />
@@ -56,7 +61,7 @@ const CategoryDetail = () => {
         <ContinuousCarousel images={allImages} title={category.name} />
 
         <div className="container mx-auto px-6 py-16">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
+          <div className="grid grid-cols-2 gap-4 md:gap-8 max-w-4xl mx-auto">
             {products.map((product, i) => (
               <motion.div
                 key={product.id}
