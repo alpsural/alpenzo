@@ -82,21 +82,21 @@ const ContactSection = () => {
             <div className="flex items-start gap-4">
               <Mail className="text-primary mt-1" size={18} />
               <div>
-                <p className="font-body text-sm text-foreground">info@alpenzo.com</p>
+                <p className="font-body text-sm text-foreground">alp@sural.tr</p>
                 <p className="font-body text-xs text-muted-foreground mt-1">Genel Bilgi</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
               <Phone className="text-primary mt-1" size={18} />
               <div>
-                <p className="font-body text-sm text-foreground">+90 (212) 000 00 00</p>
+                <p className="font-body text-sm text-foreground">+90 532 229 95 62</p>
                 <p className="font-body text-xs text-muted-foreground mt-1">Pazartesi - Cumartesi, 09:00 - 18:00</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
               <MapPin className="text-primary mt-1" size={18} />
               <div>
-                <p className="font-body text-sm text-foreground">İstanbul, Türkiye</p>
+                <p className="font-body text-sm text-foreground">SULTAN SELİM MAH. ESKİ BÜYÜKDERE CAD. NO: 61 İÇ KAPI NO: 2 KAĞITHANE/ İSTANBUL</p>
                 <p className="font-body text-xs text-muted-foreground mt-1">Merkez Ofis</p>
               </div>
             </div>
