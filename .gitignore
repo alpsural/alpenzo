@@ -1,5 +1,7 @@
 # Yerel / geliştirme dosyaları — siteye yayınlanmaz
 .claude/
+.agents/
+.codex/
 CLAUDE.md
 skills-lock.json
 wire-products.mjs
