@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALPENZO — Alpine Tee</title>
+<meta name="description" content="ALPENZO Alpine Tee — %100 pamuk, ağır gramajlı premium streetwear.">
+<link rel="icon" href="favicon.svg">
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/cart.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">İçeriğe geç</a>
+<header class="topbar">
+  <a class="topbar__brand" href="alpenzo-spiral-final9.html">ALPENZO</a>
+  <nav class="topbar__nav">
+    <a href="shop.html">Mağaza</a>
+    <a href="about.html">Hakkımızda</a>
+    <a href="contact.html">İletişim</a>
+  </nav>
+  <div class="topbar__utils">
+    <form class="search" role="search" onsubmit="location.href=&quot;yakinda.html&quot;;return false;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="search" placeholder="Ara" aria-label="Ara">
+    </form>
+    <a class="iconbtn" href="yakinda.html" aria-label="Hesabım"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.6 3.1-5.6 7-5.6s7 2 7 5.6"/></svg></a>
+    <a class="iconbtn" href="yakinda.html" aria-label="Favoriler"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 4.2l2.5 5.1 5.6.8-4 3.9 1 5.6L12 17l-5 2.6 1-5.6-4-3.9 5.6-.8z"/></svg></a>
+    <a class="iconbtn" href="cart.html" aria-label="Sepet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M6 8h12l-1 12H7z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg><span class="cart-badge" id="cartCount">0</span></a>
+  </div>
+</header>
+
+<main id="main" class="page page--wide">
+  <p class="crumb"><a href="shop.html">Mağaza</a> / Alpine Tee</p>
+
+  <div class="pd">
+    <div class="pd__gallery">
+      <div class="main"><img src="products/alpine-black.png" alt="Alpine Tee"></div>
+      <div class="thumb"><img src="products/atype-black-front-plain.jpg" alt=""></div>
+      <div class="thumb"><img src="products/atype-black-back.jpg" alt=""></div>
+    </div>
+
+    <div class="pd__info">
+      <div class="pd__brand">ALPENZO</div>
+      <h1 class="pd__name">Alpine Tee — Black</h1>
+      <div class="pd__price"><span class="lira">₺</span>1.450,00</div>
+
+      <div class="pd__label">Beden</div>
+      <div class="sizes" id="sizes">
+        <button class="size">XS</button>
+        <button class="size">S</button>
+        <button class="size">M</button>
+        <button class="size">L</button>
+        <button class="size">XL</button>
+      </div>
+
+      <div class="pd__label">Adet</div>
+      <div class="qty">
+        <button onclick="chQty(-1)">−</button>
+        <span id="qty">1</span>
+        <button onclick="chQty(1)">+</button>
+      </div>
+
+      <button class="btn btn--block" onclick="addCurrent()">Sepete ekle</button>
+
+      <div class="pd__meta">
+        <p>%100 pamuk, ağır gramajlı (240 GSM) örme.</p>
+        <p>Önde işlemeli ALPENZO imza logosu — "Created for Elevation".</p>
+        <p>Türkiye içi 2.500<span class="lira">₺</span> üzeri kargo ücretsiz · 14 gün iade.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer__cols">
+    <div class="fcol"><h4>Mağaza</h4><a href="shop.html">Yeni Gelenler</a><a href="shop.html">Üst Giyim</a><a href="shop.html">Dış Giyim</a><a href="shop.html">Aksesuar</a></div>
+    <div class="fcol"><h4>Yardım</h4><a href="shipping.html">Kargo & İade</a><a href="size-guide.html">Beden Tablosu</a><a href="contact.html">İletişim</a></div>
+    <div class="fcol"><h4>Kurumsal</h4><a href="about.html">Hakkımızda</a><a href="privacy.html">Gizlilik & Koşullar</a></div>
+    <div class="fcol"><h4>Takip Et</h4><a href="https://www.instagram.com/alpenzo.tr/" target="_blank" rel="noopener">Instagram</a></div>
+  </div>
+  <div class="footer__bottom">
+    <span class="footer__logo">ALPENZO</span>
+    <span class="footer__copy">© 2026 ALPENZO — İstanbul. Tüm hakları saklıdır.</span>
+    <span class="footer__pay">VISA · MASTERCARD · AMEX · PAYPAL · APPLE PAY</span>
+  </div>
+</footer>
+
+<script>
+  let selectedSize = null, qty = 1;
+  const sizesEl = document.getElementById('sizes');
+  sizesEl.addEventListener('click', e => {
+    if (!e.target.classList.contains('size')) return;
+    [...sizesEl.children].forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    selectedSize = e.target.textContent;
+  });
+  function chQty(d){ qty = Math.max(1, qty + d); document.getElementById('qty').textContent = qty; }
+  function addCurrent(){
+    if(!selectedSize){ ALPENZO.toast('Lütfen bir beden seçin'); return; }
+    ALPENZO.add({ id:'alpine-tee-black', name:'Alpine Tee — Black', price:1450, color:'Black', size:selectedSize, img:'products/alpine-black.png', qty });
+    ALPENZO.toast('Sepete eklendi · ' + selectedSize + ' ×' + qty);
+  }
+</script>
+</body>
+</html>

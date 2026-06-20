@@ -1,0 +1,8 @@
+# Yerel / geliştirme dosyaları — siteye yayınlanmaz
+.claude/
+CLAUDE.md
+skills-lock.json
+wire-products.mjs
+sd_App.js
+.DS_Store
+Thumbs.db

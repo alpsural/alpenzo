@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALPENZO — Shop</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Schibsted+Grotesk:wght@400;500;600&display=swap');
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#ffffff; --ink:#111; --line:rgba(0,0,0,0.10);
+    --ease:cubic-bezier(0.32,0.72,0,1);
+  }
+  html,body{ background:var(--bg); color:var(--ink); font-family:'Schibsted Grotesk',sans-serif; -webkit-font-smoothing:antialiased; }
+  a{color:inherit;text-decoration:none;}
+  .lira{ font-family:'Arial','Segoe UI',sans-serif; }
+
+  /* ── ANNOUNCEMENT MARQUEE ── */
+  .marquee{
+    overflow:hidden; white-space:nowrap; background:#fff;
+    padding:9px 0;
+  }
+  .marquee__track{
+    display:inline-flex; align-items:center; gap:64px;
+    will-change:transform; animation:marquee 16s linear infinite;
+  }
+  .marquee__track span{
+    font-size:11px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#000;
+  }
+  @keyframes marquee{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+  @media(prefers-reduced-motion: reduce){ .marquee__track{ animation:none; } }
+
+  /* ── TOP BAR ── */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    display:grid; grid-template-columns:1fr auto 1fr; align-items:center;
+    padding:22px 32px; background:#fff;
+  }
+  .topbar__brand{
+    justify-self:start;
+    font-family:'Bricolage Grotesque',sans-serif; font-weight:800;
+    font-size:27px; letter-spacing:0.16em;
+  }
+  .topbar__nav{ justify-self:center; display:flex; gap:34px; }
+  .topbar__utils{ justify-self:end; display:flex; gap:26px; align-items:center; }
+  .topbar__nav a, .topbar__utils a{
+    font-size:12px; letter-spacing:0.1em; text-transform:uppercase; font-weight:600; color:var(--ink);
+    transition:opacity .3s var(--ease);
+  }
+  .topbar__nav a:hover{ opacity:0.55; }
+  @media(max-width:900px){ .topbar__nav{display:none;} }
+  .topbar__utils{ gap:18px; }
+  .search{ display:flex; align-items:center; gap:8px; border:1px solid var(--line); border-radius:999px; padding:9px 16px; }
+  .search svg{ width:16px; height:16px; color:#8a867d; }
+  .search input{ border:none; outline:none; background:none; font-family:inherit; font-size:13px; width:150px; color:var(--ink); }
+  .iconbtn{ position:relative; display:inline-flex; color:var(--ink); transition:opacity .25s var(--ease); }
+  .iconbtn:hover{ opacity:0.55; }
+  .iconbtn svg{ width:23px; height:23px; }
+  .cart-badge{ position:absolute; top:-7px; right:-9px; min-width:18px; height:18px; padding:0 4px; border-radius:999px;
+    background:#111; color:#fff; font-size:10px; font-weight:600; display:flex; align-items:center; justify-content:center; }
+  @media(max-width:680px){ .search{ display:none; } }
+
+  /* ── HERO GRID ── */
+  .hero{ display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:16px 64px; }
+  .htile{ min-height:0; }
+  @media(min-width:761px){
+    /* photos, each framed, with side margins (walls) */
+    .hero{ height:92vh; overflow:hidden; }
+    .hero__right{ height:100%; }
+    .htile--wide{ aspect-ratio:auto; flex:1.2 1 0; min-height:0; }
+    .htile--tall{ aspect-ratio:auto; flex:1 1 0; min-height:0; }
+  }
+  .hero__left{ position:relative; overflow:hidden; }
+  .hero__left img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform 1s var(--ease); }
+  .hero__left:hover img{ transform:scale(1.03); }
+  .hero__right{ display:flex; flex-direction:column; gap:10px; }
+
+  .htile{ position:relative; overflow:hidden; display:block; background:#e9e7e1; }
+  .htile img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform 1s var(--ease); }
+  .htile:hover img{ transform:scale(1.04); }
+  .htile--wide{ aspect-ratio:16/10; }
+  .htile--tall{ aspect-ratio:1/1; }
+  .htile__label{
+    position:absolute; left:28px; bottom:24px; z-index:2; color:#fff;
+    font-family:'Bricolage Grotesque',sans-serif; font-weight:700;
+    font-size:clamp(1.4rem,2.2vw,2.2rem); letter-spacing:-0.01em;
+  }
+  .htile--label::after{
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(to top, rgba(0,0,0,0.5), transparent 45%);
+  }
+  .ss{
+    position:absolute; right:10px; top:50%; transform:translateY(-50%);
+    writing-mode:vertical-rl; font-size:10px; letter-spacing:0.25em;
+    color:#fff; opacity:0.65; z-index:2;
+  }
+
+  @media(max-width:760px){
+    .hero{ grid-template-columns:1fr; }
+    .htile--wide{ aspect-ratio:16/11; }
+    .htile--tall{ aspect-ratio:4/5; }
+  }
+
+  /* ── NEW ARRIVALS (horizontal carousel · hover swaps the image) ── */
+  .arrivals{ padding:80px 32px 100px; }
+  .arrivals__head{ display:flex; align-items:flex-start; justify-content:space-between; gap:24px; margin-bottom:40px; }
+  .arrivals__title{
+    font-family:'Bricolage Grotesque',sans-serif; font-weight:800;
+    font-size:clamp(2.4rem,5vw,4rem); letter-spacing:-0.03em; line-height:1;
+  }
+  .viewall{
+    flex:none; background:#111; color:#fff; border:none;
+    font-size:10px; letter-spacing:0.2em; text-transform:uppercase; font-weight:600;
+    padding:14px 24px; cursor:pointer; transition:background .4s var(--ease);
+  }
+  .viewall:hover{ background:#333; }
+  .arrivals__track{
+    display:flex; gap:24px; overflow-x:auto; overflow-y:hidden;
+    padding-bottom:12px; scrollbar-width:none; cursor:grab;
+  }
+  .arrivals__track::-webkit-scrollbar{ display:none; }
+  .acard{ flex:0 0 clamp(320px,28vw,440px); }
+  .acard__media{ position:relative; aspect-ratio:3/4; overflow:hidden; background:#f0eee9; }
+  .acard__media img{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    transition:opacity .55s var(--ease), transform .8s var(--ease);
+  }
+  .acard__media .img2{ opacity:0; }
+  .acard:hover .img1{ opacity:0; }
+  .acard:hover .img2{ opacity:1; transform:scale(1.04); }
+  .badge{
+    position:absolute; top:14px; left:14px; z-index:2; background:#111; color:#fff;
+    font-size:9px; letter-spacing:0.18em; font-weight:600; padding:5px 9px; text-transform:uppercase;
+  }
+  .badge.out{ background:#8c8881; }
+  .quickview{
+    position:absolute; left:0; right:0; bottom:0; z-index:2; text-align:center;
+    padding:14px 0; background:rgba(255,255,255,0.93);
+    font-size:10px; letter-spacing:0.24em; text-transform:uppercase;
+    transform:translateY(100%); transition:transform .45s var(--ease);
+  }
+  .acard:hover .quickview{ transform:translateY(0); }
+  .acard__info{ padding-top:14px; }
+  .card__brand{ display:block; font-weight:600; font-size:13px; }
+  .card__name { display:block; font-size:13px; color:#444; margin-top:2px; }
+  .card__color{ display:block; font-size:12px; color:#8a867d; margin-top:8px; }
+  .card__price{ display:block; font-size:13px; margin-top:6px; }
+  @media(max-width:640px){ .arrivals{ padding:56px 20px 72px; } .acard{ flex-basis:74vw; } }
+
+  /* ── FEATURE BANNER (campaign) ── */
+  .feature{ position:relative; height:90vh; overflow:hidden; }
+  .feature img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform 1.2s var(--ease); }
+  .feature:hover img{ transform:scale(1.04); }
+  .feature::after{
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(to top, rgba(0,0,0,0.55), transparent 50%);
+  }
+  .feature__label{ position:absolute; left:48px; bottom:52px; z-index:2; color:#fff; }
+  .feature__title{
+    font-family:'Bricolage Grotesque',sans-serif; font-weight:800;
+    font-size:clamp(2.2rem,4.5vw,4rem); letter-spacing:-0.02em; line-height:1;
+  }
+  .feature__btn{
+    display:inline-block; margin-top:22px; background:#fff; color:#111;
+    font-size:11px; letter-spacing:0.2em; text-transform:uppercase; font-weight:600;
+    padding:14px 26px; transition:background .35s var(--ease);
+  }
+  .feature__btn:hover{ background:#e8e6e0; }
+  @media(max-width:760px){
+    .feature{ height:70vh; }
+    .feature__label{ left:24px; bottom:32px; }
+  }
+
+  /* ── CONNECT: 3D rotating community gallery ── */
+  @property --rot { syntax:'<angle>'; initial-value:0deg; inherits:false; }
+  .connect{
+    --r: clamp(950px, 90vw, 1480px);
+    position:relative; background:#fff; color:#111;
+    padding:84px 0 120px; text-align:center; overflow:hidden;
+  }
+  .connect__eyebrow{ font-size:10px; letter-spacing:0.3em; text-transform:uppercase; color:#8a867d; margin-bottom:14px; }
+  .connect__title{
+    font-family:'Bricolage Grotesque',sans-serif; font-weight:800;
+    font-size:clamp(2.6rem,7vw,5.5rem); letter-spacing:-0.03em; line-height:1; color:#111; margin-bottom:34px;
+  }
+  .connect__stage{ position:relative; height:clamp(420px,40vw,620px); perspective:2000px; }
+  .connect__ring{
+    position:absolute; inset:0; margin:auto; width:0; height:0; transform-style:preserve-3d;
+    transform:rotateZ(-3deg) rotateX(6deg) translateZ(calc(var(--r) * -1)) rotateY(var(--rot));
+    animation:ringspin 46s linear infinite;
+  }
+  .connect__cell{
+    position:absolute; top:50%; left:50%;
+    width:clamp(300px,23vw,440px); height:clamp(420px,32vw,580px);
+    transform:translate(-50%,-50%) rotateY(calc(var(--i) * 18deg)) translateZ(var(--r));
+    overflow:hidden; background:#e9e7e1; box-shadow:0 22px 55px rgba(0,0,0,0.28); backface-visibility:hidden;
+  }
+  .connect__cell{ cursor:pointer; }
+  .connect__cell img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; transition:opacity .5s var(--ease); }
+  .connect__cell .img2{ opacity:0; }
+  .connect__cell:hover .img1{ opacity:0; }
+  .connect__cell:hover .img2{ opacity:1; }
+  .connect:hover .connect__ring{ animation-play-state:paused; }
+  @keyframes ringspin{ to{ --rot:360deg; } }
+  @media(prefers-reduced-motion: reduce){ .connect__ring{ animation:none; } }
+
+  /* ── FOOTER ── */
+  .footer{ background:#0c0c0c; color:#f2f0ec; padding:96px 56px 40px; }
+  .footer__news{ max-width:520px; margin-bottom:72px; }
+  .footer__news h3{ font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:clamp(1.8rem,3vw,2.6rem); letter-spacing:-0.02em; margin-bottom:12px; }
+  .footer__news p{ color:#7a766d; font-size:14px; margin-bottom:24px; }
+  .news__form{ display:flex; align-items:center; gap:16px; border-bottom:1px solid rgba(255,255,255,0.22); }
+  .news__form input{ flex:1; background:none; border:none; color:#f2f0ec; font-family:inherit; font-size:14px; padding:12px 0; outline:none; }
+  .news__form input::placeholder{ color:#6a6a6a; }
+  .news__form button{ background:none; border:none; color:#c8a04a; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; font-weight:600; cursor:pointer; white-space:nowrap; transition:opacity .3s var(--ease); }
+  .news__form button:hover{ opacity:0.7; }
+  .footer__cols{ display:grid; grid-template-columns:repeat(4,1fr); gap:40px; padding-bottom:64px; border-bottom:1px solid rgba(255,255,255,0.08); }
+  .fcol h4{ font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#f2f0ec; margin-bottom:18px; }
+  .fcol a{ display:block; color:#7a766d; font-size:13px; margin-bottom:11px; transition:color .3s var(--ease); }
+  .fcol a:hover{ color:#f2f0ec; }
+  .footer__bottom{ display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; padding-top:30px; }
+  .footer__logo{ font-family:'Bricolage Grotesque',sans-serif; font-weight:800; letter-spacing:0.3em; font-size:14px; color:#f2f0ec; }
+  .footer__copy{ color:#7a766d; font-size:11px; letter-spacing:0.04em; }
+  .footer__pay{ color:#7a766d; font-size:10px; letter-spacing:0.18em; }
+  @media(max-width:760px){ .footer{ padding:64px 24px 32px; } .footer__cols{ grid-template-columns:1fr 1fr; gap:34px; } }
+</style>
+<script src="assets/cart.js" defer></script>
+</head>
+<body>
+
+<div class="marquee">
+  <div class="marquee__track">
+    <span>2.500<span class="lira">₺</span> üzeri ücretsiz kargo</span>
+    <span>·</span>
+    <span>Tüm dünyaya teslimat</span>
+    <span>·</span>
+    <span>İstanbul doğumlu premium sokak giyimi</span>
+    <span>·</span>
+    <span>2.500<span class="lira">₺</span> üzeri ücretsiz kargo</span>
+    <span>·</span>
+    <span>Tüm dünyaya teslimat</span>
+    <span>·</span>
+    <span>İstanbul doğumlu premium sokak giyimi</span>
+    <span>·</span>
+  </div>
+</div>
+
+<header class="topbar">
+  <a class="topbar__brand" href="alpenzo-spiral-final9.html">ALPENZO</a>
+  <nav class="topbar__nav">
+    <a href="shop.html">Mağaza</a>
+    <a href="#">Özel</a>
+    <a href="#">Topluluk</a>
+    <a href="#">İlkbahar Yaz 2026</a>
+  </nav>
+  <div class="topbar__utils">
+    <form class="search" role="search" onsubmit="location.href=&quot;yakinda.html&quot;;return false;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="search" placeholder="Ara" aria-label="Ara">
+    </form>
+    <a class="iconbtn" href="yakinda.html" aria-label="Hesabım"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.6 3.1-5.6 7-5.6s7 2 7 5.6"/></svg></a>
+    <a class="iconbtn" href="yakinda.html" aria-label="Favoriler"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 4.2l2.5 5.1 5.6.8-4 3.9 1 5.6L12 17l-5 2.6 1-5.6-4-3.9 5.6-.8z"/></svg></a>
+    <a class="iconbtn" href="cart.html" aria-label="Sepet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M6 8h12l-1 12H7z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg><span class="cart-badge" id="cartCount">0</span></a>
+  </div>
+</header>
+
+<section class="hero">
+  <a class="hero__left" href="#">
+    <img src="products/alpenzo-signature.png" alt="">
+    <span class="ss">SS26</span>
+  </a>
+
+  <div class="hero__right">
+    <a class="htile htile--wide htile--label" href="#">
+      <img src="products/alpine-black-2.jpg" alt="">
+      <span class="htile__label">Sonbahar Kış 2025</span>
+    </a>
+    <a class="htile htile--tall" href="#">
+      <img src="products/alpine-black.png" alt="">
+      <span class="ss">SS26</span>
+    </a>
+  </div>
+</section>
+
+<section class="arrivals">
+  <div class="arrivals__head">
+    <h2 class="arrivals__title">Yeni Gelenler</h2>
+    <button class="viewall">Tümünü gör</button>
+  </div>
+  <div class="arrivals__track" id="arrivalsTrack">
+
+    <article class="acard">
+      <div class="acard__media">
+        <span class="badge">Yeni</span>
+        <img class="img1" src="products/alpine-white-2.jpg" alt="">
+        <img class="img2" src="products/alpine-white.png" alt="">
+        <span class="quickview">Hızlı bak</span>
+      </div>
+      <div class="acard__info">
+        <span class="card__brand">ALPENZO</span><span class="card__name">Spiral Logo Tee</span>
+        <span class="card__color">Bone</span><span class="card__price"><span class="lira">₺</span>1.450,00</span>
+      </div>
+    </article>
+
+    <article class="acard">
+      <div class="acard__media">
+        <span class="badge out">Tükendi</span>
+        <img class="img1" src="products/atype-black-back.jpg" alt="">
+        <img class="img2" src="products/atype-black-detail.jpg" alt="">
+        <span class="quickview">Hızlı bak</span>
+      </div>
+      <div class="acard__info">
+        <span class="card__brand">ALPENZO</span><span class="card__name">Atlas Graphic Tee</span>
+        <span class="card__color">Black</span><span class="card__price"><span class="lira">₺</span>1.450,00</span>
+      </div>
+    </article>
+
+    <article class="acard">
+      <div class="acard__media">
+        <span class="badge">Yeni</span>
+        <img class="img1" src="products/atype-black-front-plain.jpg" alt="">
+        <img class="img2" src="products/atype-black-front.jpg" alt="">
+        <span class="quickview">Hızlı bak</span>
+      </div>
+      <div class="acard__info">
+        <span class="card__brand">ALPENZO</span><span class="card__name">Coil Knit Cardigan</span>
+        <span class="card__color">Sand</span><span class="card__price"><span class="lira">₺</span>3.250,00</span>
+      </div>
+    </article>
+
+    <article class="acard">
+      <div class="acard__media">
+        <span class="badge out">Tükendi</span>
+        <img class="img1" src="products/atype-black.jpg" alt="">
+        <img class="img2" src="products/atype-logo-ref.png" alt="">
+        <span class="quickview">Hızlı bak</span>
+      </div>
+      <div class="acard__info">
+        <span class="card__brand">ALPENZO</span><span class="card__name">Track Top</span>
+        <span class="card__color">Vapor Grey</span><span class="card__price"><span class="lira">₺</span>3.250,00</span>
+      </div>
+    </article>
+
+    <article class="acard">
+      <div class="acard__media">
+        <span class="badge">Yeni</span>
+        <img class="img1" src="products/atype-white-back.jpg" alt="">
+        <img class="img2" src="products/atype-white-detail.jpg" alt="">
+        <span class="quickview">Hızlı bak</span>
+      </div>
+      <div class="acard__info">
+        <span class="card__brand">ALPENZO</span><span class="card__name">Mono Pocket Tee</span>
+        <span class="card__color">Slate</span><span class="card__price"><span class="lira">₺</span>1.250,00</span>
+      </div>
+    </article>
+
+    <article class="acard">
+      <div class="acard__media">
+        <img class="img1" src="products/atype-white-front-plain.jpg" alt="">
+        <img class="img2" src="products/atype-white-front.jpg" alt="">
+        <span class="quickview">Hızlı bak</span>
+      </div>
+      <div class="acard__info">
+        <span class="card__brand">ALPENZO</span><span class="card__name">Bosphorus Hoodie</span>
+        <span class="card__color">Charcoal</span><span class="card__price"><span class="lira">₺</span>2.750,00</span>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section class="feature">
+  <img src="products/kampanya-aktif.jpeg" alt="ALPENZO aktif giyim kampanyası">
+  <div class="feature__label">
+    <h2 class="feature__title">Performans Koleksiyonu</h2>
+    <a class="feature__btn" href="shop.html">Hemen al</a>
+  </div>
+</section>
+
+<section class="connect">
+  <div class="connect__eyebrow">Topluluğa katıl</div>
+  <h2 class="connect__title">Bize katıl</h2>
+  <div class="connect__stage">
+    <div class="connect__ring">
+      <div class="connect__cell" style="--i:0"><img src="products/atype.jpg" alt=""></div>
+      <div class="connect__cell" style="--i:1"><img src="products/beyaz-hoodie-v2-alt.png" alt=""></div>
+      <div class="connect__cell" style="--i:2"><img src="products/beyaz-hoodie-v2.png" alt=""></div>
+      <div class="connect__cell" style="--i:3"><img src="products/beyaz-hoodie.png" alt=""></div>
+      <div class="connect__cell" style="--i:4"><img src="products/beyaz-polo.png" alt=""></div>
+      <div class="connect__cell" style="--i:5"><img src="products/beyaz-tisort-detay.jpg" alt=""></div>
+      <div class="connect__cell" style="--i:6"><img src="products/beyaz-tisort-flat.jpg" alt=""></div>
+      <div class="connect__cell" style="--i:7"><img src="products/beyaz-tisort.png" alt=""></div>
+      <div class="connect__cell" style="--i:8"><img src="products/black-collection.png" alt=""></div>
+      <div class="connect__cell" style="--i:9"><img src="products/black-embroidery-1.jpg" alt=""></div>
+      <div class="connect__cell" style="--i:10"><img src="products/black-embroidery-2.jpg" alt=""></div>
+      <div class="connect__cell" style="--i:11"><img src="products/black-tee-detail.jpg" alt=""></div>
+      <div class="connect__cell" style="--i:12"><img src="products/black-tee-flat.jpg" alt=""></div>
+      <div class="connect__cell" style="--i:13"><img src="products/cover-label-v2.jpg" alt=""></div>
+      <div class="connect__cell" style="--i:14"><img src="products/cover-label.jpg" alt=""></div>
+      <div class="connect__cell" style="--i:15"><img src="products/design-1.jpeg" alt=""></div>
+      <div class="connect__cell" style="--i:16"><img src="products/design-2.jpeg" alt=""></div>
+      <div class="connect__cell" style="--i:17"><img src="products/design-3.jpeg" alt=""></div>
+      <div class="connect__cell" style="--i:18"><img src="products/design-4.jpeg" alt=""></div>
+      <div class="connect__cell" style="--i:19"><img src="products/fabric-texture.jpg" alt=""></div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer__news">
+    <h3>Haberdar ol</h3>
+    <p>New drops, early access, studio stories. No noise.</p>
+    <form class="news__form" onsubmit="ALPENZO.toast(&quot;Teşekkürler! Bültene kaydoldun.&quot;);return false;">
+      <input type="email" placeholder="Email address" aria-label="Email address">
+      <button type="submit">Abone ol →</button>
+    </form>
+  </div>
+
+  <div class="footer__cols">
+    <div class="fcol">
+      <h4>Mağaza</h4>
+      <a href="shop.html">Yeni Gelenler</a>
+      <a href="shop.html">Baskılı Tişört</a>
+      <a href="shop.html">Dış Giyim</a>
+      <a href="shop.html">Aksesuar</a>
+      <a href="shop.html">İndirim</a>
+    </div>
+    <div class="fcol">
+      <h4>Yardım</h4>
+      <a href="shipping.html">Shipping</a>
+      <a href="shipping.html">İade & Değişim</a>
+      <a href="size-guide.html">Beden Tablosu</a>
+      <a href="contact.html">Sipariş Takibi</a>
+      <a href="contact.html">SSS</a>
+    </div>
+    <div class="fcol">
+      <h4>Kurumsal</h4>
+      <a href="about.html">Hakkımızda</a>
+      <a href="contact.html">Mağazalar</a>
+      <a href="about.html">Sürdürülebilirlik</a>
+      <a href="contact.html">Kariyer</a>
+      <a href="contact.html">Basın</a>
+    </div>
+    <div class="fcol">
+      <h4>Takip Et</h4>
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+      <a href="#">YouTube</a>
+      <a href="contact.html">İletişim</a>
+    </div>
+  </div>
+
+  <div class="footer__bottom">
+    <span class="footer__logo">ALPENZO</span>
+    <span class="footer__copy">© 2026 ALPENZO — İstanbul. Tüm hakları saklıdır.</span>
+    <span class="footer__pay">VISA · MASTERCARD · AMEX · PAYPAL · APPLE PAY</span>
+  </div>
+</footer>
+
+<script>
+  const track = document.getElementById('arrivalsTrack');
+  if (track) {
+    let down=false, startX=0, startLeft=0;
+    track.addEventListener('pointerdown', e=>{ down=true; startX=e.clientX; startLeft=track.scrollLeft; track.setPointerCapture(e.pointerId); });
+    track.addEventListener('pointermove', e=>{ if(down) track.scrollLeft = startLeft - (e.clientX - startX); });
+    const rel=()=>{down=false;};
+    track.addEventListener('pointerup', rel);
+    track.addEventListener('pointercancel', rel);
+  }
+
+  // product imagery → product detail page
+  document.querySelectorAll('.acard, .htile, .hero__left').forEach(el => {
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', e => { e.preventDefault(); (window.pageGo || ((h)=>location.href=h))('product.html'); });
+  });
+
+  // "Bize katıl" gallery: hover swaps the image · click opens detail
+  (function () {
+    const cells = [...document.querySelectorAll('.connect__cell')];
+    const srcs = cells.map(c => c.querySelector('img') && c.querySelector('img').src).filter(Boolean);
+    cells.forEach((c, i) => {
+      const img1 = c.querySelector('img');
+      if (img1) img1.classList.add('img1');
+      const img2 = document.createElement('img');
+      img2.className = 'img2'; img2.alt = '';
+      img2.src = srcs[(i + 1) % srcs.length];
+      c.appendChild(img2);
+      c.addEventListener('click', () => { (window.pageGo || ((h)=>location.href=h))('product.html'); });
+    });
+  })();
+</script>
+
+</body>
+</html>

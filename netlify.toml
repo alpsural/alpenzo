@@ -1,0 +1,4 @@
+# ALPENZO — saf HTML/CSS/JS sitesi. Build gerekmez; dosyalar olduğu gibi yayınlanır.
+[build]
+  publish = "."
+  command = "echo 'no build needed — static site'"

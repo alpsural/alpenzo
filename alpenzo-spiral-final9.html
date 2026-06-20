@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALPENZO — Collection</title>
+<style>
+  /* premium type: Bricolage Grotesque (display) + Schibsted Grotesk (micro) — distinctive, not Inter/Roboto */
+  @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Schibsted+Grotesk:wght@400;500;600&display=swap');
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  :root {
+    --bg: #0c0c0c;
+    --bg-deep: #060606;
+    --ink: #f2f0ec;
+    --muted: #6b6862;
+    --gold: #c8a04a;
+    --ease: cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  html, body {
+    min-height:100%; background:var(--bg);
+    color:var(--ink);
+    font-family:'Schibsted Grotesk', sans-serif;
+    overflow-x:clip;   /* clip (not hidden) so position:sticky still works */
+    -webkit-font-smoothing:antialiased;
+  }
+  a { color:inherit; text-decoration:none; }
+  .lira { font-family:'Arial','Segoe UI',sans-serif; }
+
+  /* fine film grain — fixed, pointer-events none (perf-safe) */
+  body::after {
+    content:''; position:fixed; inset:0; z-index:8; pointer-events:none;
+    opacity:0.035;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* giant hero headline at the TOP (the spiral starts lower, in front of it) */
+  .bg-word {
+    position:fixed; inset:0;
+    display:flex; justify-content:center; align-items:flex-start;
+    padding-top:1.5vh;
+    z-index:0; pointer-events:none; user-select:none;
+    opacity:0; transition:opacity 1.6s var(--ease) .3s;
+  }
+  .bg-word.in { opacity:1; }
+  .bg-word span {
+    display:block; text-align:center;
+    font-family:'Bricolage Grotesque', sans-serif;
+    font-weight:800; font-size:12vw; line-height:0.88;
+    letter-spacing:-0.03em; text-transform:uppercase;
+    color:#eceae4; opacity:0.9;
+  }
+
+  /* centered hero tagline — sits between the headline and the spiral */
+  .hero-tagline {
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    z-index:5; text-align:center; max-width:330px;
+    font-size:12px; line-height:1.75; letter-spacing:0.03em;
+    color:#9a968e; pointer-events:none;
+  }
+  @media(max-width:640px){ .hero-tagline{ max-width:220px; font-size:11px; } }
+
+  #scene {
+    position:fixed; inset:0; z-index:1;
+    opacity:0; filter:blur(14px);
+    transition:opacity 1.4s var(--ease), filter 1.4s var(--ease);
+  }
+  #scene.in { opacity:1; filter:blur(0); }
+
+  /* ── HUD ───────────────────────────────────────────────── */
+  .hud {
+    position:fixed; z-index:6;
+    font-size:11px; letter-spacing:0.16em;
+    color:var(--muted); pointer-events:none;
+    text-transform:uppercase; font-weight:500;
+  }
+  .hud.brand {
+    top:28px; left:36px; color:var(--ink);
+    font-family:'Bricolage Grotesque', sans-serif;
+    font-weight:800; letter-spacing:0.26em; font-size:23px;
+  }
+  .hud.nav {
+    top:74px; left:36px; display:flex; flex-direction:column; gap:11px;
+    pointer-events:auto;
+  }
+  .hud.nav a {
+    display:flex; align-items:center; gap:11px; width:max-content;
+    padding:11px 20px 11px 20px; border-radius:999px;
+    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    box-shadow:inset 0 1px 1px rgba(255,255,255,0.08);
+    font-size:12px; letter-spacing:0.22em; text-transform:uppercase;
+    color:var(--ink); font-weight:600;
+    transition:transform .5s var(--ease), background .5s var(--ease);
+  }
+  .hud.nav a::before {
+    content:''; width:5px; height:5px; border-radius:50%; background:var(--gold);
+    box-shadow:0 0 8px var(--gold);
+  }
+  .hud.nav a:hover { transform:scale(1.04); background:rgba(255,255,255,0.07); }
+  .hud.coords {
+    top:50%; right:34px; transform:translateY(-50%);
+    line-height:2.3; font-size:10px; letter-spacing:0.2em;
+  }
+  .hud.tagline {
+    bottom:32px; left:34px; max-width:300px;
+    line-height:1.85; letter-spacing:0.08em;
+    text-transform:none; font-size:12px; color:#9a968e;
+  }
+  .hud.drag { bottom:32px; right:34px; }
+  .hud .num { color:var(--gold); font-variant-numeric:tabular-nums; }
+
+  /* floating glass MENU pill (Fluid Island) */
+  .menu-pill {
+    position:fixed; top:24px; right:30px; z-index:7;
+    display:flex; align-items:center; gap:10px;
+    padding:9px 16px 9px 18px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.08);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    box-shadow:inset 0 1px 1px rgba(255,255,255,0.08);
+    font-size:10px; letter-spacing:0.24em; text-transform:uppercase;
+    color:var(--ink); font-weight:600;
+    cursor:pointer;
+    transition:transform .5s var(--ease), background .5s var(--ease);
+  }
+  .menu-pill:hover { transform:scale(1.04); background:rgba(255,255,255,0.07); }
+  .menu-pill .dot {
+    width:5px; height:5px; border-radius:50%; background:var(--gold);
+    box-shadow:0 0 8px var(--gold);
+  }
+  .menu-pill:active { transform:scale(0.97); }
+
+  /* top-right icon cluster (search · account · favorites · cart) — dark */
+  .topicons {
+    position:fixed; top:24px; right:30px; z-index:7;
+    display:flex; align-items:center; gap:18px; pointer-events:auto;
+  }
+  .topicons .search {
+    display:flex; align-items:center; gap:8px;
+    border:1px solid rgba(255,255,255,0.16); border-radius:999px; padding:9px 16px;
+    background:rgba(255,255,255,0.04);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  }
+  .topicons .search svg { width:16px; height:16px; color:#9a968e; }
+  .topicons .search input {
+    border:none; outline:none; background:none; color:var(--ink);
+    font-family:inherit; font-size:13px; width:130px;
+  }
+  .topicons .search input::placeholder { color:#7a766d; }
+  .topicons .iconbtn { position:relative; display:inline-flex; color:var(--ink); transition:opacity .25s var(--ease); }
+  .topicons .iconbtn:hover { opacity:0.6; }
+  .topicons .iconbtn svg { width:22px; height:22px; }
+  .topicons .cart-badge {
+    position:absolute; top:-7px; right:-9px; min-width:18px; height:18px; padding:0 4px; border-radius:999px;
+    background:var(--gold); color:#0c0c0c; font-size:10px; font-weight:700;
+    display:flex; align-items:center; justify-content:center; font-variant-numeric:tabular-nums;
+  }
+  @media(max-width:680px){ .topicons .search { display:none; } }
+
+  /* faint side crosshairs */
+  .plus { position:fixed; z-index:4; color:var(--muted); font-size:14px; opacity:0.3; pointer-events:none; }
+  .plus.l { left:34px; top:50%; transform:translateY(-50%); }
+  .plus.r { right:118px; top:50%; transform:translateY(-50%); }
+
+  /* custom cursor disabled — use the native mouse pointer */
+  .cursor {
+    display:none;
+    position:fixed; z-index:9; width:20px; height:20px;
+    border:1px solid rgba(200,160,74,0.65); border-radius:50%;
+    transform:translate(-50%,-50%);
+    pointer-events:none;
+    transition:width .45s var(--ease), height .45s var(--ease),
+               border-color .45s var(--ease), background .45s var(--ease);
+  }
+  .cursor.active {
+    width:46px; height:46px;
+    border-color:rgba(200,160,74,0.35);
+    background:rgba(200,160,74,0.06);
+  }
+
+  #loader {
+    position:fixed; inset:0; z-index:20; background:var(--bg-deep);
+    display:flex; align-items:center; justify-content:center;
+    letter-spacing:0.3em; font-size:11px;
+    color:var(--muted); transition:opacity 1s var(--ease); text-transform:uppercase;
+  }
+  #loader.hide { opacity:0; pointer-events:none; }
+  #loader .pct { color:var(--gold); margin-left:8px; }
+
+  /* ── HERO: tall transparent spacer; the fixed spiral reveals as you scroll ── */
+  .hero-spacer { height:190vh; width:100%; }
+  .hero-ui {
+    position:fixed; inset:0; z-index:5; pointer-events:none;
+    transition:opacity .25s var(--ease);
+  }
+  .hero-ui .hud, .hero-ui .plus { position:absolute; }
+
+  /* ── SHOP SECTION (editorial product grid, scrolls over the fixed spiral) ── */
+  .shop {
+    position:relative; z-index:2;
+    background:#ffffff; color:#111;
+    display:grid; grid-template-columns:46% 54%;
+    align-items:start;
+  }
+  /* left image stays pinned while the right column scrolls (Patta behaviour) */
+  .shop__hero {
+    position:sticky; top:0; align-self:start;
+    height:100vh; padding:26px; display:flex;
+  }
+  .shop__hero img {
+    width:100%; height:100%; object-fit:cover; display:block;
+    border:1px solid rgba(0,0,0,0.14);   /* framed look */
+  }
+  .shop__main { padding:64px 56px 96px; }
+  .shop__title {
+    font-family:'Bricolage Grotesque', sans-serif;
+    font-weight:800; letter-spacing:-0.02em;
+    font-size:clamp(2.4rem, 4.4vw, 3.8rem);
+    line-height:1; margin-bottom:48px; color:#111;
+  }
+  .shop__grid {
+    display:grid; grid-template-columns:1fr 1fr; gap:44px 36px;
+  }
+  .card { display:flex; flex-direction:column; }
+  .card__media {
+    position:relative; aspect-ratio:4/5; overflow:hidden;
+    background:#e9e7e1;
+  }
+  .card__media img {
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;
+    transition:opacity .55s var(--ease), transform .8s var(--ease);
+  }
+  .card__media .img2 { opacity:0; }
+  .card:hover .img1 { opacity:0; }
+  .card:hover .img2 { opacity:1; transform:scale(1.04); }
+  .badge {
+    position:absolute; top:14px; left:14px; z-index:2;
+    background:#111; color:#fff;
+    font-size:9px; letter-spacing:0.18em; font-weight:600;
+    padding:5px 9px; text-transform:uppercase;
+  }
+  .quickview {
+    position:absolute; left:0; right:0; bottom:0; z-index:2;
+    text-align:center; padding:14px 0;
+    background:rgba(255,255,255,0.92);
+    font-size:10px; letter-spacing:0.24em; text-transform:uppercase; color:#111;
+    transform:translateY(100%); transition:transform .45s var(--ease);
+    pointer-events:auto; cursor:pointer;
+  }
+  .card:hover .quickview { transform:translateY(0); }
+  .card__info { padding-top:16px; }
+  .card__brand { display:block; font-weight:600; font-size:13px; color:#111; }
+  .card__name  { display:block; font-size:13px; color:#444; margin-top:2px; }
+  .card__color { display:block; font-size:12px; color:#9a968e; margin-top:8px; }
+  .card__price { display:block; font-size:13px; color:#111; margin-top:6px; }
+  .badge.out { background:#8c8881; }
+
+  /* ── LATEST ARRIVALS (horizontal carousel · hover swaps the image) ── */
+  .arrivals {
+    position:relative; z-index:2;
+    background:#ffffff; color:#111;
+    padding:90px 56px 110px;
+  }
+  .arrivals__head {
+    display:flex; align-items:flex-start; justify-content:space-between; gap:24px;
+    margin-bottom:44px;
+  }
+  .arrivals__title {
+    font-family:'Bricolage Grotesque', sans-serif; font-weight:800;
+    font-size:clamp(2.2rem, 4vw, 3.4rem); letter-spacing:-0.02em; line-height:1; color:#111;
+  }
+  .viewall {
+    flex:none; display:inline-block; background:#111; color:#fff; border:none;
+    font-size:10px; letter-spacing:0.2em; text-transform:uppercase; font-weight:600;
+    padding:14px 22px; cursor:pointer; pointer-events:auto;
+    transition:background .4s var(--ease);
+  }
+  .viewall:hover { background:#333; }
+  .arrivals__track {
+    display:flex; gap:24px; overflow-x:auto; overflow-y:hidden;
+    scroll-snap-type:x proximity; padding-bottom:12px;
+    scrollbar-width:none; cursor:grab;
+  }
+  .arrivals__track::-webkit-scrollbar { display:none; }
+  .acard { flex:0 0 clamp(250px, 23vw, 340px); scroll-snap-align:start; }
+  .acard__media {
+    position:relative; aspect-ratio:4/5; overflow:hidden; background:#e9e7e1;
+  }
+  .acard__media img {
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    transition:opacity .55s var(--ease), transform .8s var(--ease);
+  }
+  .acard__media .img2 { opacity:0; }
+  .acard:hover .img1 { opacity:0; }
+  .acard:hover .img2 { opacity:1; transform:scale(1.04); }
+  .acard:hover .quickview { transform:translateY(0); }
+  .acard__info { padding-top:14px; }
+
+  @media(max-width:640px){
+    .arrivals { padding:64px 20px 80px; }
+    .acard { flex-basis:78vw; }
+  }
+
+  /* ── CONNECT: 3D rotating community gallery (horizontal cylinder) ── */
+  @property --rot { syntax:'<angle>'; initial-value:0deg; inherits:false; }
+  .connect {
+    --r: clamp(950px, 90vw, 1480px);
+    position:relative; z-index:2; background:#ffffff; color:#111;
+    padding:84px 0 120px; text-align:center; overflow:hidden;
+  }
+  .connect__eyebrow {
+    font-size:10px; letter-spacing:0.3em; text-transform:uppercase;
+    color:#8a867d; margin-bottom:14px;
+  }
+  .connect__title {
+    font-family:'Bricolage Grotesque', sans-serif; font-weight:800;
+    font-size:clamp(2.6rem, 7vw, 5.5rem); letter-spacing:-0.03em; line-height:1;
+    color:#111; margin-bottom:34px;
+  }
+  .connect__stage { position:relative; height:clamp(420px, 40vw, 620px); perspective:2000px; }
+  .connect__ring {
+    position:absolute; inset:0; margin:auto; width:0; height:0;
+    transform-style:preserve-3d;
+    transform:rotateZ(-3deg) rotateX(6deg) translateZ(calc(var(--r) * -1)) rotateY(var(--rot));
+    animation:ringspin 46s linear infinite;
+  }
+  .connect__cell {
+    position:absolute; top:50%; left:50%;
+    width:clamp(300px, 23vw, 440px); height:clamp(420px, 32vw, 580px);
+    transform:translate(-50%,-50%) rotateY(calc(var(--i) * 18deg)) translateZ(var(--r));
+    overflow:hidden; background:#e9e7e1;
+    box-shadow:0 22px 55px rgba(0,0,0,0.28);
+    backface-visibility:hidden;
+  }
+  .connect__cell { cursor:pointer; }
+  .connect__cell img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; transition:opacity .5s var(--ease); }
+  .connect__cell .img2 { opacity:0; }
+  .connect__cell:hover .img1 { opacity:0; }
+  .connect__cell:hover .img2 { opacity:1; }
+  .connect:hover .connect__ring { animation-play-state:paused; }
+
+  /* brand mark band (logo on cream) */
+  .brandmark { position:relative; z-index:2; background:#f6f4ee; display:flex; justify-content:center; align-items:center; padding:70px 24px; }
+  .brandmark img { width:auto; max-width:min(440px, 70vw); height:auto; display:block; }
+
+  /* campaign banner */
+  .home-feature { position:relative; z-index:2; height:88vh; overflow:hidden; }
+  .home-feature img { width:100%; height:100%; object-fit:cover; display:block; transition:transform 1.2s var(--ease); }
+  .home-feature:hover img { transform:scale(1.04); }
+  .home-feature::after { content:''; position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.5), transparent 50%); }
+  .home-feature__label { position:absolute; left:48px; bottom:52px; z-index:2; color:#fff; }
+  .home-feature__title { font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:clamp(2.2rem,4.5vw,4rem); letter-spacing:-0.02em; line-height:1; }
+  .home-feature__btn { display:inline-block; margin-top:22px; background:#fff; color:#111; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; font-weight:600; padding:14px 26px; transition:background .35s var(--ease); }
+  .home-feature__btn:hover { background:#e8e6e0; }
+  @media(max-width:760px){ .home-feature{ height:66vh; } .home-feature__label{ left:24px; bottom:32px; } .brandmark{ padding:54px 20px; } }
+  @keyframes ringspin { to { --rot:360deg; } }
+  @media(prefers-reduced-motion: reduce){
+    .connect__ring { animation:none; }
+  }
+
+  /* ── FOOTER (bookends the dark hero) ── */
+  .footer {
+    position:relative; z-index:2; background:var(--bg-deep); color:var(--ink);
+    padding:96px 56px 40px;
+  }
+  .footer__news { max-width:520px; margin-bottom:72px; }
+  .footer__news h3 {
+    font-family:'Bricolage Grotesque', sans-serif; font-weight:800;
+    font-size:clamp(1.8rem, 3vw, 2.6rem); letter-spacing:-0.02em; margin-bottom:12px;
+  }
+  .footer__news p { color:var(--muted); font-size:14px; margin-bottom:24px; }
+  .news__form {
+    display:flex; align-items:center; gap:16px;
+    border-bottom:1px solid rgba(255,255,255,0.22);
+  }
+  .news__form input {
+    flex:1; background:none; border:none; color:var(--ink);
+    font-family:inherit; font-size:14px; padding:12px 0; outline:none;
+    pointer-events:auto;
+  }
+  .news__form input::placeholder { color:#6a6a6a; }
+  .news__form button {
+    background:none; border:none; color:var(--gold);
+    font-size:11px; letter-spacing:0.2em; text-transform:uppercase; font-weight:600;
+    cursor:pointer; pointer-events:auto; white-space:nowrap;
+    transition:opacity .3s var(--ease);
+  }
+  .news__form button:hover { opacity:0.7; }
+  .footer__cols {
+    display:grid; grid-template-columns:repeat(4, 1fr); gap:40px;
+    padding-bottom:64px; border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+  .fcol h4 {
+    font-size:11px; letter-spacing:0.2em; text-transform:uppercase;
+    color:var(--ink); margin-bottom:18px;
+  }
+  .fcol a {
+    display:block; color:var(--muted); font-size:13px; text-decoration:none;
+    margin-bottom:11px; pointer-events:auto; transition:color .3s var(--ease);
+  }
+  .fcol a:hover { color:var(--ink); }
+  .footer__bottom {
+    display:flex; align-items:center; justify-content:space-between;
+    gap:20px; flex-wrap:wrap; padding-top:30px;
+  }
+  .footer__logo {
+    font-family:'Bricolage Grotesque', sans-serif; font-weight:800;
+    letter-spacing:0.3em; font-size:14px; color:var(--ink);
+  }
+  .footer__copy { color:var(--muted); font-size:11px; letter-spacing:0.04em; }
+  .footer__pay { color:var(--muted); font-size:10px; letter-spacing:0.18em; }
+  @media(max-width:760px){
+    .footer { padding:64px 24px 32px; }
+    .footer__cols { grid-template-columns:1fr 1fr; gap:34px; }
+  }
+
+  @media(max-width:960px){
+    .shop { grid-template-columns:1fr; }
+    .shop__hero { position:relative; height:auto; min-height:60vh; padding:18px; }
+    .shop__main { padding:48px 24px 72px; }
+  }
+  @media(max-width:520px){
+    .shop__grid { grid-template-columns:1fr; gap:36px; }
+  }
+  @media(max-width:640px){
+    .hud.tagline { display:none; }
+    .hud.coords  { display:none; }
+    .plus { display:none; }
+    .bg-word span { font-size:34vw; }
+  }
+</style>
+<script src="assets/cart.js" defer></script>
+</head>
+<body>
+
+<div id="loader">[ LOADING <span class="pct" id="pct">0%</span> ]</div>
+
+<div class="bg-word" id="bgword"><span>PREMIUM<br>STREETWEAR</span></div>
+
+<canvas id="scene"></canvas>
+
+<a class="hud brand" href="alpenzo-spiral-final9.html">ALPENZO</a>
+<nav class="hud nav">
+  <a href="shop.html">Mağaza</a>
+  <a href="about.html">Hakkımızda</a>
+  <a href="contact.html">İletişim</a>
+</nav>
+
+<div class="topicons">
+  <form class="search" role="search" onsubmit="location.href=&quot;yakinda.html&quot;;return false;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    <input type="search" placeholder="Ara" aria-label="Ara">
+  </form>
+  <a class="iconbtn" href="yakinda.html" aria-label="Hesabım"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.6 3.1-5.6 7-5.6s7 2 7 5.6"/></svg></a>
+  <a class="iconbtn" href="yakinda.html" aria-label="Favoriler"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 4.2l2.5 5.1 5.6.8-4 3.9 1 5.6L12 17l-5 2.6 1-5.6-4-3.9 5.6-.8z"/></svg></a>
+  <a class="iconbtn" href="cart.html" aria-label="Sepet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M6 8h12l-1 12H7z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg><span class="cart-badge" id="cartCount">0</span></a>
+</div>
+
+<div class="hero-ui" id="heroUI">
+  <span class="plus l">+</span>
+  <span class="plus r">+</span>
+  <div class="hero-tagline">İstanbul doğumlu premium sokak giyimi — engineered for movement, made to last, designed without compromise.</div>
+  <div class="hud coords">X&nbsp;<span class="num" id="cx">000</span><br>Y&nbsp;<span class="num" id="cy">000</span></div>
+  <div class="hud drag">Scroll ↓</div>
+</div>
+
+<div class="hero-spacer"></div>
+
+<section class="shop">
+  <div class="shop__hero">
+    <img src="products/alpenzo-signature.png" alt="ALPENZO editorial">
+  </div>
+  <div class="shop__main">
+    <h2 class="shop__title">Graphic Tees</h2>
+    <div class="shop__grid">
+
+      <article class="card">
+        <div class="card__media">
+          <span class="badge">Yeni</span>
+          <img class="img1" src="products/alpine-black-2.jpg" alt="">
+          <img class="img2" src="products/alpine-black.png" alt="">
+          <span class="quickview">Hızlı bak</span>
+        </div>
+        <div class="card__info">
+          <span class="card__brand">ALPENZO</span>
+          <span class="card__name">Spiral Logo Tee</span>
+          <span class="card__color">Bone</span>
+          <span class="card__price"><span class="lira">₺</span>1.450,00</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__media">
+          <span class="badge">Yeni</span>
+          <img class="img1" src="products/alpine-white-2.jpg" alt="">
+          <img class="img2" src="products/alpine-white.png" alt="">
+          <span class="quickview">Hızlı bak</span>
+        </div>
+        <div class="card__info">
+          <span class="card__brand">ALPENZO</span>
+          <span class="card__name">Atlas Graphic Tee</span>
+          <span class="card__color">Black</span>
+          <span class="card__price"><span class="lira">₺</span>1.450,00</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__media">
+          <img class="img1" src="products/atype-black-back.jpg" alt="">
+          <img class="img2" src="products/atype-black-detail.jpg" alt="">
+          <span class="quickview">Hızlı bak</span>
+        </div>
+        <div class="card__info">
+          <span class="card__brand">ALPENZO</span>
+          <span class="card__name">Bosphorus Tee</span>
+          <span class="card__color">Off-white</span>
+          <span class="card__price"><span class="lira">₺</span>1.350,00</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__media">
+          <span class="badge">Yeni</span>
+          <img class="img1" src="products/atype-black-front-plain.jpg" alt="">
+          <img class="img2" src="products/atype-black-front.jpg" alt="">
+          <span class="quickview">Hızlı bak</span>
+        </div>
+        <div class="card__info">
+          <span class="card__brand">ALPENZO</span>
+          <span class="card__name">Coil Print Tee</span>
+          <span class="card__color">Charcoal</span>
+          <span class="card__price"><span class="lira">₺</span>1.450,00</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__media">
+          <img class="img1" src="products/atype-black.jpg" alt="">
+          <img class="img2" src="products/atype-logo-ref.png" alt="">
+          <span class="quickview">Hızlı bak</span>
+        </div>
+        <div class="card__info">
+          <span class="card__brand">ALPENZO</span>
+          <span class="card__name">İstanbul Heavy Tee</span>
+          <span class="card__color">Sand</span>
+          <span class="card__price"><span class="lira">₺</span>1.350,00</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__media">
+          <img class="img1" src="products/atype-white-back.jpg" alt="">
+          <img class="img2" src="products/atype-white-detail.jpg" alt="">
+          <span class="quickview">Hızlı bak</span>
+        </div>
+        <div class="card__info">
+          <span class="card__brand">ALPENZO</span>
+          <span class="card__name">Mono Pocket Tee</span>
+          <span class="card__color">Slate</span>
+          <span class="card__price"><span class="lira">₺</span>1.250,00</span>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section class="brandmark">
+  <img src="assets/logo.png" alt="ALPENZO Sportswear — Created for Elevation">
+</section>
+
+<section class="arrivals">
+  <div class="arrivals__head">
+    <h2 class="arrivals__title">Yeni Gelenler</h2>
+    <a class="viewall" href="shop.html">Tümünü gör</a>
+  </div>
+  <div class="arrivals__track" id="arrivalsTrack">
+
+    <article class="acard">
+      <div class="acard__media">
+        <span class="badge">Yeni</span>
+        <img class="img1" src="products/atype-white-front-plain.jpg" alt="">
+        <img class="img2" src="products/atype-white-front.jpg" alt="">
+        <span class="quickview">Hızlı bak</span>
+      </div>
+      <div class="acard__info">
+        <span class="card__brand">ALPENZO</span>
+        <span class="card__name">Spiral Logo Tee</span>
+        <span class="card__color">Bone</span>
+        <span class="card__price"><span class="lira">₺</span>1.450,00</span>
+      </div>
+    </article>
+
+    <article class="acard">
+      <div class="acard__media">
+        <span class="badge out">Tükendi</span>
+        <img class="img1" src="products/atype-white.jpg" alt="">
+        <img class="img2" src="products/atype.jpg" alt="">
+        <span class="quickview">Hızlı bak</span>
+      </div>
+      <div class="acard__info">
+        <span class="card__brand">ALPENZO</span>
+        <span class="card__name">Atlas Graphic Tee</span>
+        <span class="card__color">Black</span>
+        <span class="card__price"><span class="lira">₺</span>1.450,00</span>
+      </div>
+    </article>
+
+    <article class="acard">
+      <div class="acard__media">
+        <span class="badge">Yeni</span>
+        <img class="img1" src="products/beyaz-hoodie-v2-alt.png" alt="">
+        <img class="img2" src="products/beyaz-hoodie-v2.png" alt="">
+        <span class="quickview">Hızlı bak</span>
+      </div>
+      <div class="acard__info">
+        <span class="card__brand">ALPENZO</span>
+        <span class="card__name">Coil Knit Cardigan</span>
+        <span class="card__color">Sand</span>
+        <span class="card__price"><span class="lira">₺</span>3.250,00</span>
+      </div>
+    </article>
+
+    <article class="acard">
+      <div class="acard__media">
+        <span class="badge out">Tükendi</span>
+        <img class="img1" src="products/beyaz-hoodie.png" alt="">
+        <img class="img2" src="products/beyaz-polo.png" alt="">
+        <span class="quickview">Hızlı bak</span>
+      </div>
+      <div class="acard__info">
+        <span class="card__brand">ALPENZO</span>
+        <span class="card__name">Track Top</span>
+        <span class="card__color">Vapor Grey</span>
+        <span class="card__price"><span class="lira">₺</span>3.250,00</span>
+      </div>
+    </article>
+
+    <article class="acard">
+      <div class="acard__media">
+        <span class="badge">Yeni</span>
+        <img class="img1" src="products/beyaz-tisort-detay.jpg" alt="">
+        <img class="img2" src="products/beyaz-tisort-flat.jpg" alt="">
+        <span class="quickview">Hızlı bak</span>
+      </div>
+      <div class="acard__info">
+        <span class="card__brand">ALPENZO</span>
+        <span class="card__name">Mono Pocket Tee</span>
+        <span class="card__color">Slate</span>
+        <span class="card__price"><span class="lira">₺</span>1.250,00</span>
+      </div>
+    </article>
+
+    <article class="acard">
+      <div class="acard__media">
+        <img class="img1" src="products/beyaz-tisort.png" alt="">
+        <img class="img2" src="products/black-collection.png" alt="">
+        <span class="quickview">Hızlı bak</span>
+      </div>
+      <div class="acard__info">
+        <span class="card__brand">ALPENZO</span>
+        <span class="card__name">Bosphorus Hoodie</span>
+        <span class="card__color">Charcoal</span>
+        <span class="card__price"><span class="lira">₺</span>2.750,00</span>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section class="home-feature">
+  <img src="products/kampanya-aktif.jpeg" alt="ALPENZO aktif giyim kampanyası">
+  <div class="home-feature__label">
+    <h2 class="home-feature__title">Performans Koleksiyonu</h2>
+    <a class="home-feature__btn" href="shop.html">Hemen al</a>
+  </div>
+</section>
+
+<section class="connect">
+  <div class="connect__eyebrow">Topluluğa katıl</div>
+  <h2 class="connect__title">Bize katıl</h2>
+  <div class="connect__stage">
+    <div class="connect__ring">
+      <div class="connect__cell" style="--i:0"><img src="products/black-embroidery-1.jpg" alt=""></div>
+      <div class="connect__cell" style="--i:1"><img src="products/black-embroidery-2.jpg" alt=""></div>
+      <div class="connect__cell" style="--i:2"><img src="products/black-tee-detail.jpg" alt=""></div>
+      <div class="connect__cell" style="--i:3"><img src="products/black-tee-flat.jpg" alt=""></div>
+      <div class="connect__cell" style="--i:4"><img src="products/cover-label-v2.jpg" alt=""></div>
+      <div class="connect__cell" style="--i:5"><img src="products/cover-label.jpg" alt=""></div>
+      <div class="connect__cell" style="--i:6"><img src="products/design-1.jpeg" alt=""></div>
+      <div class="connect__cell" style="--i:7"><img src="products/design-2.jpeg" alt=""></div>
+      <div class="connect__cell" style="--i:8"><img src="products/design-3.jpeg" alt=""></div>
+      <div class="connect__cell" style="--i:9"><img src="products/design-4.jpeg" alt=""></div>
+      <div class="connect__cell" style="--i:10"><img src="products/fabric-texture.jpg" alt=""></div>
+      <div class="connect__cell" style="--i:11"><img src="products/folded-set.jpg" alt=""></div>
+      <div class="connect__cell" style="--i:12"><img src="products/hero-product.jpg" alt=""></div>
+      <div class="connect__cell" style="--i:13"><img src="products/hoodie-cover.jpg" alt=""></div>
+      <div class="connect__cell" style="--i:14"><img src="products/hoodie-design2-black.png" alt=""></div>
+      <div class="connect__cell" style="--i:15"><img src="products/hoodie.png" alt=""></div>
+      <div class="connect__cell" style="--i:16"><img src="products/logo-tshirt.jpeg" alt=""></div>
+      <div class="connect__cell" style="--i:17"><img src="products/mountains-story.jpg" alt=""></div>
+      <div class="connect__cell" style="--i:18"><img src="products/polo-black-greek-2.jpg" alt=""></div>
+      <div class="connect__cell" style="--i:19"><img src="products/polo-black-greek.jpg" alt=""></div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer__news">
+    <h3>Haberdar ol</h3>
+    <p>New drops, early access, studio stories. No noise.</p>
+    <form class="news__form" onsubmit="ALPENZO.toast(&quot;Teşekkürler! Bültene kaydoldun.&quot;);return false;">
+      <input type="email" placeholder="Email address" aria-label="Email address">
+      <button type="submit">Abone ol →</button>
+    </form>
+  </div>
+
+  <div class="footer__cols">
+    <div class="fcol">
+      <h4>Mağaza</h4>
+      <a href="shop.html">Yeni Gelenler</a>
+      <a href="shop.html">Baskılı Tişört</a>
+      <a href="shop.html">Dış Giyim</a>
+      <a href="shop.html">Aksesuar</a>
+      <a href="shop.html">İndirim</a>
+    </div>
+    <div class="fcol">
+      <h4>Yardım</h4>
+      <a href="shipping.html">Shipping</a>
+      <a href="shipping.html">İade & Değişim</a>
+      <a href="size-guide.html">Beden Tablosu</a>
+      <a href="contact.html">Sipariş Takibi</a>
+      <a href="contact.html">SSS</a>
+    </div>
+    <div class="fcol">
+      <h4>Kurumsal</h4>
+      <a href="about.html">Hakkımızda</a>
+      <a href="contact.html">Mağazalar</a>
+      <a href="about.html">Sürdürülebilirlik</a>
+      <a href="contact.html">Kariyer</a>
+      <a href="contact.html">Basın</a>
+    </div>
+    <div class="fcol">
+      <h4>Takip Et</h4>
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+      <a href="#">YouTube</a>
+      <a href="contact.html">İletişim</a>
+    </div>
+  </div>
+
+  <div class="footer__bottom">
+    <span class="footer__logo">ALPENZO</span>
+    <span class="footer__copy">© 2026 ALPENZO — İstanbul. Tüm hakları saklıdır.</span>
+    <span class="footer__pay">VISA · MASTERCARD · AMEX · PAYPAL · APPLE PAY</span>
+  </div>
+</footer>
+
+<div class="cursor" id="cursor"></div>
+
+<script type="importmap">
+{ "imports": { "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.module.min.js" } }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+
+/* ── IMAGES — replace with your own product photos ───────── */
+const IMAGES = [
+  'products/alpenzo-signature.png',
+  'products/alpine-black-2.jpg',
+  'products/alpine-black.png',
+  'products/alpine-white-2.jpg',
+  'products/alpine-white.png',
+  'products/atype-black-back.jpg',
+  'products/atype-black-detail.jpg',
+  'products/atype-black-front-plain.jpg',
+  'products/atype-black-front.jpg',
+  'products/atype-black.jpg',
+  'products/atype-logo-ref.png',
+  'products/atype-white-back.jpg',
+  'products/atype-white-detail.jpg',
+  'products/atype-white-front-plain.jpg',
+  'products/atype-white-front.jpg',
+  'products/atype-white.jpg',
+  'products/atype.jpg',
+  'products/beyaz-hoodie-v2-alt.png',
+  'products/beyaz-hoodie-v2.png',
+  'products/beyaz-hoodie.png',
+  'products/beyaz-polo.png',
+  'products/beyaz-tisort-detay.jpg',
+  'products/beyaz-tisort-flat.jpg',
+  'products/beyaz-tisort.png',
+  'products/black-collection.png',
+  'products/black-embroidery-1.jpg',
+  'products/black-embroidery-2.jpg',
+  'products/black-tee-detail.jpg',
+  'products/black-tee-flat.jpg',
+  'products/cover-label-v2.jpg',
+  'products/cover-label.jpg',
+  'products/design-1.jpeg',
+  'products/design-2.jpeg',
+  'products/design-3.jpeg',
+  'products/design-4.jpeg',
+  'products/fabric-texture.jpg',
+  'products/folded-set.jpg',
+  'products/hero-product.jpg',
+  'products/hoodie-cover.jpg',
+  'products/hoodie-design2-black.png',
+  'products/hoodie.png',
+  'products/logo-tshirt.jpeg',
+  'products/mountains-story.jpg',
+  'products/polo-black-greek-2.jpg',
+  'products/polo-black-greek.jpg',
+  'products/polo-black-minimal-2.jpg',
+  'products/polo-black-minimal.jpg',
+  'products/polo-white-2.jpg',
+  'products/polo-white-detail.jpg',
+  'products/polo-white.png',
+  'products/polo.jpg',
+  'products/product-hoodie.jpg',
+  'products/product-sweatshirt.jpg',
+  'products/product-tshirt.jpg',
+  'products/sig-label-alpenzo.jpg',
+  'products/sig-label-detail.jpg',
+  'products/sig-tee-detail.jpg',
+  'products/sig-tee-flat.jpg',
+  'products/signature-cover-new.jpg',
+  'products/signature-logo.png',
+  'products/siyah-hoodie-v2-alt.png',
+  'products/siyah-hoodie-v2.png',
+  'products/siyah-hoodie.png',
+  'products/siyah-polo.jpeg',
+  'products/siyah-tisort-detay.jpg',
+  'products/siyah-tisort-flat.jpg',
+  'products/siyah-tisort.png',
+  'products/sweatshirt-black-2.jpg',
+  'products/sweatshirt-black.png',
+  'products/sweatshirt-cover.jpg',
+  'products/sweatshirt-white-2.jpg',
+  'products/sweatshirt-white.jpg',
+  'products/sweatshirt.jpg',
+  'products/tee-black.jpg',
+  'products/tee-collection.png',
+  'products/tee-white.jpg',
+  'products/tshirt-cover-new.jpeg',
+  'products/tshirt-cover.jpg',
+  'products/white-collection.png',
+  'products/white-embroidery-1.jpg',
+  'products/white-embroidery-2.jpg',
+  'products/white-tee-detail.jpg',
+  'products/white-tee-flat.jpg',
+];
+
+/* ── SPIRAL CONFIG — continuous helical ribbon (Studio-Dialect technique) ──
+   ONE climbing ribbon, photos tile edge-to-edge (no gaps / no overflow);
+   radius oscillates with a sine wave for organic bulging coils. */
+const PER_TURN    = 17;   // photos per turn (fewer → each photo a touch bigger)
+const COPIES      = 1;    // all product photos, one pass
+const RADIUS_BASE = 9.5;  // bottom
+const RADIUS_TOP  = 11.9; // subtle, even per-layer growth — top stays reliably the largest
+const RATIO       = 1.33; // 600×800 portrait, like the reference
+const COIL_GAP    = 1.22; // climb per turn ÷ band height (>1 = visible 3D gap between coils)
+const WAVE_AMP    = 0.025; // very subtle bulge — too small to reverse the upward growth
+const WAVE_FREQ   = 0.1;  // ~0.9 waves over the whole spiral → one gentle, even bulge (not messy)
+const WAVE_PHASE  = 0;
+const SUB         = 8;    // curve subdivisions per photo (smooth arc)
+const THICK       = 0.6;  // ribbon thickness → dark edge gives the band real 3D depth
+
+const canvas   = document.getElementById('scene');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+const scene  = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(58, window.innerWidth/window.innerHeight, 0.1, 300);
+camera.position.set(0, 10, 28);  // panned up → spiral renders lower without shrinking
+camera.lookAt(0, 10, 0);
+
+const group = new THREE.Group();
+scene.add(group);
+
+/* ── BUILD CONTINUOUS HELICAL RIBBON ─────────────────────────
+   One climbing vertical ribbon. Each photo = a curved quad whose right
+   edge is shared with the next photo's left edge → perfect edge-to-edge
+   tiling, no gaps, no overflow. Radius oscillates (sine) for organic coils. */
+const texLoader = new THREE.TextureLoader();
+const TWO_PI    = Math.PI * 2;
+const TOTAL     = IMAGES.length * COPIES;     // photos along the ribbon
+let loaded = 0;
+
+const sinHalf = Math.sin(Math.PI / PER_TURN);
+const GR      = RADIUS_TOP / RADIUS_BASE;             // total growth ratio over the ribbon
+const lnGR    = Math.log(GR);
+const A       = 2 * sinHalf * RATIO * COIL_GAP / PER_TURN;
+
+// EXPONENTIAL growth → every layer grows by the SAME proportion (equal ratio per turn)
+const coneR  = (t) => RADIUS_BASE * Math.pow(GR, t / TOTAL);
+// half band-height at t → photos grow in proportion with the radius
+const halfAt = (t) => coneR(t) * sinHalf * RATIO;
+// cumulative climb (integral of A·coneR) so the coil gap stays proportional
+const yAt    = (t) => A * (coneR(t) - RADIUS_BASE) * TOTAL / lnGR;
+const yCenter = yAt(TOTAL) / 2;
+
+// radius for x/z position: cone growth × sine-wave bulge (organic)
+function radiusAt(t) {
+  return coneR(t) * (1 + WAVE_AMP * Math.sin(t * WAVE_FREQ + WAVE_PHASE));
+}
+function pointAt(t) {
+  const ang = (t / PER_TURN) * TWO_PI + Math.PI * 0.5;
+  const rad = radiusAt(t);
+  return { x: Math.cos(ang) * rad, y: yAt(t) - yCenter, z: Math.sin(ang) * rad };
+}
+
+const meshes = [];   // for hover raycasting
+
+function markLoaded() {
+  loaded++;
+  document.getElementById('pct').textContent =
+    Math.round((loaded / TOTAL) * 100) + '%';
+  if (loaded >= TOTAL) reveal();
+}
+
+for (let i = 0; i < TOTAL; i++) {
+  // centre of this photo → geometry is built relative to it (so hover scales in place)
+  const cp = pointAt(i + 0.5);
+
+  const pos = [], uv = [], idx = [];
+  for (let s = 0; s <= SUB; s++) {
+    const t = i + s / SUB;
+    const p = pointAt(t);
+    const half = halfAt(t);
+    pos.push(p.x - cp.x, (p.y - half) - cp.y, p.z - cp.z);  uv.push(s / SUB, 0);
+    pos.push(p.x - cp.x, (p.y + half) - cp.y, p.z - cp.z);  uv.push(s / SUB, 1);
+  }
+  for (let s = 0; s < SUB; s++) {
+    const a = s*2, b = s*2+1, c = s*2+2, d = s*2+3;
+    idx.push(a, b, c,  b, d, c);
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  geo.setAttribute('uv',       new THREE.Float32BufferAttribute(uv, 2));
+  geo.setIndex(idx);
+  geo.computeVertexNormals();
+
+  const tex = texLoader.load(IMAGES[i % IMAGES.length], markLoaded, undefined, markLoaded);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  const mat = new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide, toneMapped: false });
+  mat.color.setScalar(1);
+
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.set(cp.x, cp.y, cp.z);
+  mesh.userData = {
+    dim: 1, scl: 1, off: 0,
+    center: new THREE.Vector3(cp.x, cp.y, cp.z),
+    normal: new THREE.Vector3(cp.x, 0, cp.z).normalize(),
+  };
+  group.add(mesh);
+  meshes.push(mesh);
+
+  // dark thickness rim along the bottom edge → gives the band real 3D depth
+  const rpos = [], ridx = [];
+  for (let s = 0; s <= SUB; s++) {
+    const t   = i + s / SUB;
+    const p   = pointAt(t);
+    const rad = radiusAt(t);
+    const yb  = p.y - halfAt(t);
+    const f   = (rad - THICK) / rad;        // inner edge, pulled toward the axis
+    rpos.push(p.x - cp.x,        yb - cp.y, p.z - cp.z);          // outer bottom
+    rpos.push(p.x * f - cp.x,    yb - cp.y, p.z * f - cp.z);      // inner bottom
+  }
+  for (let s = 0; s < SUB; s++) {
+    const a = s*2, b = s*2+1, c = s*2+2, d = s*2+3;
+    ridx.push(a, b, c, b, d, c);
+  }
+  const rgeo = new THREE.BufferGeometry();
+  rgeo.setAttribute('position', new THREE.Float32BufferAttribute(rpos, 3));
+  rgeo.setIndex(ridx);
+  const rim = new THREE.Mesh(rgeo, new THREE.MeshBasicMaterial({ color:0x141414, side:THREE.DoubleSide }));
+  rim.position.set(cp.x, cp.y, cp.z);
+  group.add(rim);
+}
+
+/* entrance choreography */
+let revealed = false;
+function reveal() {
+  if (revealed) return;
+  revealed = true;
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hide');
+    document.getElementById('scene').classList.add('in');
+    document.getElementById('bgword').classList.add('in');
+  }, 300);
+}
+
+/* ── INTERACTION: scroll spins the spiral · mouse parallax · hover ─ */
+let targetRotY = 0, currentRotY = 0;     // ambient + scroll-driven spin
+let targetMx = 0, targetMy = 0;          // mouse parallax targets (-0.5..0.5)
+let currentMx = 0, currentMy = 0;
+const cursorEl = document.getElementById('cursor');
+
+// raycast hover → highlight the photo under the cursor
+const raycaster = new THREE.Raycaster();
+const mouseNDC  = new THREE.Vector2(-2, -2);
+const _wp       = new THREE.Vector3();   // scratch for depth shading
+let   hovered   = null;
+
+window.addEventListener('mousemove', (e) => {
+  cursorEl.style.left = e.clientX + 'px';
+  cursorEl.style.top  = e.clientY + 'px';
+  document.getElementById('cx').textContent = String(Math.round(e.clientX)).padStart(3,'0');
+  document.getElementById('cy').textContent = String(Math.round(e.clientY)).padStart(3,'0');
+  mouseNDC.x =  (e.clientX / window.innerWidth)  * 2 - 1;
+  mouseNDC.y = -(e.clientY / window.innerHeight) * 2 + 1;
+  // mouse parallax: spiral leans toward the cursor
+  targetMx = (e.clientX / window.innerWidth)  - 0.5;
+  targetMy = (e.clientY / window.innerHeight) - 0.5;
+});
+
+function updateHover() {
+  raycaster.setFromCamera(mouseNDC, camera);
+  const hits = raycaster.intersectObjects(meshes, false);
+  const top  = hits.length ? hits[0].object : null;
+  if (top !== hovered) {
+    hovered = top;
+    cursorEl.classList.toggle('active', !!hovered);
+    canvas.style.cursor = hovered ? 'pointer' : '';
+  }
+}
+
+// click a spiral photo → product detail (smooth transition)
+canvas.addEventListener('click', () => {
+  if (hovered) (window.pageGo || ((h) => location.href = h))('product.html');
+});
+
+/* ── RENDER ──────────────────────────────────────────────── */
+const BASE_TILT     = -0.26;    // tilt the other way → band curves UPWARD (like the reference)
+const AUTO_SPIN     = 0.0001;   // gentle continuous drift (a touch slower)
+const SCROLL_FACTOR = 0.0016;   // how strongly page scroll spins the spiral
+const MOUSE_YAW     = 0.22;     // parallax left/right turn from the cursor
+const MOUSE_TILT    = 0.16;     // parallax up/down tip from the cursor
+const GROUP_Y       = -12;      // spiral sits low at the top → headline dominates (like the reference)
+const SCROLL_LIFT   = 0.019;    // scrolling lifts it up into full view
+const GROUP_Y_MAX   = 11;       // lift all the way up to centre on scroll
+const heroUI        = document.getElementById('heroUI');
+function animate() {
+  requestAnimationFrame(animate);
+
+  updateHover();
+  targetRotY  += AUTO_SPIN;
+  // scroll position drives the spin: scrolling down rotates the spiral
+  const scrollRot = window.scrollY * SCROLL_FACTOR;
+  currentRotY += ((targetRotY + scrollRot) - currentRotY) * 0.08;
+  // ease the mouse parallax
+  currentMx += (targetMx - currentMx) * 0.05;
+  currentMy += (targetMy - currentMy) * 0.05;
+
+  group.rotation.y = currentRotY - currentMx * MOUSE_YAW;   // inverse parallax (like Studio Dialect)
+  group.rotation.x = BASE_TILT - currentMy * MOUSE_TILT;
+  group.rotation.z = -currentMx * 0.05;   // drape away from the cursor
+  group.position.y = Math.min(GROUP_Y_MAX, GROUP_Y + window.scrollY * SCROLL_LIFT);  // low → rises on scroll
+  // fade the hero UI out as you scroll into the page
+  heroUI.style.opacity = Math.max(0, 1 - window.scrollY / (window.innerHeight * 0.6));
+
+  // hover: lift + slightly enlarge the hovered photo — no darkening of the rest
+  for (const m of meshes) {
+    const u = m.userData;
+    const tScl = (m === hovered) ? 1.14 : 1;
+    const tOff = (m === hovered) ? 0.9 : 0;
+    u.scl += (tScl - u.scl) * 0.16;
+    u.off += (tOff - u.off) * 0.16;
+    m.scale.setScalar(u.scl);
+    m.position.copy(u.center).addScaledVector(u.normal, u.off);
+
+    // depth shading: photos at the BACK of the coil (away from camera) dim down,
+    // front photos stay bright — gives the spiral real depth
+    m.getWorldPosition(_wp);
+    const depth  = Math.max(0, Math.min(1, (_wp.z + 11) / 22));   // 0 = back, 1 = front
+    const bright = (m === hovered) ? 1 : (0.3 + 0.7 * depth);
+    m.material.color.setScalar(bright);
+  }
+
+  renderer.render(scene, camera);
+}
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+/* drag-to-scroll for the Latest Arrivals carousel */
+const track = document.getElementById('arrivalsTrack');
+if (track) {
+  let down = false, startX = 0, startLeft = 0;
+  track.addEventListener('pointerdown', (e) => {
+    down = true; startX = e.clientX; startLeft = track.scrollLeft;
+    track.setPointerCapture(e.pointerId);
+  });
+  track.addEventListener('pointermove', (e) => {
+    if (down) track.scrollLeft = startLeft - (e.clientX - startX);
+  });
+  const release = () => { down = false; };
+  track.addEventListener('pointerup', release);
+  track.addEventListener('pointercancel', release);
+}
+
+/* safety reveal */
+setTimeout(reveal, 7000);
+</script>
+<script>
+  // product cards → product detail page
+  document.querySelectorAll('.card, .acard').forEach(el => {
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', () => { (window.pageGo || ((h)=>location.href=h))('product.html'); });
+  });
+
+  // "Bize katıl" gallery: hover swaps the image · click opens detail
+  (function () {
+    const cells = [...document.querySelectorAll('.connect__cell')];
+    const srcs = cells.map(c => c.querySelector('img')?.src).filter(Boolean);
+    cells.forEach((c, i) => {
+      const img1 = c.querySelector('img');
+      if (img1) img1.classList.add('img1');
+      const img2 = document.createElement('img');
+      img2.className = 'img2'; img2.alt = '';
+      img2.src = srcs[(i + 1) % srcs.length];
+      c.appendChild(img2);
+      c.addEventListener('click', () => { (window.pageGo || ((h)=>location.href=h))('product.html'); });
+    });
+  })();
+</script>
+</body>
+</html>
