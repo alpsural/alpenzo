@@ -339,10 +339,8 @@
   .connect__cell { cursor:pointer; }
   .connect__cell img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; transition:opacity .5s var(--ease); }
   .connect__cell .img2 { opacity:0; }
-  @media(hover:hover) and (pointer:fine){
-    .connect__cell:hover .img1 { opacity:0; }
-    .connect__cell:hover .img2 { opacity:1; }
-  }
+  /* hover image-swap kaldırıldı: sürekli dönüşle çakışıp birden fazla panelin
+     aynı anda takas olmasına yol açıyordu. Galeri sade döner, tıkla → ürün. */
 
   /* brand mark band (logo on cream) */
   .brandmark { position:relative; z-index:2; background:#f6f4ee; display:flex; justify-content:center; align-items:center; padding:70px 24px; }
@@ -431,6 +429,7 @@
     .hud.tagline { display:none; }
     .hud.coords  { display:none; }
     .plus { display:none; }
+    .bg-word { padding-top:17vh; }
     .bg-word span { font-size:14vw; letter-spacing:-0.04em; }
   }
 </style>
@@ -884,14 +883,15 @@ const camera = new THREE.PerspectiveCamera(58, window.innerWidth/window.innerHei
 // full spiral fits the frame — phones and desktop get their own sizing.
 function fitCamera() {
   const w = window.innerWidth, h = window.innerHeight, aspect = w / h;
-  let fov = 58, z = 28;                          // desktop / landscape — original framing
-  if (aspect < 0.66)      { fov = 66; z = 48; }  // phones (portrait) → smaller, fully in frame
-  else if (aspect < 1.0)  { fov = 62; z = 37; }  // large phones / small tablets
+  let fov = 58, z = 28, prCap = 2;                            // desktop / landscape — original framing
+  if (aspect < 0.66)      { fov = 64; z = 44; prCap = 1.5; }  // phones (portrait) → fits frame, lighter to render
+  else if (aspect < 1.0)  { fov = 61; z = 35; prCap = 1.6; }  // large phones / small tablets
   camera.fov = fov;
   camera.aspect = aspect;
   camera.position.set(0, 10, z);  // panned up → spiral renders lower without shrinking
   camera.lookAt(0, 10, 0);
   camera.updateProjectionMatrix();
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, prCap));  // cap DPR on phones → smoother motion
   renderer.setSize(w, h);
 }
 fitCamera();
@@ -1131,20 +1131,10 @@ setTimeout(reveal, 7000);
     el.addEventListener('click', () => { (window.pageGo || ((h)=>location.href=h))('product.html'); });
   });
 
-  // "Bize katıl" gallery: hover swaps the image · click opens detail
-  (function () {
-    const cells = [...document.querySelectorAll('.connect__cell')];
-    const srcs = cells.map(c => c.querySelector('img')?.src).filter(Boolean);
-    cells.forEach((c, i) => {
-      const img1 = c.querySelector('img');
-      if (img1) img1.classList.add('img1');
-      const img2 = document.createElement('img');
-      img2.className = 'img2'; img2.alt = '';
-      img2.src = srcs[(i + 1) % srcs.length];
-      c.appendChild(img2);
-      c.addEventListener('click', () => { (window.pageGo || ((h)=>location.href=h))('product.html'); });
-    });
-  })();
+  // "Bize katıl" gallery: tıkla → ürün detayı (sürekli döner, hover-takas yok)
+  document.querySelectorAll('.connect__cell').forEach((c) => {
+    c.addEventListener('click', () => { (window.pageGo || ((h)=>location.href=h))('product.html'); });
+  });
 </script>
 </body>
 </html>
