@@ -47,34 +47,42 @@
 (function () {
   if (typeof document === 'undefined') return;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const DUR = 520;
+  const DUR = 440;   // cover hold before navigating (exit a touch quicker than the reveal)
 
   const style = document.createElement('style');
   style.textContent =
-    '.pgfade{position:fixed;inset:0;z-index:9999;background:#0c0c0c;opacity:1;pointer-events:none;' +
-    'transition:opacity .55s cubic-bezier(.32,.72,0,1);}' +
-    '.pgfade.out{opacity:0;}.pgfade.cover{opacity:1;pointer-events:all;}';
+    '.pgfade{position:fixed;inset:0;z-index:9999;background:#0c0c0c;display:flex;flex-direction:column;' +
+    'align-items:center;justify-content:center;gap:16px;opacity:1;pointer-events:auto;' +
+    'transition:opacity .56s cubic-bezier(.32,.72,0,1);}' +
+    '.pgfade.hide{opacity:0;pointer-events:none;}' +
+    '.pgfade__mark{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;text-transform:uppercase;' +
+    'font-size:clamp(19px,3.6vw,28px);letter-spacing:.42em;padding-left:.42em;color:#f2efe8;' +
+    'opacity:0;transform:translateY(10px);' +
+    'transition:opacity .5s ease,transform .62s cubic-bezier(.32,.72,0,1);}' +
+    '.pgfade__line{width:0;height:1px;background:#c8a04a;opacity:.9;' +
+    'transition:width .62s cubic-bezier(.32,.72,0,1);}' +
+    '.pgfade:not(.hide) .pgfade__mark{opacity:.96;transform:translateY(0);}' +
+    '.pgfade:not(.hide) .pgfade__line{width:56px;}';
   document.head.appendChild(style);
 
   const ov = document.createElement('div');
   ov.className = 'pgfade';
+  ov.innerHTML = '<div class="pgfade__mark">ALPENZO</div><div class="pgfade__line"></div>';
 
   function reveal() {
     if (!ov.isConnected) document.body.appendChild(ov);
-    ov.classList.remove('cover');
     if (reduce) { ov.remove(); return; }
-    requestAnimationFrame(() => ov.classList.add('out'));
+    requestAnimationFrame(() => ov.classList.add('hide'));
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', reveal);
   else reveal();
 
   // restored from back/forward cache → make sure the overlay isn't stuck covering
-  window.addEventListener('pageshow', (e) => { if (e.persisted || ov.classList.contains('cover')) reveal(); });
+  window.addEventListener('pageshow', (e) => { if (e.persisted || !ov.classList.contains('hide')) reveal(); });
 
   function go(href) {
     if (reduce) { location.href = href; return; }
-    ov.classList.remove('out');
-    ov.classList.add('cover');
+    ov.classList.remove('hide');
     setTimeout(() => { location.href = href; }, DUR);
   }
   window.pageGo = go;

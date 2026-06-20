@@ -339,9 +339,10 @@
   .connect__cell { cursor:pointer; }
   .connect__cell img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; transition:opacity .5s var(--ease); }
   .connect__cell .img2 { opacity:0; }
-  .connect__cell:hover .img1 { opacity:0; }
-  .connect__cell:hover .img2 { opacity:1; }
-  .connect:hover .connect__ring { animation-play-state:paused; }
+  @media(hover:hover) and (pointer:fine){
+    .connect__cell:hover .img1 { opacity:0; }
+    .connect__cell:hover .img2 { opacity:1; }
+  }
 
   /* brand mark band (logo on cream) */
   .brandmark { position:relative; z-index:2; background:#f6f4ee; display:flex; justify-content:center; align-items:center; padding:70px 24px; }
@@ -430,7 +431,7 @@
     .hud.tagline { display:none; }
     .hud.coords  { display:none; }
     .plus { display:none; }
-    .bg-word span { font-size:34vw; }
+    .bg-word span { font-size:14vw; letter-spacing:-0.04em; }
   }
 </style>
 <script src="assets/cart.js" defer></script>
@@ -878,8 +879,22 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 const scene  = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(58, window.innerWidth/window.innerHeight, 0.1, 300);
-camera.position.set(0, 10, 28);  // panned up → spiral renders lower without shrinking
-camera.lookAt(0, 10, 0);
+// Responsive framing: a fixed camera crops/oversizes the wide spiral on narrow
+// portrait phones. Pull the camera back + widen the FOV per aspect ratio so the
+// full spiral fits the frame — phones and desktop get their own sizing.
+function fitCamera() {
+  const w = window.innerWidth, h = window.innerHeight, aspect = w / h;
+  let fov = 58, z = 28;                          // desktop / landscape — original framing
+  if (aspect < 0.66)      { fov = 66; z = 48; }  // phones (portrait) → smaller, fully in frame
+  else if (aspect < 1.0)  { fov = 62; z = 37; }  // large phones / small tablets
+  camera.fov = fov;
+  camera.aspect = aspect;
+  camera.position.set(0, 10, z);  // panned up → spiral renders lower without shrinking
+  camera.lookAt(0, 10, 0);
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
+}
+fitCamera();
 
 const group = new THREE.Group();
 scene.add(group);
@@ -1088,11 +1103,7 @@ function animate() {
 }
 animate();
 
-window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-});
+window.addEventListener('resize', fitCamera);
 
 /* drag-to-scroll for the Latest Arrivals carousel */
 const track = document.getElementById('arrivalsTrack');
