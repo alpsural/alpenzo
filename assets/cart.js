@@ -24,11 +24,28 @@
 
   const fmt = (n) => '<span class="lira">₺</span>' + n.toLocaleString('tr-TR') + ',00';
 
-  function toast(msg) {
-    let t = document.querySelector('.toast');
-    if (!t) { t = document.createElement('div'); t.className = 'toast'; document.body.appendChild(t); }
-    t.textContent = msg; t.classList.add('show');
-    clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 2200);
+  function toast(msg, icon) {
+    if (!document.getElementById('alp-toast-style')) {
+      const s = document.createElement('style'); s.id = 'alp-toast-style';
+      s.textContent =
+        '.alp-toast{position:fixed;left:50%;bottom:28px;z-index:9993;' +
+        'transform:translateX(-50%) translateY(14px) scale(.97);display:flex;align-items:center;gap:11px;' +
+        'max-width:min(90vw,440px);background:#0c0c0c;color:#f2efe8;font-family:"Schibsted Grotesk",sans-serif;' +
+        'font-size:13.5px;line-height:1.4;letter-spacing:.01em;padding:13px 19px 13px 15px;border-radius:14px;' +
+        'border:1px solid rgba(200,160,74,.32);box-shadow:0 18px 50px rgba(0,0,0,.42);opacity:0;pointer-events:none;' +
+        'transition:opacity .22s ease, transform .5s cubic-bezier(.23,1,.32,1);}' +    /* enter: strong ease-out, transform+opacity only */
+        '.alp-toast.show{opacity:1;transform:translateX(-50%) translateY(0) scale(1);}' +
+        '.alp-toast__ico{display:inline-flex;align-items:center;justify-content:center;width:21px;height:21px;flex:0 0 auto;' +
+        'border-radius:50%;background:rgba(200,160,74,.16);color:#c8a04a;}' +
+        '.alp-toast__ico svg{width:13px;height:13px;}';
+      document.head.appendChild(s);
+    }
+    let t = document.querySelector('.alp-toast');
+    if (!t) { t = document.createElement('div'); t.className = 'alp-toast'; document.body.appendChild(t); }
+    const check = '<span class="alp-toast__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>';
+    t.innerHTML = (icon === 'check' ? check : '') + '<span>' + msg + '</span>';
+    t.classList.remove('show'); void t.offsetWidth; t.classList.add('show');   // restart so rapid adds re-animate
+    clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 2600);
   }
 
   function markActiveNav() {

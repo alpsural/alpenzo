@@ -205,7 +205,7 @@
     const link = BUY_LINKS[selectedSize];
     if (link) { location.href = link; return; }              // → iyzico/PayTR ödeme sayfası
     ALPENZO.add({ ...PRODUCT, size:selectedSize, qty });
-    ALPENZO.toast('Sepete eklendi · ' + selectedSize + ' ×' + qty);
+    ALPENZO.toast('Sepete eklendi · ' + selectedSize + ' ×' + qty, 'check');
   }
 </script>
 </body>
