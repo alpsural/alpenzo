@@ -246,6 +246,7 @@
       const off = document.createElement('style');
       off.textContent =
         '.hud.brand{top:' + (28 + h) + 'px;}.topicons{top:' + (24 + h) + 'px;}' +
+        '.hud.nav{top:' + (74 + h) + 'px;}' +   // menüyü de banner kadar indir → markayla çakışmaz
         '.alp-burger--float{top:' + (70 + h) + 'px;}';
       document.head.appendChild(off);
     }
