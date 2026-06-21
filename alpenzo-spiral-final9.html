@@ -1099,20 +1099,16 @@ animate();
 
 window.addEventListener('resize', fitCamera);
 
-/* drag-to-scroll for the Latest Arrivals carousel */
+/* drag-to-scroll for the Latest Arrivals carousel (tek tık → ürün, drag yutmaz) */
 const track = document.getElementById('arrivalsTrack');
 if (track) {
-  let down = false, startX = 0, startLeft = 0;
-  track.addEventListener('pointerdown', (e) => {
-    down = true; startX = e.clientX; startLeft = track.scrollLeft;
-    track.setPointerCapture(e.pointerId);
-  });
-  track.addEventListener('pointermove', (e) => {
-    if (down) track.scrollLeft = startLeft - (e.clientX - startX);
-  });
+  let down = false, moved = false, startX = 0, startLeft = 0;
+  track.addEventListener('pointerdown', (e) => { down = true; moved = false; startX = e.clientX; startLeft = track.scrollLeft; });
+  track.addEventListener('pointermove', (e) => { if (!down) return; if (Math.abs(e.clientX - startX) > 5) moved = true; track.scrollLeft = startLeft - (e.clientX - startX); });
   const release = () => { down = false; };
   track.addEventListener('pointerup', release);
   track.addEventListener('pointercancel', release);
+  track.addEventListener('click', (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); } }, true);
 }
 
 /* safety reveal */
@@ -1128,6 +1124,11 @@ setTimeout(reveal, 7000);
   // "Bize katıl" gallery: tıkla → ürün detayı (sürekli döner, hover-takas yok)
   document.querySelectorAll('.connect__cell').forEach((c) => {
     c.addEventListener('click', () => { (window.pageGo || ((h)=>location.href=h))('product.html'); });
+  });
+  // kampanya banner'ı → ürün (içindeki butona dokunma)
+  document.querySelectorAll('.home-feature').forEach((f) => {
+    f.style.cursor = 'pointer';
+    f.addEventListener('click', (e) => { if (e.target.closest('.home-feature__btn')) return; (window.pageGo || ((h)=>location.href=h))('product.html'); });
   });
 </script>
 </body>

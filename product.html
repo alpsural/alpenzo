@@ -23,6 +23,12 @@
   .btn--block:disabled{ opacity:.5; cursor:not-allowed; }
   .pd__soldout{ display:none; margin-top:12px; font-size:11px; letter-spacing:.14em;
     text-transform:uppercase; color:#b4453a; font-weight:600; }
+  /* galeri: tıkla-değiştir + hover zoom */
+  .pd__gallery .main{ cursor:zoom-in; }
+  .pd__gallery .main img{ transition:transform .45s cubic-bezier(.32,.72,0,1); will-change:transform; }
+  .pd__gallery .main.zoom img{ transition:none; }
+  .pd__gallery .thumb{ cursor:pointer; transition:opacity .25s var(--ease); }
+  .pd__gallery .thumb:hover{ opacity:.6; }
 </style>
 </head>
 <body>
@@ -109,6 +115,28 @@
 </footer>
 
 <script>
+  /* galeri: küçük görsele tıkla → büyüğe geçir · büyük görselde imleç-takipli zoom */
+  (function(){
+    const g = document.querySelector('.pd__gallery'); if(!g) return;
+    const main = g.querySelector('.main'); const mainImg = main && main.querySelector('img');
+    if(!mainImg) return;
+    g.querySelectorAll('.thumb').forEach(t => {
+      t.addEventListener('click', () => {
+        const ti = t.querySelector('img'); if(!ti) return;
+        const tmp = mainImg.getAttribute('src');
+        mainImg.setAttribute('src', ti.getAttribute('src'));
+        ti.setAttribute('src', tmp);
+      });
+    });
+    main.addEventListener('mousemove', e => {
+      const r = main.getBoundingClientRect();
+      mainImg.style.transformOrigin = ((e.clientX-r.left)/r.width*100)+'% '+((e.clientY-r.top)/r.height*100)+'%';
+      mainImg.style.transform = 'scale(1.9)';
+      main.classList.add('zoom');
+    });
+    main.addEventListener('mouseleave', () => { mainImg.style.transform=''; main.classList.remove('zoom'); });
+  })();
+
   /* ════════ SINIRLI SERİ AYARLARI — SAHİBİ BURAYI GÜNCELLER ════════
      STOCK     : her bedende KALAN adet (toplam 100'lük seri). Satış oldukça düşür.
      BUY_LINKS : iyzico/PayTR ödeme linkleri. Doldurulunca "Satın Al" doğrudan

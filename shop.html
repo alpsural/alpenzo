@@ -199,9 +199,7 @@
   .connect__cell{ cursor:pointer; }
   .connect__cell img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; transition:opacity .5s var(--ease); }
   .connect__cell .img2{ opacity:0; }
-  .connect__cell:hover .img1{ opacity:0; }
-  .connect__cell:hover .img2{ opacity:1; }
-  .connect:hover .connect__ring{ animation-play-state:paused; }
+  /* hover image-swap & pause kaldırıldı: sürekli dönüşle çakışıyordu. Galeri sade döner. */
   @keyframes ringspin{ to{ --rot:360deg; } }
   @media(prefers-reduced-motion: reduce){ .connect__ring{ animation:none; } }
 
@@ -373,7 +371,7 @@
   <img src="products/kampanya-aktif.jpeg" alt="ALPENZO aktif giyim kampanyası">
   <div class="feature__label">
     <h2 class="feature__title">Performans Koleksiyonu</h2>
-    <a class="feature__btn" href="shop.html">Hemen al</a>
+    <a class="feature__btn" href="product.html">Hemen al</a>
   </div>
 </section>
 
@@ -456,36 +454,42 @@
 </footer>
 
 <script>
+  const go = (h) => (window.pageGo || ((u)=>location.href=u))(h);
+
+  // Yeni Gelenler: sürükle-kaydır, ama tek tık → ürün (drag tıklamayı yutmasın)
   const track = document.getElementById('arrivalsTrack');
   if (track) {
-    let down=false, startX=0, startLeft=0;
-    track.addEventListener('pointerdown', e=>{ down=true; startX=e.clientX; startLeft=track.scrollLeft; track.setPointerCapture(e.pointerId); });
-    track.addEventListener('pointermove', e=>{ if(down) track.scrollLeft = startLeft - (e.clientX - startX); });
-    const rel=()=>{down=false;};
+    let down=false, moved=false, startX=0, startLeft=0;
+    track.addEventListener('pointerdown', e=>{ down=true; moved=false; startX=e.clientX; startLeft=track.scrollLeft; });
+    track.addEventListener('pointermove', e=>{ if(!down) return; if(Math.abs(e.clientX-startX)>5) moved=true; track.scrollLeft = startLeft-(e.clientX-startX); });
+    const rel=()=>{ down=false; };
     track.addEventListener('pointerup', rel);
     track.addEventListener('pointercancel', rel);
+    track.addEventListener('click', e=>{ if(moved){ e.preventDefault(); e.stopPropagation(); } }, true);  // sürükleme sonrası tıklamayı engelle
   }
 
-  // product imagery → product detail page
+  // ürün görselleri / kartlar → ürün detayı
   document.querySelectorAll('.acard, .htile, .hero__left').forEach(el => {
-    el.style.cursor = 'pointer';
-    el.addEventListener('click', e => { e.preventDefault(); (window.pageGo || ((h)=>location.href=h))('product.html'); });
+    el.style.cursor='pointer';
+    el.addEventListener('click', e=>{ e.preventDefault(); go('product.html'); });
   });
 
-  // "Bize katıl" gallery: hover swaps the image · click opens detail
-  (function () {
-    const cells = [...document.querySelectorAll('.connect__cell')];
-    const srcs = cells.map(c => c.querySelector('img') && c.querySelector('img').src).filter(Boolean);
-    cells.forEach((c, i) => {
-      const img1 = c.querySelector('img');
-      if (img1) img1.classList.add('img1');
-      const img2 = document.createElement('img');
-      img2.className = 'img2'; img2.alt = '';
-      img2.src = srcs[(i + 1) % srcs.length];
-      c.appendChild(img2);
-      c.addEventListener('click', () => { (window.pageGo || ((h)=>location.href=h))('product.html'); });
-    });
-  })();
+  // "Tümünü gör" → mağaza
+  document.querySelectorAll('.viewall').forEach(b => {
+    b.style.cursor='pointer';
+    b.addEventListener('click', ()=> go('shop.html'));
+  });
+
+  // kampanya banner'ı → ürün (içindeki butona dokunma)
+  document.querySelectorAll('.feature').forEach(f => {
+    f.style.cursor='pointer';
+    f.addEventListener('click', e=>{ if(e.target.closest('.feature__btn')) return; go('product.html'); });
+  });
+
+  // "Bize katıl" galerisi: tıkla → ürün (sürekli döner, hover-takas yok)
+  document.querySelectorAll('.connect__cell').forEach(c => {
+    c.addEventListener('click', ()=> go('product.html'));
+  });
 </script>
 
 </body>
