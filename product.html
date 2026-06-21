@@ -8,6 +8,22 @@
 <link rel="icon" href="favicon.svg">
 <link rel="stylesheet" href="assets/site.css">
 <script src="assets/cart.js" defer></script>
+<style>
+  .pd__limited{ display:inline-block; margin:2px 0 14px; font-size:11px; letter-spacing:.18em;
+    text-transform:uppercase; font-weight:600; color:#9a7b2e; background:rgba(200,160,74,.12);
+    border:1px solid rgba(200,160,74,.45); padding:5px 12px; border-radius:999px; }
+  .pd__stock{ margin:18px 0 24px; max-width:330px; }
+  .pd__stockbar{ height:5px; border-radius:999px; background:#ece9e2; overflow:hidden; }
+  .pd__stockbar span{ display:block; height:100%; width:100%; border-radius:999px; transform:scaleX(0);
+    transform-origin:left; background:linear-gradient(90deg,#c8a04a,#9a7b2e); transition:transform .9s cubic-bezier(.32,.72,0,1); }
+  .pd__stocktxt{ margin-top:10px; font-size:12.5px; letter-spacing:.02em; color:#6a665e; }
+  .pd__stocktxt b{ color:#111; font-weight:700; }
+  .pd__stocktxt.low b{ color:#b4453a; }
+  .size:disabled{ opacity:.38; cursor:not-allowed; text-decoration:line-through; }
+  .btn--block:disabled{ opacity:.5; cursor:not-allowed; }
+  .pd__soldout{ display:none; margin-top:12px; font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; color:#b4453a; font-weight:600; }
+</style>
 </head>
 <body>
 <a class="skip" href="#main">İçeriğe geç</a>
@@ -41,8 +57,14 @@
 
     <div class="pd__info">
       <div class="pd__brand">ALPENZO</div>
+      <span class="pd__limited">Sınırlı Seri · 100 Adet</span>
       <h1 class="pd__name">Alpine Tee — Black</h1>
       <div class="pd__price"><span class="lira">₺</span>1.450,00</div>
+
+      <div class="pd__stock" id="stockStrip">
+        <div class="pd__stockbar"><span id="stockFill"></span></div>
+        <p class="pd__stocktxt" id="stockTxt"></p>
+      </div>
 
       <div class="pd__label">Beden</div>
       <div class="sizes" id="sizes">
@@ -60,7 +82,8 @@
         <button onclick="chQty(1)">+</button>
       </div>
 
-      <button class="btn btn--block" onclick="addCurrent()">Sepete ekle</button>
+      <button class="btn btn--block" id="buyBtn" onclick="addCurrent()">Sepete ekle</button>
+      <p class="pd__soldout" id="soldOut">Bu seri tükendi</p>
 
       <div class="pd__meta">
         <p>%100 pamuk, ağır gramajlı (240 GSM) örme.</p>
@@ -86,18 +109,64 @@
 </footer>
 
 <script>
+  /* ════════ SINIRLI SERİ AYARLARI — SAHİBİ BURAYI GÜNCELLER ════════
+     STOCK     : her bedende KALAN adet (toplam 100'lük seri). Satış oldukça düşür.
+     BUY_LINKS : iyzico/PayTR ödeme linkleri. Doldurulunca "Satın Al" doğrudan
+                 ödeme sayfasına gider; boşken sepete ekler.
+     Örn: BUY_LINKS = { S:'https://...', M:'https://...', ... }                */
+  const SERIES_TOTAL = 100;
+  const STOCK     = { XS:6, S:22, M:30, L:26, XL:16 };
+  const BUY_LINKS = { XS:'', S:'', M:'', L:'', XL:'' };
+  /* ═════════════════════════════════════════════════════════════════ */
+
+  const PRODUCT = { id:'alpine-tee-black', name:'Alpine Tee — Black', price:1450, color:'Black', img:'products/alpine-black.png' };
+
   let selectedSize = null, qty = 1;
   const sizesEl = document.getElementById('sizes');
-  sizesEl.addEventListener('click', e => {
-    if (!e.target.classList.contains('size')) return;
-    [...sizesEl.children].forEach(b => b.classList.remove('active'));
-    e.target.classList.add('active');
-    selectedSize = e.target.textContent;
+  const buyBtn  = document.getElementById('buyBtn');
+  const remaining = Object.values(STOCK).reduce((a, n) => a + Math.max(0, n), 0);
+
+  // bedene göre tükendi
+  [...sizesEl.children].forEach(b => {
+    const s = b.textContent.trim();
+    if ((STOCK[s] || 0) <= 0) { b.disabled = true; b.title = 'Tükendi'; }
   });
+
+  // stok göstergesi
+  (function renderStock(){
+    const fill = document.getElementById('stockFill');
+    const txt  = document.getElementById('stockTxt');
+    const ratio = Math.max(0, Math.min(1, remaining / SERIES_TOTAL));
+    requestAnimationFrame(() => { fill.style.transform = 'scaleX(' + ratio + ')'; });
+    if (remaining <= 0) {
+      txt.innerHTML = 'Bu seri <b>tükendi</b>.';
+      buyBtn.disabled = true; buyBtn.textContent = 'Tükendi';
+      document.getElementById('soldOut').style.display = 'block';
+    } else if (remaining <= 15) {
+      txt.classList.add('low');
+      txt.innerHTML = 'Son <b>' + remaining + '</b> adet!';
+    } else {
+      txt.innerHTML = '100 adetlik seriden <b>' + remaining + '</b> adet kaldı';
+    }
+  })();
+
+  sizesEl.addEventListener('click', e => {
+    const b = e.target.closest('.size');
+    if (!b || b.disabled) return;
+    [...sizesEl.children].forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    selectedSize = b.textContent.trim();
+    if (remaining > 0) buyBtn.textContent = BUY_LINKS[selectedSize] ? 'Hemen Satın Al' : 'Sepete ekle';
+  });
+
   function chQty(d){ qty = Math.max(1, qty + d); document.getElementById('qty').textContent = qty; }
+
   function addCurrent(){
-    if(!selectedSize){ ALPENZO.toast('Lütfen bir beden seçin'); return; }
-    ALPENZO.add({ id:'alpine-tee-black', name:'Alpine Tee — Black', price:1450, color:'Black', size:selectedSize, img:'products/alpine-black.png', qty });
+    if (remaining <= 0) return;
+    if (!selectedSize){ ALPENZO.toast('Lütfen bir beden seçin'); return; }
+    const link = BUY_LINKS[selectedSize];
+    if (link) { location.href = link; return; }              // → iyzico/PayTR ödeme sayfası
+    ALPENZO.add({ ...PRODUCT, size:selectedSize, qty });
     ALPENZO.toast('Sepete eklendi · ' + selectedSize + ' ×' + qty);
   }
 </script>
