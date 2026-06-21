@@ -128,13 +128,23 @@
         ti.setAttribute('src', tmp);
       });
     });
-    main.addEventListener('mousemove', e => {
+    const zoomTo = (cx, cy) => {
       const r = main.getBoundingClientRect();
-      mainImg.style.transformOrigin = ((e.clientX-r.left)/r.width*100)+'% '+((e.clientY-r.top)/r.height*100)+'%';
-      mainImg.style.transform = 'scale(1.9)';
+      const x = Math.max(0, Math.min(1, (cx - r.left) / r.width));
+      const y = Math.max(0, Math.min(1, (cy - r.top) / r.height));
+      mainImg.style.transformOrigin = (x*100) + '% ' + (y*100) + '%';
+      mainImg.style.transform = 'scale(2)';
       main.classList.add('zoom');
-    });
-    main.addEventListener('mouseleave', () => { mainImg.style.transform=''; main.classList.remove('zoom'); });
+    };
+    const zoomOff = () => { mainImg.style.transform = ''; main.classList.remove('zoom'); };
+    // masaüstü: imleç ile
+    main.addEventListener('mousemove', e => zoomTo(e.clientX, e.clientY));
+    main.addEventListener('mouseleave', zoomOff);
+    // telefon: parmakla dokun & kaydır → dokunduğun noktada zoom, parmağı takip eder
+    main.addEventListener('touchstart', e => { const t = e.touches[0]; zoomTo(t.clientX, t.clientY); }, { passive:true });
+    main.addEventListener('touchmove',  e => { e.preventDefault(); const t = e.touches[0]; zoomTo(t.clientX, t.clientY); }, { passive:false });
+    main.addEventListener('touchend', zoomOff);
+    main.addEventListener('touchcancel', zoomOff);
   })();
 
   /* ════════ SINIRLI SERİ AYARLARI — SAHİBİ BURAYI GÜNCELLER ════════
