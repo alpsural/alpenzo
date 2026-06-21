@@ -5,4 +5,5 @@ compatibility_date = "2024-09-25"
 # _redirects ve _headers dosyaları Cloudflare tarafından işlenir.
 [assets]
 directory = "./"
+html_handling = "none"          # .html'i düşürme/yönlendirme yapma → iç linkler ve _redirects Netlify gibi çalışsın
 not_found_handling = "404-page"
