@@ -1,0 +1,8 @@
+name = "alpenzo"
+compatibility_date = "2024-09-25"
+
+# Saf statik site — Worker kodu yok, sadece dosyalar yayınlanır.
+# _redirects ve _headers dosyaları Cloudflare tarafından işlenir.
+[assets]
+directory = "./"
+not_found_handling = "404-page"
