@@ -181,3 +181,90 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();
+
+/* ── storefront extras: announcement bar · cookie consent · trust line · SSS link · icon cleanup ── */
+(function () {
+  if (typeof document === 'undefined') return;
+
+  function init() {
+    // hide placeholder utility icons (search / account / favorites) — single-product store
+    const cleanup = document.createElement('style');
+    cleanup.textContent =
+      '.search{display:none!important;}' +
+      '.iconbtn[aria-label="Hesabım"],.iconbtn[aria-label="Favoriler"]{display:none!important;}';
+    document.head.appendChild(cleanup);
+
+    const style = document.createElement('style');
+    style.textContent =
+      '.alp-annc{background:#0c0c0c;color:#e9e4d9;text-align:center;font-family:"Schibsted Grotesk",sans-serif;' +
+      'font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;padding:9px 16px;' +
+      'border-bottom:1px solid rgba(200,160,74,.28);}' +
+      '.alp-annc b{color:#c8a04a;font-weight:600;padding:0 .55em;}' +
+      '.alp-annc--fixed{position:fixed;top:0;left:0;right:0;z-index:45;}' +
+      '.alp-cookie{position:fixed;left:16px;right:16px;bottom:18px;margin:0 auto;max-width:560px;z-index:9994;' +
+      'background:#0c0c0c;color:#cfcabf;border:1px solid rgba(200,160,74,.3);border-radius:14px;padding:18px 20px;' +
+      'display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;justify-content:space-between;' +
+      'box-shadow:0 24px 60px rgba(0,0,0,.45);font-family:"Schibsted Grotesk",sans-serif;font-size:13px;line-height:1.5;' +
+      'opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s cubic-bezier(.32,.72,0,1);}' +
+      '.alp-cookie.show{opacity:1;transform:none;}' +
+      '.alp-cookie__txt{flex:1;min-width:210px;}' +
+      '.alp-cookie__txt a{color:#c8a04a;text-decoration:underline;}' +
+      '.alp-cookie__btns{display:flex;gap:8px;}' +
+      '.alp-cookie button{font-family:inherit;font-size:12px;letter-spacing:.06em;padding:9px 17px;border-radius:999px;' +
+      'cursor:pointer;border:1px solid rgba(255,255,255,.2);background:transparent;color:#e9e4d9;' +
+      '-webkit-tap-highlight-color:transparent;transition:transform .16s ease;}' +
+      '.alp-cookie button:active{transform:scale(.97);}' +
+      '.alp-cookie__ok{background:#c8a04a;border-color:#c8a04a;color:#0c0c0c;font-weight:600;}';
+    document.head.appendChild(style);
+
+    // announcement bar (limited-drop message)
+    const annc = document.createElement('div');
+    annc.className = 'alp-annc';
+    annc.innerHTML = 'Sınırlı Seri<b>·</b>Sadece 100 Adet Üretildi<b>·</b>Created for Elevation';
+    const isHome = !!document.querySelector('#scene');
+    if (isHome) annc.classList.add('alp-annc--fixed');
+    document.body.insertBefore(annc, document.body.firstChild);
+    if (isHome) {                              // push the homepage's fixed top UI below the bar
+      const h = annc.offsetHeight;
+      const off = document.createElement('style');
+      off.textContent =
+        '.hud.brand{top:' + (28 + h) + 'px;}.topicons{top:' + (24 + h) + 'px;}' +
+        '.alp-burger--float{top:' + (70 + h) + 'px;}';
+      document.head.appendChild(off);
+    }
+
+    // footer trust line (replaces the generic card list)
+    document.querySelectorAll('.footer__pay').forEach((el) => {
+      el.textContent = 'Güvenli ödeme · Visa · Mastercard · Troy';
+    });
+
+    // SSS link into the footer "Yardım" column
+    document.querySelectorAll('.footer h4, .fcol h4').forEach((h) => {
+      if (/yard[ıi]m/i.test(h.textContent) && !h.parentElement.querySelector('a[href="sss.html"]')) {
+        const a = document.createElement('a');
+        a.href = 'sss.html'; a.textContent = 'SSS';
+        h.parentElement.appendChild(a);
+      }
+    });
+
+    // cookie / KVKK consent
+    if (!localStorage.getItem('ALPENZO_COOKIE')) {
+      const c = document.createElement('div');
+      c.className = 'alp-cookie';
+      c.innerHTML =
+        '<span class="alp-cookie__txt">Deneyimini geliştirmek için çerez kullanıyoruz. ' +
+        'Detaylar için <a href="privacy.html">Gizlilik Politikası</a>.</span>' +
+        '<span class="alp-cookie__btns">' +
+        '<button class="alp-cookie__reject" type="button">Reddet</button>' +
+        '<button class="alp-cookie__ok" type="button">Kabul et</button></span>';
+      document.body.appendChild(c);
+      requestAnimationFrame(() => c.classList.add('show'));
+      const done = (v) => { try { localStorage.setItem('ALPENZO_COOKIE', v); } catch (e) {} c.classList.remove('show'); setTimeout(() => c.remove(), 500); };
+      c.querySelector('.alp-cookie__ok').addEventListener('click', () => done('accepted'));
+      c.querySelector('.alp-cookie__reject').addEventListener('click', () => done('rejected'));
+    }
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();

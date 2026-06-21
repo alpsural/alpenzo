@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALPENZO — Sıkça Sorulan Sorular</title>
+<meta name="description" content="ALPENZO sipariş, kargo, iade, beden ve ödeme hakkında sıkça sorulan sorular.">
+<link rel="icon" href="favicon.svg">
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/cart.js" defer></script>
+<style>
+  .faq{ max-width:760px; }
+  .faq details{ border-bottom:1px solid var(--line); }
+  .faq summary{ list-style:none; cursor:pointer; padding:22px 0; display:flex; justify-content:space-between;
+    align-items:center; gap:20px; font-family:'Bricolage Grotesque',sans-serif; font-weight:700;
+    font-size:1.05rem; letter-spacing:-0.01em; color:var(--ink); }
+  .faq summary::-webkit-details-marker{ display:none; }
+  .faq summary::after{ content:'+'; font-size:22px; font-weight:400; color:var(--muted);
+    transition:transform .3s var(--ease); line-height:1; }
+  .faq details[open] summary::after{ transform:rotate(45deg); }
+  .faq details > div{ padding:0 0 24px; color:#444; line-height:1.85; max-width:62ch; }
+  .faq details > div a{ color:#111; text-decoration:underline; }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">İçeriğe geç</a>
+<header class="topbar">
+  <a class="topbar__brand" href="alpenzo-spiral-final9.html">ALPENZO</a>
+  <nav class="topbar__nav">
+    <a href="shop.html">Mağaza</a>
+    <a href="about.html">Hakkımızda</a>
+    <a href="contact.html">İletişim</a>
+  </nav>
+  <div class="topbar__utils">
+    <form class="search" role="search" onsubmit="location.href=&quot;yakinda.html&quot;;return false;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="search" placeholder="Ara" aria-label="Ara">
+    </form>
+    <a class="iconbtn" href="yakinda.html" aria-label="Hesabım"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.6 3.1-5.6 7-5.6s7 2 7 5.6"/></svg></a>
+    <a class="iconbtn" href="yakinda.html" aria-label="Favoriler"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 4.2l2.5 5.1 5.6.8-4 3.9 1 5.6L12 17l-5 2.6 1-5.6-4-3.9 5.6-.8z"/></svg></a>
+    <a class="iconbtn" href="cart.html" aria-label="Sepet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M6 8h12l-1 12H7z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg><span class="cart-badge" id="cartCount">0</span></a>
+  </div>
+</header>
+
+<main id="main" class="page">
+  <p class="crumb">Anasayfa / SSS</p>
+  <h1 class="page__title">Sıkça Sorulan Sorular</h1>
+  <div class="faq">
+
+    <details open>
+      <summary>Sipariş ne zaman kargoya verilir?</summary>
+      <div>Siparişler ödeme onayından sonra <strong>1–3 iş günü</strong> içinde kargoya verilir. Kargoya verildikten sonra teslimat genellikle 1–3 iş günü sürer. Yoğun dönemlerde süre uzayabilir.</div>
+    </details>
+
+    <details>
+      <summary>Kargo ücreti ne kadar?</summary>
+      <div>Güncel kargo ücretleri ve ücretsiz kargo koşulları için <a href="shipping.html">Kargo &amp; İade</a> sayfasına bakabilirsin.</div>
+    </details>
+
+    <details>
+      <summary>İade ve değişim nasıl yapılır?</summary>
+      <div>Teslim tarihinden itibaren <strong>14 gün</strong> içinde cayma hakkın vardır. Ürün kullanılmamış, etiketli ve orijinal ambalajında olmalıdır. İade için <a href="contact.html">İletişim</a> sayfasından bize ulaş, sipariş numaranı ilet; adımları paylaşalım. Detaylar: <a href="shipping.html">Kargo &amp; İade</a>.</div>
+    </details>
+
+    <details>
+      <summary>Doğru bedeni nasıl seçerim?</summary>
+      <div>Ölçü tablomuz ve beden önerileri için <a href="size-guide.html">Beden Tablosu</a> sayfasına göz at. Kararsız kalırsan <a href="contact.html">bize yaz</a>, yardımcı olalım.</div>
+    </details>
+
+    <details>
+      <summary>Ödeme güvenli mi?</summary>
+      <div>Tüm ödemeler güvenli ödeme altyapısı ve SSL şifrelemesi üzerinden alınır. Kart bilgilerin ALPENZO tarafında saklanmaz. Visa, Mastercard ve Troy kartları kabul edilir.</div>
+    </details>
+
+    <details>
+      <summary>"Sınırlı seri · 100 adet" ne demek?</summary>
+      <div>ALPENZO ürünleri sınırlı sayıda üretilir. Mevcut seri yalnızca <strong>100 adet</strong> ile sınırlıdır; stok tükendiğinde satış kapanır. Bu, her parçanın özel ve sayılı kalmasını sağlar.</div>
+    </details>
+
+    <details>
+      <summary>Tükenen ürün tekrar gelir mi?</summary>
+      <div>Sınırlı seriler tükendiğinde genellikle tekrar üretilmez. Yeni drop'lardan ilk haberdar olmak için <a href="https://www.instagram.com/alpenzo.tr/" target="_blank" rel="noopener">Instagram</a>'dan bizi takip et veya bültene kaydol.</div>
+    </details>
+
+    <details>
+      <summary>Size nasıl ulaşırım?</summary>
+      <div>E-posta: <a href="mailto:alp@sural.tr">alp@sural.tr</a> · Instagram: <a href="https://www.instagram.com/alpenzo.tr/" target="_blank" rel="noopener">@alpenzo.tr</a>. Tüm kanallar için <a href="contact.html">İletişim</a> sayfasına bak.</div>
+    </details>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer__cols">
+    <div class="fcol"><h4>Mağaza</h4><a href="shop.html">Yeni Gelenler</a><a href="shop.html">Üst Giyim</a><a href="shop.html">Dış Giyim</a><a href="shop.html">Aksesuar</a></div>
+    <div class="fcol"><h4>Yardım</h4><a href="shipping.html">Kargo & İade</a><a href="size-guide.html">Beden Tablosu</a><a href="contact.html">İletişim</a></div>
+    <div class="fcol"><h4>Kurumsal</h4><a href="about.html">Hakkımızda</a><a href="privacy.html">Gizlilik & Koşullar</a></div>
+    <div class="fcol"><h4>Takip Et</h4><a href="https://www.instagram.com/alpenzo.tr/" target="_blank" rel="noopener">Instagram</a></div>
+  </div>
+  <div class="footer__bottom">
+    <span class="footer__logo">ALPENZO</span>
+    <span class="footer__copy">© 2026 ALPENZO — İstanbul. Tüm hakları saklıdır.</span>
+    <span class="footer__pay">VISA · MASTERCARD · AMEX · PAYPAL · APPLE PAY</span>
+  </div>
+</footer>
+</body>
+</html>
