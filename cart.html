@@ -79,14 +79,29 @@
           <div class="summary__row"><span>Ara toplam</span><span>${ALPENZO.fmt(sub)}</span></div>
           <div class="summary__row"><span>Kargo</span><span>${shipping===0 ? 'Ücretsiz' : ALPENZO.fmt(shipping)}</span></div>
           <div class="summary__total"><span>Toplam</span><span>${ALPENZO.fmt(sub+shipping)}</span></div>
-          <button class="btn btn--block" onclick="checkout()">Ödemeye geç</button>
-          <p style="font-size:11px;color:var(--muted);margin-top:14px;line-height:1.6">Ödeme altyapısı (iyzico / Shopify) yakında bağlanacak.</p>
+          <button class="btn btn--block" onclick="checkout()">WhatsApp ile sipariş ver</button>
+          <p style="font-size:11px;color:var(--muted);margin-top:14px;line-height:1.6">Kart ile online ödeme yakında. Şimdilik siparişini WhatsApp'tan saniyeler içinde tamamlıyoruz; sepetin otomatik iletilir.</p>
         </aside>
       </div>`;
   }
   function q(i,d){ const it=ALPENZO.get()[i]; ALPENZO.setQty(i, it.qty+d); render(); }
   function rm(i){ ALPENZO.removeAt(i); render(); }
-  function checkout(){ ALPENZO.toast('Ödeme adımı yakında — altyapı bağlanınca aktif olacak.'); }
+  /* Sipariş kanalı: kart ödeme altyapısı (ikas/iyzico) bağlanana kadar WhatsApp.
+     WA_PHONE: uluslararası format, başında + ve boşluk olmadan. */
+  const WA_PHONE = '905322299562';   // 0532 229 95 62
+  function checkout(){
+    const items = ALPENZO.get();
+    if(!items.length){ ALPENZO.toast('Sepetin boş.'); return; }
+    const sub = ALPENZO.total();
+    const shipping = sub >= 2500 ? 0 : 120;
+    const money = x => ALPENZO.fmt(x).replace(/<[^>]*>/g, '');   // fmt'deki .lira span'ini at → düz metin
+    const lines = items.map(i => '• ' + i.name + ', Beden ' + (i.size||'-') + ' x' + i.qty + ' (' + money(i.price*i.qty) + ')');
+    const msg = 'Merhaba ALPENZO! Sipariş vermek istiyorum:\n\n' + lines.join('\n') +
+      '\n\nAra toplam: ' + money(sub) +
+      '\nKargo: ' + (shipping===0 ? 'Ücretsiz' : money(shipping)) +
+      '\nToplam: ' + money(sub+shipping);
+    window.open('https://wa.me/' + WA_PHONE + '?text=' + encodeURIComponent(msg), '_blank');
+  }
   document.addEventListener('DOMContentLoaded', render);
 </script>
 </body>
