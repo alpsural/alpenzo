@@ -58,6 +58,12 @@
     }
     const sub = ALPENZO.total();
     const shipping = sub >= 2500 ? 0 : 120;
+    const FREE_THRESHOLD = 2500;
+    const remain = Math.max(0, FREE_THRESHOLD - sub);
+    const ratio = Math.min(1, sub / FREE_THRESHOLD).toFixed(3);
+    const freeshipHtml = remain > 0
+      ? '<div class="freeship"><div class="freeship__txt">Ücretsiz kargoya <b>' + ALPENZO.fmt(remain) + '</b> kaldı</div><div class="freeship__bar"><span style="transform:scaleX(' + ratio + ')"></span></div></div>'
+      : '<div class="freeship freeship--done"><div class="freeship__txt"><b>Ücretsiz kargo</b> kazandın 🎉</div><div class="freeship__bar"><span style="transform:scaleX(1)"></span></div></div>';
     const rows = items.map((i,idx)=>`
       <div class="citem">
         <img src="${i.img}" alt="">
@@ -79,7 +85,13 @@
           <div class="summary__row"><span>Ara toplam</span><span>${ALPENZO.fmt(sub)}</span></div>
           <div class="summary__row"><span>Kargo</span><span>${shipping===0 ? 'Ücretsiz' : ALPENZO.fmt(shipping)}</span></div>
           <div class="summary__total"><span>Toplam</span><span>${ALPENZO.fmt(sub+shipping)}</span></div>
+          ${freeshipHtml}
           <button class="btn btn--block" onclick="checkout()">WhatsApp ile sipariş ver</button>
+          <div class="reassure">
+            <span><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Güvenli ödeme</span>
+            <span><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 8M20 4v4h-4"/></svg>14 gün koşulsuz iade</span>
+            <span><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5 5.5.8-4 3.9 1 5.5L12 16l-5 2.2 1-5.5-4-3.9 5.5-.8z"/></svg>%100 orijinal ürün</span>
+          </div>
           <p style="font-size:11px;color:var(--muted);margin-top:14px;line-height:1.6">Kart ile online ödeme yakında. Şimdilik siparişini WhatsApp'tan saniyeler içinde tamamlıyoruz; sepetin otomatik iletilir.</p>
         </aside>
       </div>`;

@@ -96,6 +96,25 @@
   .buybar__price{ font-size:13px; color:#4a4742; font-variant-numeric:tabular-nums; }
   .buybar .btn{ flex:none; padding:14px 26px; }
   @media(max-width:520px){ .buybar{ padding:11px 16px; } .buybar__name{ font-size:13px; } .buybar .btn{ padding:13px 20px; } }
+
+  /* iade/garanti rozeti (satın-al butonu altında) */
+  .pd__guarantee{ display:flex; align-items:center; gap:11px; margin-top:14px; padding:12px 14px;
+    border:1px solid rgba(200,160,74,.4); background:rgba(200,160,74,.07); border-radius:10px;
+    font-size:13px; color:#4a4742; line-height:1.45; }
+  .pd__guarantee svg{ width:20px; height:20px; stroke:var(--gold); fill:none; stroke-width:1.7; flex:none; }
+  .pd__guarantee b{ color:var(--ink); font-weight:600; }
+
+  /* beden bazlı düşük stok uyarısı */
+  .pd__sizenote{ font-size:12.5px; color:#b4453a; font-weight:600; min-height:15px; margin:-16px 0 24px; }
+
+  /* yorumlar (dürüst boş durum) */
+  .reviews{ margin-top:96px; border-top:1px solid var(--line); padding-top:40px; }
+  .reviews__head{ display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:14px; }
+  .reviews__head h2{ font-family:'Bricolage Grotesque',sans-serif; font-weight:800; letter-spacing:-.02em; font-size:clamp(1.5rem,2.6vw,2rem); }
+  .reviews__count{ font-size:13px; color:var(--muted); }
+  .reviews__empty{ color:#5a564f; line-height:1.85; font-size:14.5px; max-width:56ch; }
+  .reviews__empty b{ color:var(--ink); }
+  .reviews__empty a{ color:var(--ink); border-bottom:1px solid var(--line); }
 </style>
 </head>
 <body>
@@ -137,6 +156,11 @@
       <h1 class="pd__name">Alpine Tee — Black</h1>
       <div class="pd__price"><span class="lira">₺</span>1.450,00</div>
 
+      <div class="freeship" id="freeShip" hidden>
+        <div class="freeship__txt"></div>
+        <div class="freeship__bar"><span style="transform:scaleX(0)"></span></div>
+      </div>
+
       <div class="pd__stock" id="stockStrip">
         <div class="pd__stockbar"><span id="stockFill"></span></div>
         <p class="pd__stocktxt" id="stockTxt"></p>
@@ -153,6 +177,7 @@
         <button class="size">L</button>
         <button class="size">XL</button>
       </div>
+      <p class="pd__sizenote" id="sizeNote"></p>
 
       <div class="pd__label">Adet</div>
       <div class="qty">
@@ -163,6 +188,11 @@
 
       <button class="btn btn--block" id="buyBtn" onclick="addCurrent()">Sepete ekle</button>
       <p class="pd__soldout" id="soldOut">Bu seri tükendi</p>
+
+      <div class="pd__guarantee">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+        <span><b>14 gün koşulsuz iade.</b> Beğenmezsen sorusuz geri al; ödeme iade edilir.</span>
+      </div>
 
       <div class="pd__trust">
         <div>
@@ -213,6 +243,14 @@
       </div>
     </div>
   </div>
+
+  <section class="reviews">
+    <div class="reviews__head">
+      <h2>Yorumlar</h2>
+      <span class="reviews__count">Henüz yorum yok</span>
+    </div>
+    <p class="reviews__empty">Bu ürünü ilk değerlendiren <b>sen ol</b>. Ürünü aldıysan deneyimini Instagram'da <a href="https://www.instagram.com/alpenzo.tr/" target="_blank" rel="noopener">@alpenzo.tr</a> etiketleyerek paylaş; seçtiğimiz kareler ve yorumlar burada yayınlanacak.</p>
+  </section>
 
   <section class="pd-editorial">
     <div class="pd-editorial__text">
@@ -373,6 +411,25 @@
     }
   })();
 
+  // ücretsiz kargo teşviki (ürün fiyatına göre)
+  (function freeShip(){
+    const FREE = 2500, el = document.getElementById('freeShip');
+    if (!el) return;
+    el.hidden = false;
+    const left = FREE - PRODUCT.price;
+    if (left > 0) {
+      el.querySelector('.freeship__txt').innerHTML = 'Ücretsiz kargoya <b><span class="lira">₺</span>' + left.toLocaleString('tr-TR') + '</b> kaldı';
+      const ratio = Math.max(0, Math.min(1, PRODUCT.price / FREE));
+      requestAnimationFrame(() => { el.querySelector('.freeship__bar span').style.transform = 'scaleX(' + ratio.toFixed(3) + ')'; });
+      el.querySelector('.freeship__bar span').style.transform = 'scaleX(' + ratio.toFixed(3) + ')';
+    } else {
+      el.classList.add('freeship--done');
+      el.querySelector('.freeship__txt').innerHTML = '<b>Ücretsiz kargo</b> dahil 🎉';
+      el.querySelector('.freeship__bar span').style.transform = 'scaleX(1)';
+    }
+  })();
+
+  const sizeNote = document.getElementById('sizeNote');
   sizesEl.addEventListener('click', e => {
     const b = e.target.closest('.size');
     if (!b || b.disabled) return;
@@ -380,6 +437,8 @@
     b.classList.add('active');
     selectedSize = b.textContent.trim();
     if (remaining > 0) buyBtn.textContent = BUY_LINKS[selectedSize] ? 'Hemen Satın Al' : 'Sepete ekle';
+    const left = STOCK[selectedSize] || 0;          // bedene özel düşük stok uyarısı
+    sizeNote.textContent = (left > 0 && left <= 8) ? 'Bu bedende son ' + left + ' adet!' : '';
   });
 
   function chQty(d){ qty = Math.max(1, qty + d); document.getElementById('qty').textContent = qty; }
