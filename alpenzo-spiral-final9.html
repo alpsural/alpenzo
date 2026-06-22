@@ -1193,10 +1193,24 @@ if (track) {
 setTimeout(reveal, 7000);
 </script>
 <script>
-  // product cards → product detail page
+  // ürün kartı → tıklanan kartın kendi verisini ürün sayfasına taşır
+  function pdUrl(el){
+    const q = el.querySelector('.card__name');
+    if(!q) return 'product.html';
+    const p = new URLSearchParams();
+    p.set('n', q.textContent.trim());
+    const pr = el.querySelector('.card__price');
+    const price = pr ? pr.textContent.replace(/[^\d.,]/g,'').replace(/\./g,'').split(',')[0] : '';
+    if(price) p.set('p', price);
+    const c = el.querySelector('.card__color'); if(c) p.set('c', c.textContent.trim());
+    const i1 = el.querySelector('.img1'); if(i1) p.set('i', i1.getAttribute('src'));
+    const i2 = el.querySelector('.img2'); if(i2) p.set('i2', i2.getAttribute('src'));
+    try{ sessionStorage.setItem('ALP_PV', JSON.stringify({ name:p.get('n'), price:+p.get('p')||0, color:p.get('c')||'', img:p.get('i')||'', img2:p.get('i2')||'' })); }catch(e){}
+    return 'product.html?' + p.toString();
+  }
   document.querySelectorAll('.card, .acard').forEach(el => {
     el.style.cursor = 'pointer';
-    el.addEventListener('click', () => { (window.pageGo || ((h)=>location.href=h))('product.html'); });
+    el.addEventListener('click', () => { (window.pageGo || ((h)=>location.href=h))(pdUrl(el)); });
   });
 
   // "Bize katıl" gallery: tıkla → ürün detayı (sürekli döner, hover-takas yok)

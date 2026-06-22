@@ -231,17 +231,17 @@
       <a href="shop.html">Tümünü gör</a>
     </div>
     <div class="pd-related__grid">
-      <a class="rcard" href="product.html">
+      <a class="rcard" href="product.html?n=Atlas%20Hoodie&p=2750&c=Siyah&i=products%2Fsiyah-hoodie.png">
         <div class="rcard__media"><img src="products/siyah-hoodie.png" alt="Atlas Hoodie, siyah" loading="lazy"></div>
         <div class="rcard__name">Atlas Hoodie</div>
         <div class="rcard__price"><span class="lira">₺</span>2.750,00</div>
       </a>
-      <a class="rcard" href="product.html">
+      <a class="rcard" href="product.html?n=Coil%20Sweatshirt&p=2250&c=Siyah&i=products%2Fsweatshirt-black.png">
         <div class="rcard__media"><img src="products/sweatshirt-black.png" alt="Coil Sweatshirt, siyah" loading="lazy"></div>
         <div class="rcard__name">Coil Sweatshirt</div>
         <div class="rcard__price"><span class="lira">₺</span>2.250,00</div>
       </a>
-      <a class="rcard" href="product.html">
+      <a class="rcard" href="product.html?n=Greek%20Polo&p=1650&c=Siyah&i=products%2Fsiyah-polo.jpeg">
         <div class="rcard__media"><img src="products/siyah-polo.jpeg" alt="Greek Polo, siyah" loading="lazy"></div>
         <div class="rcard__name">Greek Polo</div>
         <div class="rcard__price"><span class="lira">₺</span>1.650,00</div>
@@ -315,7 +315,34 @@
   const BUY_LINKS = { XS:'', S:'', M:'', L:'', XL:'' };
   /* ═════════════════════════════════════════════════════════════════ */
 
-  const PRODUCT = { id:'alpine-tee-black', name:'Alpine Tee — Black', price:1450, color:'Black', img:'products/alpine-black.png' };
+  // ── ürün verisi: URL parametresi (paylaşılabilir) ya da sessionStorage (kart
+  //    tıklamasından; yerel sunucu query'i düşürse de çalışır). Yoksa varsayılan. ──
+  const _sp = new URLSearchParams(location.search);
+  const _money = n => '<span class="lira">₺</span>' + Number(n).toLocaleString('tr-TR', { minimumFractionDigits:2, maximumFractionDigits:2 });
+  let _pv = null;
+  if (_sp.get('n')) {
+    _pv = { name:_sp.get('n'), price:parseInt(_sp.get('p'),10)||1450, color:_sp.get('c')||'', img:_sp.get('i')||'', img2:_sp.get('i2')||'' };
+  } else {
+    try { const _s = sessionStorage.getItem('ALP_PV'); if (_s) _pv = JSON.parse(_s); } catch(e){}
+  }
+  const PRODUCT = (_pv && _pv.name)
+    ? { id:_pv.name.toLowerCase().replace(/[^a-z0-9]+/g,'-'), name:_pv.name, price:_pv.price||1450,
+        color:_pv.color||'', img:_pv.img||'products/alpine-black.png', img2:_pv.img2||'' }
+    : { id:'alpine-tee-black', name:'Alpine Tee — Black', price:1450, color:'Black', img:'products/alpine-black.png', img2:'' };
+
+  // kart verisinden gelindiyse sayfayı o ürüne göre doldur
+  if (_pv && _pv.name) {
+    document.title = 'ALPENZO — ' + PRODUCT.name;
+    document.querySelector('.crumb').innerHTML = '<a href="shop.html">Mağaza</a> / ' + PRODUCT.name;
+    document.querySelector('.pd__name').textContent = PRODUCT.name;
+    document.querySelector('.pd__price').innerHTML = _money(PRODUCT.price);
+    const _mi = document.querySelector('.pd__gallery .main img');
+    if (_mi) { _mi.src = PRODUCT.img; _mi.alt = PRODUCT.name; }
+    const _t1 = document.querySelector('.pd__gallery .thumb img');
+    if (_t1 && PRODUCT.img2) _t1.src = PRODUCT.img2;
+    document.querySelector('.buybar__name').textContent = PRODUCT.name;
+    document.querySelector('.buybar__price').innerHTML = _money(PRODUCT.price);
+  }
 
   let selectedSize = null, qty = 1;
   const sizesEl = document.getElementById('sizes');
@@ -379,6 +406,17 @@
     io.observe(buyBtn);
     sizesEl.addEventListener('click', () => { barBtn.textContent = buyBtn.textContent; });
   })();
+
+  /* ilgili ürün kartı tıklanınca verisini sessionStorage'a yaz (yerel sunucu
+     query'i düşürse de hedef sayfa doğru ürünü açsın) */
+  document.querySelectorAll('.rcard').forEach(a => {
+    a.addEventListener('click', () => {
+      try {
+        const q = new URL(a.href, location.href).searchParams;
+        if (q.get('n')) sessionStorage.setItem('ALP_PV', JSON.stringify({ name:q.get('n'), price:+q.get('p')||0, color:q.get('c')||'', img:q.get('i')||'', img2:q.get('i2')||'' }));
+      } catch(e){}
+    });
+  });
 </script>
 </body>
 </html>
