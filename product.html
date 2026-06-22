@@ -29,6 +29,73 @@
   .pd__gallery .main.zoom img{ transition:none; }
   .pd__gallery .thumb{ cursor:pointer; transition:opacity .25s var(--ease); }
   .pd__gallery .thumb:hover{ opacity:.6; }
+
+  /* ─── P0: premium PDP katmanları ─── */
+  /* beden başlığı + rehber linki */
+  .pd__sizehead{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:12px; }
+  .pd__sizehead .pd__label{ margin:0; }
+  .pd__sizeguide{ font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted);
+    border-bottom:1px solid var(--line); padding-bottom:2px; cursor:pointer;
+    transition:color .25s var(--ease),border-color .25s var(--ease); }
+  .pd__sizeguide:hover{ color:var(--ink); border-color:var(--ink); }
+
+  /* güven satırı */
+  .pd__trust{ display:grid; grid-template-columns:1fr 1fr; gap:14px 18px; margin:24px 0 4px; }
+  .pd__trust div{ display:flex; align-items:center; gap:10px; font-size:12.5px; color:#4a4742; line-height:1.3; }
+  .pd__trust svg{ flex:none; width:18px; height:18px; color:var(--gold); }
+
+  /* akordeon: Detaylar / Kalıp / Kargo */
+  .pd__acc{ margin-top:30px; border-top:1px solid var(--line); }
+  .pd__acc details{ border-bottom:1px solid var(--line); }
+  .pd__acc summary{ list-style:none; cursor:pointer; display:flex; align-items:center; justify-content:space-between;
+    padding:18px 2px; font-size:12px; letter-spacing:.14em; text-transform:uppercase; font-weight:600; color:var(--ink); }
+  .pd__acc summary::-webkit-details-marker{ display:none; }
+  .pd__acc summary::after{ content:''; width:8px; height:8px; border-right:1.5px solid var(--muted);
+    border-bottom:1.5px solid var(--muted); transform:rotate(45deg); transition:transform .3s var(--ease); margin-right:4px; }
+  .pd__acc details[open] summary::after{ transform:rotate(-135deg); }
+  .pd__acc .acc__body{ padding:0 2px 22px; }
+  .pd__acc .acc__body p, .pd__acc .acc__body li{ color:#4a4742; line-height:1.8; font-size:14px; }
+  .pd__acc .acc__body p+p{ margin-top:10px; }
+  .pd__acc .acc__body ul{ margin:6px 0 0 18px; }
+  .pd__acc .acc__body a{ color:var(--ink); border-bottom:1px solid var(--line); }
+
+  /* editoryal hikâye */
+  .pd-editorial{ display:grid; grid-template-columns:1fr 1fr; gap:6px; align-items:stretch; margin-top:104px; }
+  .pd-editorial__text{ display:flex; flex-direction:column; justify-content:center; padding:8px 6vw 8px 0; }
+  .pd-editorial__kicker{ font-size:11px; letter-spacing:.28em; text-transform:uppercase; color:var(--gold); margin-bottom:18px; }
+  .pd-editorial__text h2{ font-family:'Bricolage Grotesque',sans-serif; font-weight:800; letter-spacing:-0.03em;
+    line-height:1.02; font-size:clamp(2rem,3.6vw,3.2rem); margin-bottom:20px; }
+  .pd-editorial__text p{ color:#4a4742; line-height:1.85; font-size:15px; max-width:46ch; }
+  .pd-editorial__media{ aspect-ratio:4/5; overflow:hidden; background:#f0eee9; }
+  .pd-editorial__media img{ width:100%; height:100%; object-fit:cover; transition:transform 1.2s var(--ease); }
+  .pd-editorial:hover .pd-editorial__media img{ transform:scale(1.04); }
+  @media(max-width:820px){ .pd-editorial{ grid-template-columns:1fr; margin-top:64px; } .pd-editorial__text{ padding:0 0 26px; } }
+
+  /* bu seriden (ilgili ürünler) */
+  .pd-related{ margin-top:104px; }
+  .pd-related__head{ display:flex; align-items:baseline; justify-content:space-between; gap:20px; margin-bottom:34px; }
+  .pd-related__head h2{ font-family:'Bricolage Grotesque',sans-serif; font-weight:800; letter-spacing:-0.02em; font-size:clamp(1.7rem,3vw,2.4rem); }
+  .pd-related__head a{ font-size:11px; letter-spacing:.18em; text-transform:uppercase; font-weight:600; color:var(--muted); transition:color .3s var(--ease); }
+  .pd-related__head a:hover{ color:var(--ink); }
+  .pd-related__grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .rcard{ cursor:pointer; display:block; }
+  .rcard__media{ aspect-ratio:4/5; overflow:hidden; background:#f0eee9; margin-bottom:14px; }
+  .rcard__media img{ width:100%; height:100%; object-fit:cover; transition:transform .8s var(--ease); }
+  .rcard:hover .rcard__media img{ transform:scale(1.05); }
+  .rcard__name{ font-weight:600; font-size:14px; }
+  .rcard__price{ font-size:13px; color:#4a4742; margin-top:3px; font-variant-numeric:tabular-nums; }
+  @media(max-width:680px){ .pd-related__grid{ grid-template-columns:1fr 1fr; gap:16px; } }
+
+  /* yapışkan satın-al barı */
+  .buybar{ position:fixed; left:0; right:0; bottom:0; z-index:60; display:flex; align-items:center; justify-content:space-between; gap:20px;
+    padding:13px 32px; background:rgba(255,255,255,0.94); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border-top:1px solid var(--line); transform:translateY(115%); transition:transform .45s var(--ease); box-shadow:0 -14px 40px rgba(40,33,20,0.07); }
+  .buybar.show{ transform:translateY(0); }
+  .buybar__info{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+  .buybar__name{ font-weight:600; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .buybar__price{ font-size:13px; color:#4a4742; font-variant-numeric:tabular-nums; }
+  .buybar .btn{ flex:none; padding:14px 26px; }
+  @media(max-width:520px){ .buybar{ padding:11px 16px; } .buybar__name{ font-size:13px; } .buybar .btn{ padding:13px 20px; } }
 </style>
 </head>
 <body>
@@ -56,9 +123,11 @@
 
   <div class="pd">
     <div class="pd__gallery">
-      <div class="main"><img src="products/alpine-black.png" alt="Alpine Tee"></div>
-      <div class="thumb"><img src="products/atype-black-front-plain.jpg" alt=""></div>
-      <div class="thumb"><img src="products/atype-black-back.jpg" alt=""></div>
+      <div class="main"><img src="products/alpine-black.png" alt="Alpine Tee siyah, önden işlemeli ALPENZO logosu"></div>
+      <div class="thumb"><img src="products/atype-black-front-plain.jpg" alt="Alpine Tee önden düz görünüm" loading="lazy"></div>
+      <div class="thumb"><img src="products/atype-black-back.jpg" alt="Alpine Tee arka görünüm" loading="lazy"></div>
+      <div class="thumb"><img src="products/black-tee-detail.jpg" alt="Kumaş ve işleme detayı" loading="lazy"></div>
+      <div class="thumb"><img src="products/black-embroidery-1.jpg" alt="İşleme yakın çekim" loading="lazy"></div>
     </div>
 
     <div class="pd__info">
@@ -72,7 +141,10 @@
         <p class="pd__stocktxt" id="stockTxt"></p>
       </div>
 
-      <div class="pd__label">Beden</div>
+      <div class="pd__sizehead">
+        <div class="pd__label">Beden</div>
+        <a class="pd__sizeguide" href="size-guide.html">Beden rehberi</a>
+      </div>
       <div class="sizes" id="sizes">
         <button class="size">XS</button>
         <button class="size">S</button>
@@ -91,14 +163,99 @@
       <button class="btn btn--block" id="buyBtn" onclick="addCurrent()">Sepete ekle</button>
       <p class="pd__soldout" id="soldOut">Bu seri tükendi</p>
 
-      <div class="pd__meta">
-        <p>%100 pamuk, ağır gramajlı (240 GSM) örme.</p>
-        <p>Önde işlemeli ALPENZO imza logosu — "Created for Elevation".</p>
-        <p>Türkiye içi 2.500<span class="lira">₺</span> üzeri kargo ücretsiz · 14 gün iade.</p>
+      <div class="pd__trust">
+        <div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v8H3zM14 10h4l3 3v2h-7z"/><circle cx="7" cy="17" r="1.8"/><circle cx="17.5" cy="17" r="1.8"/></svg>
+          <span>2.500<span class="lira">₺</span> üzeri<br>ücretsiz kargo</span>
+        </div>
+        <div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 8M20 4v4h-4"/><path d="M20 12a8 8 0 0 1-13.7 5.6L4 16M4 20v-4h4"/></svg>
+          <span>14 gün içinde<br>kolay iade</span>
+        </div>
+        <div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+          <span>Güvenli<br>ödeme</span>
+        </div>
+        <div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5 5.5.8-4 3.9 1 5.5L12 16l-5 2.2 1-5.5-4-3.9 5.5-.8z"/></svg>
+          <span>%100 orijinal<br>İstanbul üretimi</span>
+        </div>
+      </div>
+
+      <div class="pd__acc">
+        <details open>
+          <summary>Ürün Detayı</summary>
+          <div class="acc__body">
+            <p>Alpine Tee, ALPENZO'nun "Created for Elevation" felsefesini taşıyan ağır gramajlı bir temel parçadır. Önde el işçiliğiyle işlenmiş imza logosu, sırtta sade bir duruş.</p>
+            <ul>
+              <li>%100 taranmış pamuk, <b>240 GSM</b> ağır örme</li>
+              <li>Önde işlemeli ALPENZO imza logosu</li>
+              <li>Yıkamada çekmez, ön-yıkamalı kumaş</li>
+              <li>Rahat (regular) kalıp · unisex</li>
+            </ul>
+          </div>
+        </details>
+        <details>
+          <summary>Kumaş & Kalıp</summary>
+          <div class="acc__body">
+            <p>Ağır 240 GSM pamuk, yapısını ve formunu uzun süre korur. Omuz dikişleri sağlam, yaka çift iğneli.</p>
+            <p>Model 1.84 m boyunda ve <b>L</b> beden giyiyor. Aranızda kaldıysanız bir beden büyük öneririz. Ölçüler için <a href="size-guide.html">beden rehberine</a> bakın.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Kargo & İade</summary>
+          <div class="acc__body">
+            <p>Türkiye içi 2.500<span class="lira">₺</span> üzeri siparişlerde <b>kargo ücretsiz</b>. Siparişler 1–3 iş günü içinde kargolanır.</p>
+            <p>Etiketleri sökülmemiş ürünleri <b>14 gün</b> içinde ücretsiz iade edebilirsiniz. Detaylar için <a href="shipping.html">Kargo &amp; İade</a> sayfası.</p>
+          </div>
+        </details>
       </div>
     </div>
   </div>
+
+  <section class="pd-editorial">
+    <div class="pd-editorial__text">
+      <div class="pd-editorial__kicker">ALPENZO · İstanbul</div>
+      <h2>Created for Elevation</h2>
+      <p>Her parça, şehirle dağ arasındaki o anı taşır: hareket için tasarlanmış, kalıcı olması için yapılmış. Sınırlı seriler, gerçek malzeme, tavizsiz işçilik. Az ama doğru.</p>
+    </div>
+    <div class="pd-editorial__media">
+      <img src="products/mountains-story.jpg" alt="ALPENZO — dağ ve şehir arasında, harekete hazır" loading="lazy">
+    </div>
+  </section>
+
+  <section class="pd-related">
+    <div class="pd-related__head">
+      <h2>Bu seriden</h2>
+      <a href="shop.html">Tümünü gör</a>
+    </div>
+    <div class="pd-related__grid">
+      <a class="rcard" href="product.html">
+        <div class="rcard__media"><img src="products/siyah-hoodie.png" alt="Atlas Hoodie, siyah" loading="lazy"></div>
+        <div class="rcard__name">Atlas Hoodie</div>
+        <div class="rcard__price"><span class="lira">₺</span>2.750,00</div>
+      </a>
+      <a class="rcard" href="product.html">
+        <div class="rcard__media"><img src="products/sweatshirt-black.png" alt="Coil Sweatshirt, siyah" loading="lazy"></div>
+        <div class="rcard__name">Coil Sweatshirt</div>
+        <div class="rcard__price"><span class="lira">₺</span>2.250,00</div>
+      </a>
+      <a class="rcard" href="product.html">
+        <div class="rcard__media"><img src="products/siyah-polo.jpeg" alt="Greek Polo, siyah" loading="lazy"></div>
+        <div class="rcard__name">Greek Polo</div>
+        <div class="rcard__price"><span class="lira">₺</span>1.650,00</div>
+      </a>
+    </div>
+  </section>
 </main>
+
+<div class="buybar" id="buyBar" aria-hidden="true">
+  <div class="buybar__info">
+    <span class="buybar__name">Alpine Tee — Black</span>
+    <span class="buybar__price"><span class="lira">₺</span>1.450,00</span>
+  </div>
+  <button class="btn" id="buyBarBtn" onclick="addCurrent()">Sepete ekle</button>
+</div>
 
 <footer class="footer">
   <div class="footer__cols">
@@ -207,6 +364,20 @@
     ALPENZO.add({ ...PRODUCT, size:selectedSize, qty });
     ALPENZO.toast('Sepete eklendi · ' + selectedSize + ' ×' + qty, 'check');
   }
+
+  /* yapışkan satın-al barı: ana buton ekrandan çıkınca belir, metni ana butonu yansıtsın */
+  (function(){
+    const bar = document.getElementById('buyBar');
+    const barBtn = document.getElementById('buyBarBtn');
+    if (!bar || !barBtn || remaining <= 0) return;          // tükendiyse bar gösterme
+    const io = new IntersectionObserver(([e]) => {
+      const past = !e.isIntersecting && e.boundingClientRect.top < 0;
+      bar.classList.toggle('show', past);
+      bar.setAttribute('aria-hidden', past ? 'false' : 'true');
+    }, { threshold:0 });
+    io.observe(buyBtn);
+    sizesEl.addEventListener('click', () => { barBtn.textContent = buyBtn.textContent; });
+  })();
 </script>
 </body>
 </html>
