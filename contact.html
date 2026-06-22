@@ -76,7 +76,17 @@
 </footer>
 
 <script>
-  function sendMsg(e){ e.preventDefault(); ALPENZO.toast('Mesaj formu yakında bağlanacak — şimdilik alp@sural.tr’a yazabilirsin.'); }
+  function sendMsg(e){
+    e.preventDefault();
+    const f = e.target;
+    const name  = (f.querySelector('input[type=text]')  || {}).value || '';
+    const email = (f.querySelector('input[type=email]') || {}).value || '';
+    const msg   = (f.querySelector('textarea')          || {}).value || '';
+    const subject = encodeURIComponent('ALPENZO İletişim · ' + (name || 'Yeni mesaj'));
+    const body = encodeURIComponent(msg + '\n\n—\n' + name + (email ? ' (' + email + ')' : ''));
+    ALPENZO.toast('E-posta uygulaman açılıyor…', 'check');
+    window.location.href = 'mailto:alp@sural.tr?subject=' + subject + '&body=' + body;
+  }
 </script>
 </body>
 </html>
