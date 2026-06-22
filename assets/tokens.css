@@ -1,0 +1,53 @@
+/* ALPENZO — tasarım token'ları (TEK KAYNAK)
+   Marka rengi, hareket, tipografi ve ölçek burada tanımlanır; tüm sayfalar
+   bunları kullanır. Bir değeri değiştirmek için SADECE burayı düzenle.
+   site.css bunu @import eder; anasayfa & shop <link> ile bağlar. */
+
+:root{
+  /* ── marka ── */
+  --alp-gold:#c8a04a;          /* altın aksan */
+  --alp-gold-deep:#9a7b2e;     /* koyu altın (degrade/hover) */
+
+  /* ── açık tema (shop · ürün · içerik sayfaları) ── */
+  --alp-bg:#ffffff;
+  --alp-cream:#f6f4ee;         /* krem bölüm zemini (marka bandı, manifesto) */
+  --alp-ink:#111;
+  --alp-muted:#8a867d;
+  --alp-line:rgba(0,0,0,0.10);
+
+  /* ── koyu tema (anasayfa · footer) ── */
+  --alp-bg-dark:#0c0c0c;
+  --alp-bg-deep:#060606;
+  --alp-ink-light:#f2f0ec;
+  --alp-muted-dark:#6b6862;
+  --alp-line-dark:rgba(255,255,255,0.08);
+
+  /* ── tipografi ── */
+  --alp-font-display:'Bricolage Grotesque', sans-serif;  /* başlık */
+  --alp-font-body:'Schibsted Grotesk', sans-serif;       /* metin */
+  --alp-font-num:'Arial','Segoe UI', sans-serif;         /* ₺ ve rakam glifi (bilinçli) */
+
+  /* tip ölçeği — gövde */
+  --alp-text-xs:11px;
+  --alp-text-sm:13px;
+  --alp-text-base:14px;
+  --alp-text-md:16px;
+  --alp-text-lg:18px;
+  /* tip ölçeği — display (akıcı clamp) */
+  --alp-display-sm:clamp(1.7rem, 3vw, 2.4rem);
+  --alp-display-md:clamp(2.2rem, 4.5vw, 3.6rem);
+  --alp-display-lg:clamp(2.4rem, 5vw, 4.4rem);
+
+  /* ── boşluk ölçeği ── */
+  --alp-space-1:8px;
+  --alp-space-2:16px;
+  --alp-space-3:24px;
+  --alp-space-4:32px;
+  --alp-space-5:48px;
+  --alp-space-6:64px;
+  --alp-space-7:96px;
+
+  /* ── hareket ── */
+  --alp-ease:cubic-bezier(0.32, 0.72, 0, 1);   /* tüm geçişlerin standart eğrisi */
+  --alp-dur:0.4s;
+}

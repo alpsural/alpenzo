@@ -4,19 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ALPENZO — Collection</title>
+<link rel="stylesheet" href="assets/tokens.css">
 <style>
   /* premium type: Bricolage Grotesque (display) + Schibsted Grotesk (micro) — distinctive, not Inter/Roboto */
   @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Schibsted+Grotesk:wght@400;500;600&display=swap');
 
   * { margin:0; padding:0; box-sizing:border-box; }
 
+  /* yerel takma adlar → tek-kaynak token'lar (tokens.css; değerler birebir) */
   :root {
-    --bg: #0c0c0c;
-    --bg-deep: #060606;
-    --ink: #f2f0ec;
-    --muted: #6b6862;
-    --gold: #c8a04a;
-    --ease: cubic-bezier(0.32, 0.72, 0, 1);
+    --bg: var(--alp-bg-dark);
+    --bg-deep: var(--alp-bg-deep);
+    --ink: var(--alp-ink-light);
+    --muted: var(--alp-muted-dark);
+    --gold: var(--alp-gold);
+    --ease: var(--alp-ease);
   }
 
   html, body {

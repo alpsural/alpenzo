@@ -2,9 +2,12 @@
 .claude/
 .agents/
 .codex/
+.impeccable/
 CLAUDE.md
+DESIGN.md
 skills-lock.json
 wire-products.mjs
 sd_App.js
+alpenzo-eski-react-yedek/
 .DS_Store
 Thumbs.db

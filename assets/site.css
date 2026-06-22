@@ -1,10 +1,12 @@
 /* ALPENZO — shared styles for content & shop pages */
+@import url('tokens.css');   /* tek-kaynak token'lar (marka/renk/hareket/tip ölçeği) */
 @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Schibsted+Grotesk:wght@400;500;600&display=swap');
 
 *{ margin:0; padding:0; box-sizing:border-box; }
+/* yerel takma adlar → tek-kaynak token'lar (değerler birebir korunur) */
 :root{
-  --bg:#ffffff; --ink:#111; --muted:#8a867d; --line:rgba(0,0,0,0.10);
-  --gold:#c8a04a; --ease:cubic-bezier(0.32,0.72,0,1);
+  --bg:var(--alp-bg); --ink:var(--alp-ink); --muted:var(--alp-muted); --line:var(--alp-line);
+  --gold:var(--alp-gold); --ease:var(--alp-ease);
 }
 html,body{ background:var(--bg); color:var(--ink); font-family:'Schibsted Grotesk',sans-serif; -webkit-font-smoothing:antialiased; }
 a{ color:inherit; text-decoration:none; }
