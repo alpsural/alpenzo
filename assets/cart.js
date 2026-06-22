@@ -287,6 +287,25 @@
   else init();
 })();
 
+/* ── bonus: akıcı (inertia) scroll — Lenis, spiral dışı sayfalarda. CDN başarısızsa
+   ya da reduced-motion'da native scroll'a düşer (kırılmaz). ── */
+(function () {
+  if (typeof document === 'undefined') return;
+  if (document.getElementById('scene')) return;                                  // spiral anasayfası: native
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js';
+  s.onload = () => {
+    const L = window.Lenis || window.lenis;
+    if (!L) return;
+    const lenis = new L({ lerp: 0.09, smoothWheel: true });
+    const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
+    requestAnimationFrame(raf);
+  };
+  s.onerror = () => {};                                                          // sessizce native scroll
+  document.head.appendChild(s);
+})();
+
 /* ── premium UI: scroll-reveal + akıllı header (tüm sayfalar; spiral anasayfasında reveal atlanır) ── */
 (function () {
   if (typeof document === 'undefined') return;
