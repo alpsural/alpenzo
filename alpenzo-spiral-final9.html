@@ -941,7 +941,27 @@ scene.add(group);
    One climbing vertical ribbon. Each photo = a curved quad whose right
    edge is shared with the next photo's left edge → perfect edge-to-edge
    tiling, no gaps, no overflow. Radius oscillates (sine) for organic coils. */
-const texLoader = new THREE.TextureLoader();
+// Spiral panelleri ekranda küçük; oysa fotoğraflar 1024–1920px. 84 dokuyu tam
+// boyut yüklemek ~500MB+ GPU belleği yer → mobil/zayıf GPU kasması. Çözüm:
+// yüklerken offscreen canvas ile küçült (mobil 384px, masaüstü 640px). Bu, "akıcılık"ın asıl anahtarı.
+const MAX_TEX = LOW_POWER ? 384 : 640;
+function loadTexScaled(url, onDone) {
+  const tex = new THREE.Texture();
+  tex.colorSpace = THREE.SRGBColorSpace;
+  const img = new Image();
+  img.onload = () => {
+    const s = Math.min(1, MAX_TEX / Math.max(img.naturalWidth, img.naturalHeight));
+    const w = Math.max(1, Math.round(img.naturalWidth  * s));
+    const h = Math.max(1, Math.round(img.naturalHeight * s));
+    const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+    cv.getContext('2d').drawImage(img, 0, 0, w, h);
+    tex.image = cv; tex.needsUpdate = true;
+    onDone();
+  };
+  img.onerror = onDone;
+  img.src = url;
+  return tex;
+}
 const TWO_PI    = Math.PI * 2;
 const TOTAL     = IMAGES.length * COPIES;     // photos along the ribbon
 let loaded = 0;
@@ -1000,8 +1020,7 @@ for (let i = 0; i < TOTAL; i++) {
   geo.setIndex(idx);
   geo.computeVertexNormals();
 
-  const tex = texLoader.load(IMAGES[i % IMAGES.length], markLoaded, undefined, markLoaded);
-  tex.colorSpace = THREE.SRGBColorSpace;
+  const tex = loadTexScaled(IMAGES[i % IMAGES.length], markLoaded);
   const mat = new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide, toneMapped: false });
   mat.color.setScalar(1);
 
@@ -1015,27 +1034,30 @@ for (let i = 0; i < TOTAL; i++) {
   group.add(mesh);
   meshes.push(mesh);
 
-  // dark thickness rim along the bottom edge → gives the band real 3D depth
-  const rpos = [], ridx = [];
-  for (let s = 0; s <= SUB; s++) {
-    const t   = i + s / SUB;
-    const p   = pointAt(t);
-    const rad = radiusAt(t);
-    const yb  = p.y - halfAt(t);
-    const f   = (rad - THICK) / rad;        // inner edge, pulled toward the axis
-    rpos.push(p.x - cp.x,        yb - cp.y, p.z - cp.z);          // outer bottom
-    rpos.push(p.x * f - cp.x,    yb - cp.y, p.z * f - cp.z);      // inner bottom
+  // dark thickness rim along the bottom edge → gives the band real 3D depth.
+  // Mobilde atlanır: çizim çağrılarını yarıya indirir (168→84) → daha akıcı.
+  if (!LOW_POWER) {
+    const rpos = [], ridx = [];
+    for (let s = 0; s <= SUB; s++) {
+      const t   = i + s / SUB;
+      const p   = pointAt(t);
+      const rad = radiusAt(t);
+      const yb  = p.y - halfAt(t);
+      const f   = (rad - THICK) / rad;        // inner edge, pulled toward the axis
+      rpos.push(p.x - cp.x,        yb - cp.y, p.z - cp.z);          // outer bottom
+      rpos.push(p.x * f - cp.x,    yb - cp.y, p.z * f - cp.z);      // inner bottom
+    }
+    for (let s = 0; s < SUB; s++) {
+      const a = s*2, b = s*2+1, c = s*2+2, d = s*2+3;
+      ridx.push(a, b, c, b, d, c);
+    }
+    const rgeo = new THREE.BufferGeometry();
+    rgeo.setAttribute('position', new THREE.Float32BufferAttribute(rpos, 3));
+    rgeo.setIndex(ridx);
+    const rim = new THREE.Mesh(rgeo, new THREE.MeshBasicMaterial({ color:0x141414, side:THREE.DoubleSide }));
+    rim.position.set(cp.x, cp.y, cp.z);
+    group.add(rim);
   }
-  for (let s = 0; s < SUB; s++) {
-    const a = s*2, b = s*2+1, c = s*2+2, d = s*2+3;
-    ridx.push(a, b, c, b, d, c);
-  }
-  const rgeo = new THREE.BufferGeometry();
-  rgeo.setAttribute('position', new THREE.Float32BufferAttribute(rpos, 3));
-  rgeo.setIndex(ridx);
-  const rim = new THREE.Mesh(rgeo, new THREE.MeshBasicMaterial({ color:0x141414, side:THREE.DoubleSide }));
-  rim.position.set(cp.x, cp.y, cp.z);
-  group.add(rim);
 }
 
 /* entrance choreography */
