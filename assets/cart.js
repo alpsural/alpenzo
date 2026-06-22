@@ -286,3 +286,45 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();
+
+/* ── premium UI: scroll-reveal + akıllı header (tüm sayfalar; spiral anasayfasında reveal atlanır) ── */
+(function () {
+  if (typeof document === 'undefined') return;
+  function init() {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // 1) scroll-reveal — bölümler kaydırdıkça yumuşakça belirir (anasayfa #scene spiralinde atlanır).
+    //    SADECE doküman görünürken gizleme uygulanır; gizli sekmede geçişler duraklar ve içerik
+    //    boş kalırdı — bu yüzden görünür değilse reveal tamamen atlanır (içerik direkt görünür).
+    if (!document.getElementById('scene') && !reduce && document.visibilityState === 'visible') {
+      const SEL = '.page__title,.prose,.sizetable,.form,.cart,.pd,.pd-editorial,.pd-related,.reviews,'
+                + '.jr-hero,.jr-feature,.jr-grid-wrap,.ig,.arrivals,.feature,.connect,.brandmark';
+      const els = [...document.querySelectorAll(SEL)];
+      if (els.length) {
+        document.documentElement.classList.add('reveal-on');
+        els.forEach(el => el.setAttribute('data-reveal', ''));
+        const io = new IntersectionObserver((ents) => {
+          ents.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+        }, { rootMargin: '0px 0px -7% 0px', threshold: 0.06 });
+        els.forEach(el => io.observe(el));
+        setTimeout(() => els.forEach(el => el.classList.add('in')), 2600);  // güvenlik: asla boş kalmasın
+      }
+    }
+
+    // 2) akıllı sticky header — aşağı kaydır gizle, yukarı çıkar göster + kaydırınca gölge
+    const bar = document.querySelector('header.topbar') || document.querySelector('.topbar');
+    if (bar) {
+      let lastY = window.scrollY, ticking = false;
+      const onScroll = () => {
+        const y = window.scrollY;
+        bar.classList.toggle('tb-scrolled', y > 8);
+        if (y > lastY && y > 220) bar.classList.add('tb-hidden');
+        else bar.classList.remove('tb-hidden');
+        lastY = y; ticking = false;
+      };
+      window.addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(onScroll); ticking = true; } }, { passive: true });
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
