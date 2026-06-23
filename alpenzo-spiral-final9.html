@@ -922,8 +922,8 @@ const camera = new THREE.PerspectiveCamera(58, window.innerWidth/window.innerHei
 function fitCamera() {
   const w = window.innerWidth, h = window.innerHeight, aspect = w / h;
   let fov = 58, z = 28, prCap = 2;                            // desktop / landscape — original framing
-  if (aspect < 0.66)      { fov = 64; z = 44; prCap = 1.5; }  // phones (portrait) → fits frame, lighter to render
-  else if (aspect < 1.0)  { fov = 61; z = 35; prCap = 1.6; }  // large phones / small tablets
+  if (aspect < 0.66)      { fov = 64; z = 44; prCap = 1.0; }  // phones (portrait) → DPR 1.0: en büyük fill-rate kazancı (sarmal çok katmanlı→overdraw ağır)
+  else if (aspect < 1.0)  { fov = 61; z = 35; prCap = 1.25; } // large phones / small tablets
   camera.fov = fov;
   camera.aspect = aspect;
   camera.position.set(0, 10, z);  // panned up → spiral renders lower without shrinking
@@ -1109,9 +1109,16 @@ function updateHover() {
   }
 }
 
-// click a spiral photo → product detail (smooth transition)
-canvas.addEventListener('click', () => {
-  if (hovered) (window.pageGo || ((h) => location.href = h))('product.html');
+// click a spiral photo → product detail (smooth transition).
+// orta-tık (tekerlek) / Ctrl / Cmd → yeni sekmede aç
+canvas.addEventListener('mousedown', (e) => { if (e.button === 1 && hovered) e.preventDefault(); });
+canvas.addEventListener('click', (e) => {
+  if (!hovered) return;
+  if (e.metaKey || e.ctrlKey) { window.open('product.html', '_blank', 'noopener'); return; }
+  (window.pageGo || ((h) => location.href = h))('product.html');
+});
+canvas.addEventListener('auxclick', (e) => {
+  if (e.button === 1 && hovered) { e.preventDefault(); window.open('product.html', '_blank', 'noopener'); }
 });
 
 /* ── RENDER ──────────────────────────────────────────────── */
@@ -1124,6 +1131,7 @@ const GROUP_Y       = -12;      // spiral sits low at the top → headline domin
 const SCROLL_LIFT   = 0.019;    // scrolling lifts it up into full view
 const GROUP_Y_MAX   = 11;       // lift all the way up to centre on scroll
 const heroUI        = document.getElementById('heroUI');
+let spiralFrame     = 0;   // mobilde derinlik döngüsünü 2 karede bir çalıştırmak için
 function animate() {
   requestAnimationFrame(animate);
 
@@ -1147,28 +1155,28 @@ function animate() {
   // fade the hero UI out as you scroll into the page
   heroUI.style.opacity = Math.max(0, 1 - window.scrollY / (window.innerHeight * 0.6));
 
-  // grup matrisini kare başına TEK kez derle (sahne kök → dünya = yerel).
-  // Böylece aşağıdaki mesh başına getWorldPosition'ın yaptığı 84× graf yürüyüşü kalkar.
-  group.updateMatrix();
-  const groupM = group.matrix;
+  // hover + derinlik gölgeleme döngüsü.
+  // Mobilde (LOW_POWER) her 2. karede çalışır → mesh başına matris/uniform yükü yarıya iner.
+  // Masaüstünde her kare (hover akıcı kalsın).
+  if (!LOW_POWER || (spiralFrame++ & 1) === 0) {
+    // grup matrisini TEK kez derle (sahne kök → dünya = yerel); mesh başına graf yürüyüşü olmaz
+    group.updateMatrix();
+    const groupM = group.matrix;
+    for (const m of meshes) {
+      const u = m.userData;
+      const tScl = (m === hovered) ? 1.14 : 1;
+      const tOff = (m === hovered) ? 0.9 : 0;
+      u.scl += (tScl - u.scl) * 0.16;
+      u.off += (tOff - u.off) * 0.16;
+      m.scale.setScalar(u.scl);
+      m.position.copy(u.center).addScaledVector(u.normal, u.off);
 
-  // hover: lift + slightly enlarge the hovered photo — no darkening of the rest
-  for (const m of meshes) {
-    const u = m.userData;
-    const tScl = (m === hovered) ? 1.14 : 1;
-    const tOff = (m === hovered) ? 0.9 : 0;
-    u.scl += (tScl - u.scl) * 0.16;
-    u.off += (tOff - u.off) * 0.16;
-    m.scale.setScalar(u.scl);
-    m.position.copy(u.center).addScaledVector(u.normal, u.off);
-
-    // depth shading: photos at the BACK of the coil (away from camera) dim down,
-    // front photos stay bright — gives the spiral real depth.
-    // dünya konumu = grup matrisi × mesh yerel konumu (ucuz; getWorldPosition'ın aksine graf yürümez)
-    _wp.copy(m.position).applyMatrix4(groupM);
-    const depth  = Math.max(0, Math.min(1, (_wp.z + 11) / 22));   // 0 = back, 1 = front
-    const bright = (m === hovered) ? 1 : (0.3 + 0.7 * depth);
-    m.material.color.setScalar(bright);
+      // depth shading: arkadaki fotoğraflar kararır, öndekiler parlak → gerçek derinlik
+      _wp.copy(m.position).applyMatrix4(groupM);
+      const depth  = Math.max(0, Math.min(1, (_wp.z + 11) / 22));   // 0 = back, 1 = front
+      const bright = (m === hovered) ? 1 : (0.3 + 0.7 * depth);
+      m.material.color.setScalar(bright);
+    }
   }
 
   renderer.render(scene, camera);
@@ -1208,19 +1216,29 @@ setTimeout(reveal, 7000);
     try{ sessionStorage.setItem('ALP_PV', JSON.stringify({ name:p.get('n'), price:+p.get('p')||0, color:p.get('c')||'', img:p.get('i')||'', img2:p.get('i2')||'' })); }catch(e){}
     return 'product.html?' + p.toString();
   }
-  document.querySelectorAll('.card, .acard').forEach(el => {
+  // sol-tık → aynı sekme (premium geçiş); orta-tık (tekerlek) / Ctrl / Cmd → yeni sekme
+  const openNew = (u) => { if (u) window.open(u, '_blank', 'noopener'); };
+  function bindNav(el, urlFn) {
+    const url = () => (typeof urlFn === 'function' ? urlFn(el) : urlFn);
     el.style.cursor = 'pointer';
-    el.addEventListener('click', () => { (window.pageGo || ((h)=>location.href=h))(pdUrl(el)); });
-  });
+    el.addEventListener('mousedown', (e) => { if (e.button === 1) e.preventDefault(); });  // orta-tık oto-kaydırmayı engelle
+    el.addEventListener('click', (e) => {
+      if (e.metaKey || e.ctrlKey) { openNew(url()); return; }
+      (window.pageGo || ((h) => location.href = h))(url());
+    });
+    el.addEventListener('auxclick', (e) => { if (e.button === 1) { e.preventDefault(); openNew(url()); } });
+  }
+  document.querySelectorAll('.card, .acard').forEach(el => bindNav(el, pdUrl));
 
   // "Bize katıl" gallery: tıkla → ürün detayı (sürekli döner, hover-takas yok)
-  document.querySelectorAll('.connect__cell').forEach((c) => {
-    c.addEventListener('click', () => { (window.pageGo || ((h)=>location.href=h))('product.html'); });
-  });
+  document.querySelectorAll('.connect__cell').forEach(c => bindNav(c, 'product.html'));
+
   // kampanya banner'ı → ürün (içindeki butona dokunma)
   document.querySelectorAll('.home-feature').forEach((f) => {
     f.style.cursor = 'pointer';
-    f.addEventListener('click', (e) => { if (e.target.closest('.home-feature__btn')) return; (window.pageGo || ((h)=>location.href=h))('product.html'); });
+    f.addEventListener('mousedown', (e) => { if (e.button === 1 && !e.target.closest('.home-feature__btn')) e.preventDefault(); });
+    f.addEventListener('click', (e) => { if (e.target.closest('.home-feature__btn')) return; (window.pageGo || ((h) => location.href = h))('product.html'); });
+    f.addEventListener('auxclick', (e) => { if (e.button === 1 && !e.target.closest('.home-feature__btn')) { e.preventDefault(); openNew('product.html'); } });
   });
 </script>
 </body>

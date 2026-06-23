@@ -486,11 +486,17 @@
     try{ sessionStorage.setItem('ALP_PV', JSON.stringify({ name:p.get('n'), price:+p.get('p')||0, color:p.get('c')||'', img:p.get('i')||'', img2:p.get('i2')||'' })); }catch(e){}
     return 'product.html?' + p.toString();
   }
-  // ürün görselleri / kartlar → ürün detayı
-  document.querySelectorAll('.acard, .htile, .hero__left').forEach(el => {
+  // sol-tık → aynı sekme; orta-tık (tekerlek) / Ctrl / Cmd → yeni sekme
+  const openNew = (u) => { if (u) window.open(u, '_blank', 'noopener'); };
+  function bindNav(el, urlFn){
+    const url = () => (typeof urlFn==='function' ? urlFn(el) : urlFn);
     el.style.cursor='pointer';
-    el.addEventListener('click', e=>{ e.preventDefault(); go(pdUrl(el)); });
-  });
+    el.addEventListener('mousedown', e=>{ if(e.button===1) e.preventDefault(); });
+    el.addEventListener('click', e=>{ e.preventDefault(); if(e.metaKey||e.ctrlKey){ openNew(url()); return; } go(url()); });
+    el.addEventListener('auxclick', e=>{ if(e.button===1){ e.preventDefault(); openNew(url()); } });
+  }
+  // ürün görselleri / kartlar → ürün detayı
+  document.querySelectorAll('.acard, .htile, .hero__left').forEach(el => bindNav(el, pdUrl));
 
   // "Tümünü gör" → mağaza
   document.querySelectorAll('.viewall').forEach(b => {
@@ -501,13 +507,13 @@
   // kampanya banner'ı → ürün (içindeki butona dokunma)
   document.querySelectorAll('.feature').forEach(f => {
     f.style.cursor='pointer';
+    f.addEventListener('mousedown', e=>{ if(e.button===1 && !e.target.closest('.feature__btn')) e.preventDefault(); });
     f.addEventListener('click', e=>{ if(e.target.closest('.feature__btn')) return; go('product.html'); });
+    f.addEventListener('auxclick', e=>{ if(e.button===1 && !e.target.closest('.feature__btn')){ e.preventDefault(); openNew('product.html'); } });
   });
 
   // "Bize katıl" galerisi: tıkla → ürün (sürekli döner, hover-takas yok)
-  document.querySelectorAll('.connect__cell').forEach(c => {
-    c.addEventListener('click', ()=> go('product.html'));
-  });
+  document.querySelectorAll('.connect__cell').forEach(c => bindNav(c, 'product.html'));
 </script>
 
 </body>
