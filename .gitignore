@@ -9,5 +9,10 @@ skills-lock.json
 wire-products.mjs
 sd_App.js
 alpenzo-eski-react-yedek/
+node_modules/
+package.json
+package-lock.json
+optimize-images.mjs
+products-original/
 .DS_Store
 Thumbs.db
